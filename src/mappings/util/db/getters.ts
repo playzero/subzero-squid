@@ -1,15 +1,14 @@
 import {
 	Organization,
 	OrganizationMember,
-	OrganizationMetadata,
 	CampaignContributor,
 	Campaign,
 	Proposal,
 	Voting,
 	ProposalVoter,
-} from '../../../model';
-
-import { Store } from '@subsquid/substrate-processor';
+	SenseEntity
+} from '../../../model'
+import { Store } from '@subsquid/typeorm-store'
 
 type EntityConstructor<T> = {
 	new (...args: any[]): T;
@@ -36,10 +35,6 @@ function getOrgMember(store: Store, orgId: string, member: string): Promise<Orga
 	return get(store, OrganizationMember, `${orgId}-${member}`.toLowerCase(), ['organization', 'identity']);
 }
 
-function getOrgMetadata(store: Store, orgMetadataId: string): Promise<OrganizationMetadata | null> {
-	return get(store, OrganizationMetadata, orgMetadataId);
-}
-
 function getCampaign(store: Store, campaignId: string): Promise<Campaign | null> {
 	return get(store, Campaign, campaignId, ['organization', 'creatorIdentity', 'metadata']);
 }
@@ -64,13 +59,17 @@ function getProposalVoter(store: Store, proposalId: string, voter: string): Prom
 	return get(store, ProposalVoter, `${proposalId}-${voter}`.toLowerCase());
 }
 
+function getSenseEntity(store: Store, accountId: string): Promise<SenseEntity | null> {
+	return get(store, SenseEntity, accountId);
+}
+
 export {
 	getOrg,
 	getOrgMember,
-	getOrgMetadata,
 	getCampaign,
 	getCampaignContributor,
 	getProposal,
 	getVoting,
 	getProposalVoter,
+	getSenseEntity
 };

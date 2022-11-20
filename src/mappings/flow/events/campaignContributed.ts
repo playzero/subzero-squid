@@ -5,13 +5,13 @@ import { CampaignContributor } from '../../../model'
 import { upsertIdentity } from '../../util/db/identity'
 import { getCampaign, getCampaignContributor } from '../../util/db/getters'
 
-import { addressCodec, hashToHexString } from '../../util/helpers'
+import { addressCodec, arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
 async function handleCampaignContributedEvent(ctx: EventHandlerContext) {
 	const eventData = getCampaignContributedData(ctx)
-	let campaignId = hashToHexString(eventData.campaignId);
+	let campaignId = arrayToHexString(eventData.campaignId);
 	let contributor = addressCodec.encode(eventData.sender);
 
 	let campaign = await getCampaign(ctx.store, campaignId);

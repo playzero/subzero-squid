@@ -19,10 +19,6 @@ interface CampaignCreatedData {
     name: Uint8Array
 }
 
-interface CampaignData {
-    campaignId: Uint8Array,
-}
-
 interface CampaignContributedData {
     campaignId: Uint8Array,
     sender: Uint8Array,
@@ -50,31 +46,31 @@ export function getCampaignContributedData(ctx: EventContext): CampaignContribut
     }
 }
 
-export function getCampaignActivatedData(ctx: EventContext): CampaignData {
+export function getCampaignActivatedData(ctx: EventContext): Uint8Array {
     const event = new FlowActivatedEvent(ctx)
     if (event.isV63) {
         const { campaignId } = event.asV63
-        return { campaignId }
+        return campaignId
     } else {
         throw new UnknownVersionError(event.constructor.name)
     }
 }
 
-export function getCampaignFailedData(ctx: EventContext): CampaignData {
+export function getCampaignFailedData(ctx: EventContext): Uint8Array {
     const event = new FlowFailedEvent(ctx)
     if (event.isV63) {
         const { campaignId, campaignBalance, blockNumber } = event.asV63
-        return { campaignId }
+        return campaignId
     } else {
         throw new UnknownVersionError(event.constructor.name)
     }
 }
 
-export function getCampaignSucceededData(ctx: EventContext): CampaignData {
+export function getCampaignSucceededData(ctx: EventContext): Uint8Array {
     const event = new FlowSucceededEvent(ctx)
     if (event.isV63) {
         const { campaignId, campaignBalance, blockNumber } = event.asV63
-        return { campaignId }
+        return campaignId
     } else {
         throw new UnknownVersionError(event.constructor.name)
     }

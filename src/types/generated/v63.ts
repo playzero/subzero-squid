@@ -185,6 +185,80 @@ export interface CampaignState_Locked {
   __kind: 'Locked'
 }
 
+export interface Entity {
+  account: Uint8Array
+  index: bigint
+  cid: Uint8Array
+  created: number
+  mutated: number
+}
+
+export interface EntityProperty {
+  value: bigint
+  mutated: number
+}
+
+export interface Type_544 {
+  index: number
+  owner: Uint8Array
+  title: Uint8Array
+  cid: Uint8Array
+  orgId: Uint8Array
+  campaignId: (Uint8Array | undefined)
+  proposalType: ProposalType
+  deposit: bigint
+  start: number
+  expiry: number
+  amount: (bigint | undefined)
+  currencyId: (CurrencyId | undefined)
+  beneficiary: (Uint8Array | undefined)
+  slashingRule: SlashingRule
+}
+
+export type ProposalState = ProposalState_Created | ProposalState_Active | ProposalState_Accepted | ProposalState_Rejected | ProposalState_Expired | ProposalState_Aborted | ProposalState_Finalized
+
+export interface ProposalState_Created {
+  __kind: 'Created'
+}
+
+export interface ProposalState_Active {
+  __kind: 'Active'
+}
+
+export interface ProposalState_Accepted {
+  __kind: 'Accepted'
+}
+
+export interface ProposalState_Rejected {
+  __kind: 'Rejected'
+}
+
+export interface ProposalState_Expired {
+  __kind: 'Expired'
+}
+
+export interface ProposalState_Aborted {
+  __kind: 'Aborted'
+}
+
+export interface ProposalState_Finalized {
+  __kind: 'Finalized'
+}
+
+export interface Type_549 {
+  index: number
+  unit: Unit
+  ayes: [Uint8Array, bigint, (bigint | undefined)][]
+  nays: [Uint8Array, bigint, (bigint | undefined)][]
+  scale: Scale
+  eligible: bigint
+  participating: bigint
+  yes: bigint
+  no: bigint
+  quorum: (number | undefined)
+  majority: Majority
+}
+
 export interface AccountInfo {
   nonce: number
   consumers: number
@@ -467,6 +541,64 @@ export interface FlowGovernance_No {
 
 export interface FlowGovernance_Yes {
   __kind: 'Yes'
+}
+
+export type ProposalType = ProposalType_General | ProposalType_Withdrawal | ProposalType_Spending
+
+export interface ProposalType_General {
+  __kind: 'General'
+}
+
+export interface ProposalType_Withdrawal {
+  __kind: 'Withdrawal'
+}
+
+export interface ProposalType_Spending {
+  __kind: 'Spending'
+}
+
+export type SlashingRule = SlashingRule_Automated | SlashingRule_Tribunal
+
+export interface SlashingRule_Automated {
+  __kind: 'Automated'
+}
+
+export interface SlashingRule_Tribunal {
+  __kind: 'Tribunal'
+}
+
+export type Unit = Unit_Account | Unit_Token
+
+export interface Unit_Account {
+  __kind: 'Account'
+}
+
+export interface Unit_Token {
+  __kind: 'Token'
+}
+
+export type Scale = Scale_Linear | Scale_Quadratic
+
+export interface Scale_Linear {
+  __kind: 'Linear'
+}
+
+export interface Scale_Quadratic {
+  __kind: 'Quadratic'
+}
+
+export type Majority = Majority_Simple | Majority_Relative | Majority_Absolute
+
+export interface Majority_Simple {
+  __kind: 'Simple'
+}
+
+export interface Majority_Relative {
+  __kind: 'Relative'
+}
+
+export interface Majority_Absolute {
+  __kind: 'Absolute'
 }
 
 export interface AccountData {

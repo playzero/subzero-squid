@@ -3,14 +3,14 @@ import { getMemberRemovedData } from './getters'
 
 import { getOrgMember } from '../../util/db/getters'
 
-import { hashToHexString, addressCodec } from '../../util/helpers'
+import { arrayToHexString, addressCodec } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
 async function handleMemberRemovedEvent(ctx: EventHandlerContext) {
 	const eventData = getMemberRemovedData(ctx)
 	let address = addressCodec.encode(eventData.who)
-	let orgId = hashToHexString(eventData.orgId)
+	let orgId = arrayToHexString(eventData.orgId)
 
 	let member = await getOrgMember(ctx.store, orgId, address)
 	if (!member) {

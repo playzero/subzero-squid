@@ -4,15 +4,11 @@ import { CallContext } from '../../types/contexts'
 import { UnknownVersionError } from '../../../common/errors'
 
 
-interface IdentitySetData {
-    info: IdentityInfo
-}
-
-export function getIdentitySetData(ctx: CallContext): IdentitySetData {
+export function getIdentitySetData(ctx: CallContext): IdentityInfo {
     const call = new IdentitySetIdentityCall(ctx)
     if (call.isV63) {
         const { info } = call.asV63
-        return { info }
+        return info
     } else {
         throw new UnknownVersionError(call.constructor.name)
     }

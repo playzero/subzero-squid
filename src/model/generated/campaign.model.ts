@@ -2,7 +2,6 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, M
 import * as marshal from "./marshal"
 import {Organization} from "./organization.model"
 import {Identity} from "./identity.model"
-import {CampaignMetadata} from "./campaignMetadata.model"
 import {CampaignContributor} from "./campaignContributor.model"
 import {Proposal} from "./proposal.model"
 
@@ -60,10 +59,6 @@ export class Campaign {
   @Column_("text", {nullable: false})
   state!: string
 
-  @Index_()
-  @ManyToOne_(() => CampaignMetadata, {nullable: true})
-  metadata!: CampaignMetadata | undefined | null
-
   @OneToMany_(() => CampaignContributor, e => e.campaign)
   contributors!: CampaignContributor[]
 
@@ -72,4 +67,28 @@ export class Campaign {
 
   @Column_("int4", {nullable: false})
   createdAtBlock!: number
+
+  @Column_("text", {nullable: false})
+  cid!: string
+
+  @Column_("text", {nullable: false})
+  name!: string
+
+  @Column_("text", {nullable: false})
+  email!: string
+
+  @Column_("text", {nullable: false})
+  title!: string
+
+  @Column_("text", {nullable: false})
+  description!: string
+
+  @Column_("text", {nullable: false})
+  markdown!: string
+
+  @Column_("text", {nullable: false})
+  logo!: string
+
+  @Column_("text", {nullable: false})
+  header!: string
 }

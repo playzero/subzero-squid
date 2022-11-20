@@ -20,8 +20,6 @@ for (const extrinsicName in extrinsicHandlers) {
 processor.includeAllBlocks()
 
 type Item = BatchProcessorItem<typeof processor>
-// type EventItem = BatchProcessorEventItem<typeof processor>
-// type CallItem = BatchProcessorCallItem<typeof processor>
 type Context = BatchContext<Store, Item>
 
 processor.run(new TypeormDatabase(), run)

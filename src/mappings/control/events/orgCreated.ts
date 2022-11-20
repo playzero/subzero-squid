@@ -1,21 +1,21 @@
 import { EventHandlerContext } from '../../types/contexts'
 import { getOrgCreatedData } from './getters'
+import { CurrencyId } from '../../../types/generated/v63'
 
 import { getOrg } from '../../util/db/getters'
 import { upsertIdentity } from '../../util/db/identity'
 import { Organization } from '../../../model'
-import { upsertOrganizationMetadata } from '../../util/ipfs/metadata'
 import { fetchOrgMetadata } from '../../util/ipfs/getters'
 import { storage } from '../../../storage'
 
-import { hashToHexString } from '../../util/helpers'
-import { ObjectExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
+import { arrayToHexString } from '../../util/helpers'
+import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
 async function handleOrgCreatedEvent(ctx: EventHandlerContext) {
 	const eventData = getOrgCreatedData(ctx)
-	let orgId = hashToHexString(eventData.orgId)
-	let treasury = hashToHexString(eventData.treasuryId)
+	let orgId = arrayToHexString(eventData.orgId)
+	let treasury = arrayToHexString(eventData.treasuryId)
 
 	if (await getOrg(ctx.store, orgId)) {
 		ctx.log.warn(ObjectExistsWarn('Org', orgId))
@@ -33,8 +33,8 @@ async function handleOrgCreatedEvent(ctx: EventHandlerContext) {
 		return
     }
 
-	let creator = hashToHexString(storageData.creator)
-	let prime = hashToHexString(storageData.prime)
+	let creator = arrayToHexString(storageData.creator)
+	let prime = arrayToHexString(storageData.prime)
 
 	let creatorIdentity = await upsertIdentity(ctx.store, creator, null)
 	let primeIdentity = await upsertIdentity(ctx.store, prime, null)
@@ -54,23 +54,37 @@ async function handleOrgCreatedEvent(ctx: EventHandlerContext) {
 	org.membershipFee = storageData.membershipFee
 	org.createdAtBlock = storageData.created
 	org.updatedAtBlock = storageData.mutated
-
-	org.state = stateStorageData
-	org.govCurrency = storageData.govCurrency?.value.__kind // ProtocolTokenId
-	org.payCurrency = storageData.payCurrency?.value.__kind // PaymentTokenId
+	org.state = stateStorageData.__kind
+	org.govCurrency = getCurrencyValue(storageData.govCurrency) // ProtocolTokenId
+	org.payCurrency = getCurrencyValue(storageData.payCurrency) // PaymentTokenId
 	org.memberLimit = storageData.memberLimit
-
-	// TODO: ASAP add deposit to the event
+	// TODO: add deposit to the event
 	// org.deposit = eventData.deposit;
 	org.deposit = BigInt(10 ^ 10) // 1 GAME Dollar (default)
+	org.cid = storageData.cid.toString()
 
-	// Check if cid is valid, fetch metadata from ipfs
+	// Fetch metadata from ipfs
 	let metadata = await fetchOrgMetadata(storageData.cid.toString(), orgId)
-	if (metadata) {
-		org.metadata = await upsertOrganizationMetadata(ctx.store, storageData.cid.toString(), metadata)
+	if (!metadata) {
+		ctx.log.warn(ObjectNotExistsWarn(`${ctx.event.name} - Metadata`, org.cid))
 	}
+	org.name = metadata?.name ?? ''
+	org.description = metadata?.description ?? ''
+	org.website = metadata?.website ?? ''
+	org.email = metadata?.email ?? ''
+	org.repo = metadata?.repo ?? ''
+	org.logo = metadata?.logo ?? ''
+	org.header = metadata?.header ?? ''
 
 	await ctx.store.save(org)
+}
+
+function getCurrencyValue(currency: CurrencyId) {
+	if (currency.__kind == 'Token') {
+		return currency.__kind
+	} else {
+		return currency.value.toString()
+	}
 }
 
 export { handleOrgCreatedEvent }

@@ -5,14 +5,14 @@ import { getOrg, getOrgMember } from '../../util/db/getters'
 import { upsertIdentity } from '../../util/db/identity'
 import { OrganizationMember } from '../../../model'
 
-import { hashToHexString, addressCodec } from '../../util/helpers'
+import { arrayToHexString, addressCodec } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn } from '../../../common/errors'
 
 
 async function handleMemberAddedEvent(ctx: EventHandlerContext) {
 	const eventData = getMemberAddedData(ctx)
 	let address = addressCodec.encode(eventData.who)
-	let orgId = hashToHexString(eventData.orgId)
+	let orgId = arrayToHexString(eventData.orgId)
 
 	if (await getOrgMember(ctx.store, orgId, address)) {
 		ctx.log.warn(ObjectExistsWarn('Member', `${orgId}-${address}`.toLowerCase()))

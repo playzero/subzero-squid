@@ -7,8 +7,8 @@ import { upsertIdentity } from '../../util/db/identity'
 import { addressCodec } from '../../util/helpers';
 
 async function handleIdentityClearedEvent(ctx: EventHandlerContext) {
-	const eventData = getIdentityClearedData(ctx)
-	let address = addressCodec.encode(eventData.who)
+	const who = getIdentityClearedData(ctx)
+	let address = addressCodec.encode(who)
 
 	const upsertData: IdentityUpsertData = {
 		address: address,

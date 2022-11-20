@@ -1,8 +1,8 @@
-import { OrganizationMetadata, CampaignMetadata, ProposalMetadata } from '../../types/metadata';
-import { isCIDValid } from '../utils';
-import { to } from 'await-to-js';
-import fetch from 'node-fetch';
-import { ipfsGateway } from '../../../config.json';
+import { OrganizationMetadata, CampaignMetadata, ProposalMetadata } from '../../types/metadata'
+import { isCIDValid } from '../helpers'
+import { to } from 'await-to-js'
+import fetch from 'node-fetch'
+import { ipfsGateway } from '../../../config.json'
 
 const getIpfsUrlByCid = (cid: string): string => `${ipfsGateway}${cid}`;
 
@@ -45,7 +45,7 @@ async function fetchCampaignMetadata(cid: string, campaignId: string): Promise<C
 }
 
 async function fetchProposalMetadata(cid: string, proposalId: string): Promise<ProposalMetadata | null> {
-	let metadata: CampaignMetadata | null = null;
+	let metadata: ProposalMetadata | null = null;
 	return await fetchMetadata(cid, proposalId, 'proposal', metadata);
 }
 

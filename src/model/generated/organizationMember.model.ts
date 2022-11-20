@@ -21,4 +21,7 @@ export class OrganizationMember {
   @Index_()
   @ManyToOne_(() => Identity, {nullable: true})
   identity!: Identity
+
+  @Column_("text", {nullable: false})
+  state!: string
 }

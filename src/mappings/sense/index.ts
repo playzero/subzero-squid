@@ -6,7 +6,7 @@ export default {
 	name: 'Sense',
 	extrinsicHandlers: {},
 	eventHandlers: {
-		'entityCreated': handleEntityCreatedEvent,
-		'propertyUpdated': handlePropertyUpdatedEvent,
+		'EntityCreated': handleEntityCreatedEvent,
+		'PropertyUpdated': handlePropertyUpdatedEvent,
 	}
 } as Pallet;

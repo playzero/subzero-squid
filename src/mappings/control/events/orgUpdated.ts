@@ -4,13 +4,13 @@ import { getOrgUpdatedData } from './getters'
 import { getOrg } from '../../util/db/getters'
 import { upsertIdentity } from '../../util/db/identity'
 
-import { addressCodec, hashToHexString } from '../../util/helpers'
+import { addressCodec, arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
 async function handleOrgUpdatedEvent(ctx: EventHandlerContext) {
 	const eventData = getOrgUpdatedData(ctx)
-	let orgId = hashToHexString(eventData.orgId)
+	let orgId = arrayToHexString(eventData.orgId)
 
 	let org = await getOrg(ctx.store, orgId);
 	if (!org) {

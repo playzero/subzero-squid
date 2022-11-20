@@ -1,7 +1,6 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
 import {Identity} from "./identity.model"
-import {OrganizationMetadata} from "./organizationMetadata.model"
 import {OrganizationMember} from "./organizationMember.model"
 import {Campaign} from "./campaign.model"
 import {Proposal} from "./proposal.model"
@@ -60,10 +59,6 @@ export class Organization {
   @Column_("int4", {nullable: false})
   memberLimit!: number
 
-  @Index_()
-  @ManyToOne_(() => OrganizationMetadata, {nullable: true})
-  metadata!: OrganizationMetadata | undefined | null
-
   @Column_("int4", {nullable: false})
   createdAtBlock!: number
 
@@ -81,4 +76,28 @@ export class Organization {
 
   @OneToMany_(() => Proposal, e => e.organization)
   proposals!: Proposal[]
+
+  @Column_("text", {nullable: false})
+  cid!: string
+
+  @Column_("text", {nullable: false})
+  name!: string
+
+  @Column_("text", {nullable: false})
+  description!: string
+
+  @Column_("text", {nullable: false})
+  website!: string
+
+  @Column_("text", {nullable: false})
+  email!: string
+
+  @Column_("text", {nullable: false})
+  repo!: string
+
+  @Column_("text", {nullable: false})
+  logo!: string
+
+  @Column_("text", {nullable: false})
+  header!: string
 }

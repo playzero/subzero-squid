@@ -1,18 +1,15 @@
+import { Data } from '../../../types/generated/v63'
 import { CallHandlerContext } from '../../types/contexts'
 import { getIdentitySetData } from './getters'
 
 import { IdentityUpsertData } from '../../types/identity';
 import { upsertIdentity } from '../../util/db/identity'
 
-import { hexStringToString } from '../../util/helpers';
 import { getOriginAccountId } from '../../../common/tools'
 
 
 async function handleIdentitySetExtrinsic(ctx: CallHandlerContext) {
 	const callData = getIdentitySetData(ctx)
-
-	const getValue = (data: string | undefined) => (data ? hexStringToString(data) : null)
-
 	const origin = getOriginAccountId(ctx.call.origin)
     if (!origin) {
         ctx.log.warn(`Origin for set_identity is null`)
@@ -21,22 +18,33 @@ async function handleIdentitySetExtrinsic(ctx: CallHandlerContext) {
 
 	const upsertData: IdentityUpsertData = {
 		address: origin,
-		displayName: getValue(callData.info.display.value),
-		legalName: getValue(callData.info.legal.value),
-		email: getValue(callData.info.email.value),
-		riot: getValue(callData.info.riot?.value),
-		image: getValue(callData.info.image?.value),
-		twitter: getValue(callData.info.twitter?.value),
-		web: getValue(callData.info.web?.value),
-		web3name: null,
-		discord: null
-		// TODO: these fields belong to IdentityInfo::additional vector
-		// web3name: getValue(callData.info.web3name?.__kind),
-		// discord: getValue(callData.info.discord?.__kind),
+		displayName: getValue(callData.display),
+		legalName: getValue(callData.legal),
+		email: getValue(callData.email),
+		riot: getValue(callData.riot),
+		image: getValue(callData.image),
+		twitter: getValue(callData.twitter),
+		web: getValue(callData.web),
+		web3name: getFromAdditional('web3name', callData.additional),
+		discord: getFromAdditional('discord', callData.additional),
 	};
 
 	await upsertIdentity(ctx.store, upsertData.address, upsertData);
 
+}
+
+const getValue = (data: Data) => data.__kind == 'None' ? null : data.value.toString()
+
+function getFromAdditional(name: string, additional: [Data, Data][]) {
+	if (!additional) {
+		return null
+	}
+	additional.forEach((field) => {
+		const [k, v] = field
+		if (k.__kind == name) {
+			return getValue(v)
+		}
+	})
 }
 
 export { handleIdentitySetExtrinsic };

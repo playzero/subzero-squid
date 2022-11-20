@@ -4,29 +4,28 @@ import { getCampaignCreatedData } from './getters'
 import { getOrg, getCampaign } from '../../util/db/getters'
 import { upsertIdentity } from '../../util/db/identity'
 import { Campaign } from '../../../model'
-import { upsertCampaignMetadata } from '../../util/ipfs/metadata'
 import { fetchCampaignMetadata } from '../../util/ipfs/getters'
 import { storage } from '../../../storage'
 
-import { hashToHexString } from '../../util/helpers'
+import { arrayToHexString } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
 	const eventData = getCampaignCreatedData(ctx)
-	let campaignId = hashToHexString(eventData.campaignId)
+	let campaignId = arrayToHexString(eventData.campaignId)
 
 	if (await getCampaign(ctx.store, campaignId)) {
 		ctx.log.warn(ObjectExistsWarn('Campaign', campaignId))
 		return
 	}
 
-	const storageData = await storage.control.getCampaignStorageData(ctx, eventData.campaignId)
+	const storageData = await storage.flow.getCampaignStorageData(ctx, eventData.campaignId)
     if (!storageData) {
 		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, campaignId))
 		return
     }
 
-	let orgId = hashToHexString(storageData.orgId)
+	let orgId = arrayToHexString(storageData.orgId)
 	let org = await getOrg(ctx.store, orgId)
 	if (!org) {
 		ctx.log.warn(ObjectNotExistsWarn('Org', orgId))
@@ -39,7 +38,8 @@ async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
 		return
     }
 
-	let creator = storageData.creator
+	let creator = arrayToHexString(storageData.owner)
+	let admin = arrayToHexString(storageData.admin)
 	let start = storageData.start
 
 	let campaign = new Campaign();
@@ -47,9 +47,9 @@ async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
 	campaign.organization = org;
 	campaign.creator = creator;
 	campaign.creatorIdentity = await upsertIdentity(ctx.store, creator, null);
-	campaign.admin = storageData.adminId;
-	campaign.adminIdentity = await upsertIdentity(ctx.store, storageData.adminId, null);
-	campaign.target = storageData.target;
+	campaign.admin = admin;
+	campaign.adminIdentity = await upsertIdentity(ctx.store, admin, null);
+	campaign.target = storageData.cap;
 	campaign.deposit = storageData.deposit;
 	campaign.start = start
 	campaign.expiry = storageData.expiry;
@@ -57,14 +57,22 @@ async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
 	campaign.governance = storageData.governance.__kind;
 	campaign.tokenSymbol = storageData.tokenSymbol?.toString();
 	campaign.tokenName = storageData.tokenName?.toString();
-	campaign.state = stateStorageData
+	campaign.state = stateStorageData.__kind
 	campaign.createdAtBlock = storageData.created
+	campaign.cid = storageData.cid.toString()
 
-	// Check if cid is valid, fetch metadata from ipfs
-	let metadata = await fetchCampaignMetadata(storageData.cid.toString(), orgId);
-	if (metadata) {
-		campaign.metadata = await upsertCampaignMetadata(ctx.store, storageData.cid.toString(), metadata);
+	// Fetch metadata from ipfs
+	let metadata = await fetchCampaignMetadata(campaign.cid, orgId);
+	if (!metadata) {
+		ctx.log.warn(ObjectNotExistsWarn(`${ctx.event.name} - Metadata`, campaign.cid))
 	}
+	campaign.name = metadata?.name ?? '';
+	campaign.email = metadata?.email ?? '';
+	campaign.title = metadata?.title ?? '';
+	campaign.description = metadata?.description ?? '';
+	campaign.markdown = metadata?.markdown ?? '';
+	campaign.logo = metadata?.logo ?? '';
+	campaign.header = metadata?.header ?? '';
 
 	await ctx.store.save(campaign);
 }

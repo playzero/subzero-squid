@@ -8,17 +8,15 @@ type Identity @entity {
     image: String
     twitter: String
     web: String
-
+    # Additionals:
     web3name: String
     discord: String
 
     createdOrganizations: [Organization!]! @derivedFrom(field: "creatorIdentity")
     controllerOrganizations: [Organization!]! @derivedFrom(field: "primeIdentity")
     organizationMembers: [OrganizationMember!]! @derivedFrom(field: "identity")
-
     createdCampaigns: [Campaign!]! @derivedFrom(field: "creatorIdentity")
     campaignContributors: [CampaignContributor!]! @derivedFrom(field: "identity")
-
     createdProposals: [Proposal!]! @derivedFrom(field: "creatorIdentity")
     proposalVoters: [ProposalVoter!]! @derivedFrom(field: "identity")
 }
@@ -39,18 +37,15 @@ type Organization @entity {
     govCurrency: String!
     payCurrency: String!
     memberLimit: Int!
-    metadata: OrganizationMetadata
     createdAtBlock: Int!
     updatedAtBlock: Int!
     deposit: BigInt!
-
     members: [OrganizationMember!] @derivedFrom(field: "organization")
     campaigns: [Campaign!]! @derivedFrom(field: "organization")
     proposals: [Proposal]! @derivedFrom(field: "organization")
-}
 
-type OrganizationMetadata @entity {
-    id: ID!
+    # Metadata:
+    cid: String!
     name: String!
     description: String!
     website: String!
@@ -65,6 +60,7 @@ type OrganizationMember @entity {
     organization: Organization!
     address: String!
     identity: Identity!
+    state: String!
 }
 
 type Campaign @entity {
@@ -82,18 +78,13 @@ type Campaign @entity {
     governance: String!
     tokenSymbol: String
     tokenName: String
-
     state: String!
-
-    metadata: CampaignMetadata
     contributors: [CampaignContributor]! @derivedFrom(field: "campaign")
     proposals: [Proposal]! @derivedFrom(field: "campaign")
-
     createdAtBlock: Int!
-}
-
-type CampaignMetadata @entity {
-    id: ID!
+    
+    # Metadata:
+    cid: String!
     name: String!
     email: String!
     title: String!
@@ -106,10 +97,8 @@ type CampaignMetadata @entity {
 type CampaignContributor @entity {
     id: ID!
     campaign: Campaign!
-
     address: String!
     identity: Identity!
-
     contributed: BigInt!
 }
 
@@ -125,19 +114,14 @@ type Proposal @entity {
     voting: Voting!
     start: Int!
     expiry: Int!
-    createdAtBlock: Int!
-
     amount: BigInt
     currencyId: String
     beneficiary: String
     beneficiaryIdentity: Identity
     slashingRule: String
 
-    metadata: ProposalMetadata
-}
-
-type ProposalMetadata @entity {
-    id: ID!
+    # Metadata:
+    cid: String!
     name: String!
     description: String!
 }
@@ -160,4 +144,17 @@ type ProposalVoter @entity {
     power: BigInt!
     amount: BigInt
     voted: Boolean!
+}
+
+type SenseEntity @entity {
+    id: ID!
+    identity: Identity!
+    experience: BigInt!
+    trust: BigInt!
+    reputation: BigInt!
+    createdAtBlock: Int!
+    updatedAtBlock: Int!
+    
+    # Metadata:
+    cid: String!
 }

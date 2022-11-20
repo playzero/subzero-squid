@@ -1,9 +1,9 @@
-import { IdentityUpsertData } from '../types/identity';
+import { IdentityUpsertData } from '../../types/identity';
 
-import { Identity } from '../../model';
+import { Identity } from '../../../model';
 
 import { get } from './getters';
-import { Store } from '@subsquid/substrate-processor';
+import { Store } from '@subsquid/typeorm-store';
 
 function getIdentity(store: Store, identity: string): Promise<Identity | null> {
 	return get(store, Identity, identity);

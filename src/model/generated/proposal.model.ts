@@ -4,7 +4,6 @@ import {Identity} from "./identity.model"
 import {Organization} from "./organization.model"
 import {Campaign} from "./campaign.model"
 import {Voting} from "./voting.model"
-import {ProposalMetadata} from "./proposalMetadata.model"
 
 @Entity_()
 export class Proposal {
@@ -49,9 +48,6 @@ export class Proposal {
   @Column_("int4", {nullable: false})
   expiry!: number
 
-  @Column_("int4", {nullable: false})
-  createdAtBlock!: number
-
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: true})
   amount!: bigint | undefined | null
 
@@ -68,7 +64,12 @@ export class Proposal {
   @Column_("text", {nullable: true})
   slashingRule!: string | undefined | null
 
-  @Index_()
-  @ManyToOne_(() => ProposalMetadata, {nullable: true})
-  metadata!: ProposalMetadata | undefined | null
+  @Column_("text", {nullable: false})
+  cid!: string
+
+  @Column_("text", {nullable: false})
+  name!: string
+
+  @Column_("text", {nullable: false})
+  description!: string
 }

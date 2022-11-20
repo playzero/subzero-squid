@@ -418,3 +418,187 @@ export class SensePropertyUpdatedEvent {
     return this._chain.decodeEvent(this.event)
   }
 }
+
+export class SignalAbortedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Aborted')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Aborted') === '6e72a97ae5b806677fe57a7494d12e2b9c7eb6bf41b48bb46554771f71d3e1cc'
+  }
+
+  get asV63(): {proposalId: Uint8Array} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class SignalAcceptedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Accepted')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Accepted') === '6e72a97ae5b806677fe57a7494d12e2b9c7eb6bf41b48bb46554771f71d3e1cc'
+  }
+
+  get asV63(): {proposalId: Uint8Array} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class SignalActivatedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Activated')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Activated') === '6e72a97ae5b806677fe57a7494d12e2b9c7eb6bf41b48bb46554771f71d3e1cc'
+  }
+
+  get asV63(): {proposalId: Uint8Array} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class SignalCreatedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Created')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Created') === 'a32001d595a80cd793e2fb41d5441290f20cdb8b2c9e5bccb6809adc21ae606a'
+  }
+
+  get asV63(): {account: Uint8Array, proposalId: Uint8Array, orgId: Uint8Array, campaignId: (Uint8Array | undefined), amount: (bigint | undefined), start: number, expiry: number} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class SignalExpiredEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Expired')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Expired') === '6e72a97ae5b806677fe57a7494d12e2b9c7eb6bf41b48bb46554771f71d3e1cc'
+  }
+
+  get asV63(): {proposalId: Uint8Array} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class SignalFinalizedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Finalized')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Finalized') === '6e72a97ae5b806677fe57a7494d12e2b9c7eb6bf41b48bb46554771f71d3e1cc'
+  }
+
+  get asV63(): {proposalId: Uint8Array} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class SignalRejectedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Rejected')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Rejected') === '6e72a97ae5b806677fe57a7494d12e2b9c7eb6bf41b48bb46554771f71d3e1cc'
+  }
+
+  get asV63(): {proposalId: Uint8Array} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class SignalVotedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Signal.Voted')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  get isV63(): boolean {
+    return this._chain.getEventHash('Signal.Voted') === 'c017b1f31028a2d6a927c9c9de81e8be0f84cc28fdc5daba87b671932d1be3be'
+  }
+
+  get asV63(): {account: Uint8Array, proposalId: Uint8Array, voted: boolean, yes: bigint, no: bigint, votePower: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
