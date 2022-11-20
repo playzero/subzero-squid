@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getMemberRemovedData } from './getters'
 
 import { getOrgMember } from '../../util/db/getters'
@@ -7,8 +7,8 @@ import { arrayToHexString, addressCodec } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
-async function handleMemberRemovedEvent(ctx: EventHandlerContext) {
-	const eventData = getMemberRemovedData(ctx)
+async function handleMemberRemovedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getMemberRemovedData(ctx, event)
 	let address = addressCodec.encode(eventData.who)
 	let orgId = arrayToHexString(eventData.orgId)
 

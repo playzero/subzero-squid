@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getCampaignFailedData } from './getters'
 
 import { getCampaign } from '../../util/db/getters'
@@ -8,8 +8,8 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
-async function handleCampaignFailedEvent(ctx: EventHandlerContext) {
-	const campaignIdArray = getCampaignFailedData(ctx)
+async function handleCampaignFailedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const campaignIdArray = getCampaignFailedData(ctx, event)
 	let campaignId = arrayToHexString(campaignIdArray)
 
 	let campaign = await getCampaign(ctx.store, campaignId)
@@ -17,9 +17,9 @@ async function handleCampaignFailedEvent(ctx: EventHandlerContext) {
 		ctx.log.warn(ObjectNotExistsWarn('Campaign', campaignId))
 		return
 	}
-	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, campaignIdArray)
+	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, block, campaignIdArray)
     if (!stateStorageData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, campaignId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, campaignId))
 		return
     }
 

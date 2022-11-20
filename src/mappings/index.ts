@@ -4,20 +4,20 @@ import identity from './identity'
 import sense from './sense'
 import signal from './signal'
 
-const extrinsicHandlers: Record<string, (context: any) => void > = {};
-const eventHandlers: Record<string, (context: any) => void > = {};
+const extrinsicHandlers: Record<string, (context: any, block: any, item: any) => void > = {};
+const eventHandlers: Record<string, (context: any, block: any, item: any) => void > = {};
 
 [control, flow, signal, sense, identity].forEach((pallet) => {
 	const mergeHandlers = (
-		handlers: Record<string, (context: any) => void >,
-		saveHandlers: Record<string, (context: any) => void >) =>
+		handlers: Record<string, (context: any, block: any, item: any) => void >,
+		saveHandlers: Record<string, (context: any, block: any, item: any) => void >) =>
 	{
 		for (const name in handlers) {
 			saveHandlers[`${pallet.name}.${name}`] = handlers[name]
 		}
 	};
-	mergeHandlers(pallet.extrinsicHandlers, extrinsicHandlers);
-	mergeHandlers(pallet.eventHandlers, eventHandlers);
+	mergeHandlers(pallet.extrinsicHandlers, extrinsicHandlers)
+	mergeHandlers(pallet.eventHandlers, eventHandlers)
 });
 
 export { extrinsicHandlers, eventHandlers }

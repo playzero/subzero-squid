@@ -1,7 +1,7 @@
-import {BatchContext, BatchProcessorItem, SubstrateBatchProcessor} from "@subsquid/substrate-processor"
-import {Store, TypeormDatabase} from "@subsquid/typeorm-store"
-import {eventHandlers, extrinsicHandlers} from './mappings';
-import { archiveGQL, chainRPC, startBlock } from './config.json';
+import { BatchContext, BatchProcessorItem, SubstrateBatchProcessor } from "@subsquid/substrate-processor"
+import { Store, TypeormDatabase } from "@subsquid/typeorm-store"
+import { eventHandlers, extrinsicHandlers } from './mappings';
+import { archiveGQL, chainRPC } from './config.json';
 
 const processor = new SubstrateBatchProcessor()
     .setTypesBundle('zeroTypesBundle.json')
@@ -29,12 +29,12 @@ async function run(ctx: Context): Promise<void> {
         for (const item of block.items) {
             if (item.kind === 'event') {
                 if (item.name in eventHandlers) {
-                    eventHandlers[item.name](ctx)
+                    eventHandlers[item.name](ctx, block, item.event)
                 }
             }
             if (item.kind === 'call') {
                 if (item.name in extrinsicHandlers) {
-                    extrinsicHandlers[item.name](ctx)
+                    extrinsicHandlers[item.name](ctx, block, item.call)
                 }
             }
         }

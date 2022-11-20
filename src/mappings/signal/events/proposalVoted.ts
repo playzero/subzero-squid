@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getProposalVotedData } from './getters'
 
 import { getProposal, getVoting, getProposalVoter } from '../../util/db/getters'
@@ -9,11 +9,11 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
-async function handleProposalVotedEvent(ctx: EventHandlerContext) {
-	const eventData = getProposalVotedData(ctx)
+async function handleProposalVotedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getProposalVotedData(ctx, event)
 	let proposalId = arrayToHexString(eventData.proposalId)
 	let votingId = proposalId
-	let proposal = await getProposal(ctx.store, proposalId);
+	let proposal = await getProposal(ctx.store, proposalId)
 	if (!proposal) {
 		ctx.log.warn(ObjectNotExistsWarn('Proposal', proposalId))
 		return
@@ -29,19 +29,19 @@ async function handleProposalVotedEvent(ctx: EventHandlerContext) {
 	await ctx.store.save(voting);
 
 	let account = arrayToHexString(eventData.account)
-	let voter = await getProposalVoter(ctx.store, proposalId, account);
+	let voter = await getProposalVoter(ctx.store, proposalId, account)
 	if (!voter) {
-		voter = new ProposalVoter();
-		voter.id = `${proposalId}-${account}`.toLowerCase();
-		voter.address = account;
-		voter.identity = await upsertIdentity(ctx.store, account, null);
-		voter.voting = voting;
+		voter = new ProposalVoter()
+		voter.id = `${proposalId}-${account}`.toLowerCase()
+		voter.address = account
+		voter.identity = await upsertIdentity(ctx.store, account, null)
+		voter.voting = voting
 	}
 	// TODO: get the deposit value from the Voted event
-	voter.amount = BigInt(0);
-	voter.power = eventData.votePower;
-	voter.voted = eventData.voted;
-	await ctx.store.save(voter);
+	voter.amount = BigInt(0)
+	voter.power = eventData.votePower
+	voter.voted = eventData.voted
+	await ctx.store.save(voter)
 }
 
-export { handleProposalVotedEvent };
+export { handleProposalVotedEvent }

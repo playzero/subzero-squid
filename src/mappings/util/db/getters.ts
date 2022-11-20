@@ -25,10 +25,10 @@ export async function get<TModel>(
 	return (await store.findOne<TModel>(entityConstructor, { where: { id }, relations })) ?? null;
 }
 
-// TODO: review "get" relations, ex. ['creatorIdentity', 'metadata']
+// TODO: review "get" relations, ex. ['creatorIdentity']
 
 function getOrg(store: Store, orgId: string): Promise<Organization | null> {
-	return get(store, Organization, orgId, ['creatorIdentity', 'metadata']);
+	return get(store, Organization, orgId, ['creatorIdentity']);
 }
 
 function getOrgMember(store: Store, orgId: string, member: string): Promise<OrganizationMember | null> {
@@ -36,7 +36,7 @@ function getOrgMember(store: Store, orgId: string, member: string): Promise<Orga
 }
 
 function getCampaign(store: Store, campaignId: string): Promise<Campaign | null> {
-	return get(store, Campaign, campaignId, ['organization', 'creatorIdentity', 'metadata']);
+	return get(store, Campaign, campaignId, ['organization', 'creatorIdentity']);
 }
 
 function getCampaignContributor(

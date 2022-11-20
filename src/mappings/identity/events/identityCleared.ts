@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getIdentityClearedData } from './getters'
 
 import { IdentityUpsertData } from '../../types/identity';
@@ -6,8 +6,8 @@ import { upsertIdentity } from '../../util/db/identity'
 
 import { addressCodec } from '../../util/helpers';
 
-async function handleIdentityClearedEvent(ctx: EventHandlerContext) {
-	const who = getIdentityClearedData(ctx)
+async function handleIdentityClearedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const who = getIdentityClearedData(ctx, event)
 	let address = addressCodec.encode(who)
 
 	const upsertData: IdentityUpsertData = {

@@ -1,4 +1,5 @@
 import { OrgType, AccessModel, FeeModel} from '../../../types/generated/v63'
+import { EventContext, Event } from '../../types/contexts'
 import {
     ControlMemberAddedEvent,
     ControlMemberRemovedEvent,
@@ -6,7 +7,6 @@ import {
     ControlOrgUpdatedEvent
 
 } from '../../../types/generated/events'
-import { EventContext } from '../../types/contexts'
 import { UnknownVersionError } from '../../../common/errors'
 
 
@@ -35,8 +35,8 @@ interface OrgUpdatedData {
     blockNumber: number
 }
 
-export function getMemberAddedData(ctx: EventContext): MemberUpdatedData {
-    const event = new ControlMemberAddedEvent(ctx)
+export function getMemberAddedData(ctx: EventContext, ev: Event): MemberUpdatedData {
+    const event = new ControlMemberAddedEvent(ctx, ev)
     if (event.isV63) {
         const { orgId, who, blockNumber } = event.asV63
         return { orgId, who, blockNumber }
@@ -45,8 +45,8 @@ export function getMemberAddedData(ctx: EventContext): MemberUpdatedData {
     }
 }
 
-export function getMemberRemovedData(ctx: EventContext): MemberUpdatedData {
-    const event = new ControlMemberRemovedEvent(ctx)
+export function getMemberRemovedData(ctx: EventContext, ev: Event): MemberUpdatedData {
+    const event = new ControlMemberRemovedEvent(ctx, ev)
     if (event.isV63) {
         const { orgId, who, blockNumber } = event.asV63
         return { orgId, who, blockNumber }
@@ -55,8 +55,8 @@ export function getMemberRemovedData(ctx: EventContext): MemberUpdatedData {
     }
 }
 
-export function getOrgCreatedData(ctx: EventContext): OrgCreatedData {
-    const event = new ControlOrgCreatedEvent(ctx)
+export function getOrgCreatedData(ctx: EventContext, ev: Event): OrgCreatedData {
+    const event = new ControlOrgCreatedEvent(ctx, ev)
     if (event.isV63) {
         const { orgId, creator, treasuryId, createdAt, realmIndex } = event.asV63
         return { orgId, creator, treasuryId, createdAt, realmIndex }
@@ -65,8 +65,8 @@ export function getOrgCreatedData(ctx: EventContext): OrgCreatedData {
     }
 }
 
-export function getOrgUpdatedData(ctx: EventContext): OrgUpdatedData {
-    const event = new ControlOrgUpdatedEvent(ctx)
+export function getOrgUpdatedData(ctx: EventContext, ev: Event): OrgUpdatedData {
+    const event = new ControlOrgUpdatedEvent(ctx, ev)
     if (event.isV63) {
         const {
             orgId, primeId, orgType, accessModel, memberLimit,

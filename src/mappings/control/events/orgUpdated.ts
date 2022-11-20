@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getOrgUpdatedData } from './getters'
 
 import { getOrg } from '../../util/db/getters'
@@ -8,8 +8,8 @@ import { addressCodec, arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
-async function handleOrgUpdatedEvent(ctx: EventHandlerContext) {
-	const eventData = getOrgUpdatedData(ctx)
+async function handleOrgUpdatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getOrgUpdatedData(ctx, event)
 	let orgId = arrayToHexString(eventData.orgId)
 
 	let org = await getOrg(ctx.store, orgId);

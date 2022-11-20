@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getCampaignContributedData } from './getters'
 
 import { CampaignContributor } from '../../../model'
@@ -9,8 +9,8 @@ import { addressCodec, arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
-async function handleCampaignContributedEvent(ctx: EventHandlerContext) {
-	const eventData = getCampaignContributedData(ctx)
+async function handleCampaignContributedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getCampaignContributedData(ctx, event)
 	let campaignId = arrayToHexString(eventData.campaignId);
 	let contributor = addressCodec.encode(eventData.sender);
 

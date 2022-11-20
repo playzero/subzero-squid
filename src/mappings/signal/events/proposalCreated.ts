@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getProposalCreatedData } from './getters'
 
 import { getProposal, getVoting, getOrg, getCampaign } from '../../util/db/getters'
@@ -11,8 +11,8 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
-async function handleProposalCreatedEvent(ctx: EventHandlerContext) {
-	const eventData = getProposalCreatedData(ctx)
+async function handleProposalCreatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getProposalCreatedData(ctx, event)
 	let proposalId = arrayToHexString(eventData.proposalId)
 	if (await getProposal(ctx.store, proposalId)) {
 		ctx.log.warn(ObjectExistsWarn('Proposal', proposalId))
@@ -23,19 +23,19 @@ async function handleProposalCreatedEvent(ctx: EventHandlerContext) {
 		ctx.log.warn(ObjectExistsWarn('Voting', votingId))
 		return
 	}
-	const proposalData = await storage.signal.getProposalStorageData(ctx, eventData.proposalId)
+	const proposalData = await storage.signal.getProposalStorageData(ctx, block, eventData.proposalId)
     if (!proposalData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, proposalId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, proposalId))
 		return
     }
-	const votingData = await storage.signal.getVotingStorageData(ctx, eventData.proposalId)
+	const votingData = await storage.signal.getVotingStorageData(ctx, block, eventData.proposalId)
     if (!votingData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, votingId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, votingId))
 		return
     }
-	const proposalState = await storage.signal.getProposalStateStorageData(ctx, eventData.proposalId)
+	const proposalState = await storage.signal.getProposalStateStorageData(ctx, block, eventData.proposalId)
     if (!proposalState) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, proposalId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, proposalId))
 		return
     }
 	let orgId = arrayToHexString(proposalData.orgId)
@@ -80,13 +80,13 @@ async function handleProposalCreatedEvent(ctx: EventHandlerContext) {
 	proposal.cid = proposalData.cid.toString()
 
 	// Fetch metadata from ipfs
-	let metadata = await fetchProposalMetadata(proposalData.cid.toString(), proposalId);
+	let metadata = await fetchProposalMetadata(proposalData.cid.toString(), proposalId)
 	if (!metadata) {
-		ctx.log.warn(ObjectNotExistsWarn(`${ctx.event.name} - Metadata`, proposal.cid))
+		ctx.log.warn(ObjectNotExistsWarn(`${event.name} - Metadata`, proposal.cid))
 	}
-	proposal.name = metadata?.name ?? '';
-	proposal.description = metadata?.description ?? '';
-	await ctx.store.save(proposal);
+	proposal.name = metadata?.name ?? ''
+	proposal.description = metadata?.description ?? ''
+	await ctx.store.save(proposal)
 }
 
-export { handleProposalCreatedEvent };
+export { handleProposalCreatedEvent }

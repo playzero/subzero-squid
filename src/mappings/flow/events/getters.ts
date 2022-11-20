@@ -5,6 +5,7 @@ import {
     FlowFailedEvent,
     FlowSucceededEvent
 } from '../../../types/generated/events'
+import { Event } from '../../../types/generated/support'
 import { EventContext } from '../../types/contexts'
 import { UnknownVersionError } from '../../../common/errors'
 
@@ -26,7 +27,7 @@ interface CampaignContributedData {
     blockNumber: number
 }
 
-export function getCampaignCreatedData(ctx: EventContext): CampaignCreatedData {
+export function getCampaignCreatedData(ctx: EventContext, ev: Event): CampaignCreatedData {
     const event = new FlowCreatedEvent(ctx)
     if (event.isV63) {
         const { campaignId, creator, admin, target, deposit, expiry, name } = event.asV63
@@ -36,8 +37,8 @@ export function getCampaignCreatedData(ctx: EventContext): CampaignCreatedData {
     }
 }
 
-export function getCampaignContributedData(ctx: EventContext): CampaignContributedData {
-    const event = new FlowContributedEvent(ctx)
+export function getCampaignContributedData(ctx: EventContext, ev: Event): CampaignContributedData {
+    const event = new FlowContributedEvent(ctx, ev)
     if (event.isV63) {
         const { campaignId, sender, contribution, blockNumber } = event.asV63
         return { campaignId, sender, contribution, blockNumber }
@@ -46,8 +47,8 @@ export function getCampaignContributedData(ctx: EventContext): CampaignContribut
     }
 }
 
-export function getCampaignActivatedData(ctx: EventContext): Uint8Array {
-    const event = new FlowActivatedEvent(ctx)
+export function getCampaignActivatedData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new FlowActivatedEvent(ctx, ev)
     if (event.isV63) {
         const { campaignId } = event.asV63
         return campaignId
@@ -56,8 +57,8 @@ export function getCampaignActivatedData(ctx: EventContext): Uint8Array {
     }
 }
 
-export function getCampaignFailedData(ctx: EventContext): Uint8Array {
-    const event = new FlowFailedEvent(ctx)
+export function getCampaignFailedData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new FlowFailedEvent(ctx, ev)
     if (event.isV63) {
         const { campaignId, campaignBalance, blockNumber } = event.asV63
         return campaignId
@@ -66,8 +67,8 @@ export function getCampaignFailedData(ctx: EventContext): Uint8Array {
     }
 }
 
-export function getCampaignSucceededData(ctx: EventContext): Uint8Array {
-    const event = new FlowSucceededEvent(ctx)
+export function getCampaignSucceededData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new FlowSucceededEvent(ctx, ev)
     if (event.isV63) {
         const { campaignId, campaignBalance, blockNumber } = event.asV63
         return campaignId

@@ -8,7 +8,7 @@ import {
     SignalRejectedEvent,
     SignalVotedEvent
 } from '../../../types/generated/events'
-import { EventContext } from '../../types/contexts'
+import { EventContext, Event } from '../../types/contexts'
 import { UnknownVersionError } from '../../../common/errors'
 
 
@@ -32,8 +32,8 @@ interface ProposalVotedData {
 }
 
 
-export function getProposalCreatedData(ctx: EventContext): ProposalCreatedData {
-    const event = new SignalCreatedEvent(ctx)
+export function getProposalCreatedData(ctx: EventContext, ev: Event): ProposalCreatedData {
+    const event = new SignalCreatedEvent(ctx, ev)
     if (event.isV63) {
         const { account, proposalId, orgId, campaignId, amount, start, expiry } = event.asV63
         return { account, proposalId, orgId, campaignId, amount, start, expiry }
@@ -42,8 +42,8 @@ export function getProposalCreatedData(ctx: EventContext): ProposalCreatedData {
     }
 }
 
-export function getProposalVotedData(ctx: EventContext): ProposalVotedData {
-    const event = new SignalVotedEvent(ctx)
+export function getProposalVotedData(ctx: EventContext, ev: Event): ProposalVotedData {
+    const event = new SignalVotedEvent(ctx, ev)
     if (event.isV63) {
         const { account, proposalId, voted, yes, no, votePower } = event.asV63
         return { account, proposalId, voted, yes, no, votePower }
@@ -52,8 +52,8 @@ export function getProposalVotedData(ctx: EventContext): ProposalVotedData {
     }
 }
 
-export function getProposalActivatedData(ctx: EventContext): Uint8Array {
-    const event = new SignalActivatedEvent(ctx)
+export function getProposalActivatedData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new SignalActivatedEvent(ctx, ev)
     if (event.isV63) {
         const { proposalId } = event.asV63
         return proposalId
@@ -62,8 +62,8 @@ export function getProposalActivatedData(ctx: EventContext): Uint8Array {
     }
 }
 
-export function getProposalAbortedData(ctx: EventContext): Uint8Array {
-    const event = new SignalAbortedEvent(ctx)
+export function getProposalAbortedData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new SignalAbortedEvent(ctx, ev)
     if (event.isV63) {
         const { proposalId } = event.asV63
         return proposalId
@@ -72,8 +72,8 @@ export function getProposalAbortedData(ctx: EventContext): Uint8Array {
     }
 }
 
-export function getProposalAcceptedData(ctx: EventContext): Uint8Array {
-    const event = new SignalAcceptedEvent(ctx)
+export function getProposalAcceptedData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new SignalAcceptedEvent(ctx, ev)
     if (event.isV63) {
         const { proposalId } = event.asV63
         return proposalId
@@ -82,8 +82,8 @@ export function getProposalAcceptedData(ctx: EventContext): Uint8Array {
     }
 }
 
-export function getProposalExpiredData(ctx: EventContext): Uint8Array {
-    const event = new SignalExpiredEvent(ctx)
+export function getProposalExpiredData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new SignalExpiredEvent(ctx, ev)
     if (event.isV63) {
         const { proposalId } = event.asV63
         return proposalId
@@ -92,8 +92,8 @@ export function getProposalExpiredData(ctx: EventContext): Uint8Array {
     }
 }
 
-export function getProposalFinalizedData(ctx: EventContext): Uint8Array {
-    const event = new SignalFinalizedEvent(ctx)
+export function getProposalFinalizedData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new SignalFinalizedEvent(ctx, ev)
     if (event.isV63) {
         const { proposalId } = event.asV63
         return proposalId
@@ -102,8 +102,8 @@ export function getProposalFinalizedData(ctx: EventContext): Uint8Array {
     }
 }
 
-export function getProposalRejectedData(ctx: EventContext): Uint8Array {
-    const event = new SignalRejectedEvent(ctx)
+export function getProposalRejectedData(ctx: EventContext, ev: Event): Uint8Array {
+    const event = new SignalRejectedEvent(ctx, ev)
     if (event.isV63) {
         const { proposalId } = event.asV63
         return proposalId

@@ -5,7 +5,7 @@ import { handleIdentityClearedEvent } from './events/identityCleared';
 export default {
 	name: 'Identity',
 	extrinsicHandlers: {
-		'set_identity': handleIdentitySetExtrinsic
+		// 'set_identity': handleIdentitySetExtrinsic
 	},
 	eventHandlers: {
 		'IdentityCleared': handleIdentityClearedEvent

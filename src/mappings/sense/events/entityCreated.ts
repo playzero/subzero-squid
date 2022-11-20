@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getEntityCreatedData } from './getters'
 
 import { getSenseEntity } from '../../util/db/getters'
@@ -10,8 +10,8 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
-async function handleEntityCreatedEvent(ctx: EventHandlerContext) {
-	const eventData = getEntityCreatedData(ctx)
+async function handleEntityCreatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getEntityCreatedData(ctx, event)
 	let accountId = arrayToHexString(eventData.accountId)
 
 	if (await getSenseEntity(ctx.store, accountId)) {
@@ -19,9 +19,9 @@ async function handleEntityCreatedEvent(ctx: EventHandlerContext) {
 		return
 	}
 
-	const storageData = await storage.sense.getEntityStorageData(ctx, eventData.accountId)
+	const storageData = await storage.sense.getEntityStorageData(ctx, block, eventData.accountId)
     if (!storageData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, accountId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, accountId))
 		return
     }
 

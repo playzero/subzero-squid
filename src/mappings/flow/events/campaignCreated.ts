@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getCampaignCreatedData } from './getters'
 
 import { getOrg, getCampaign } from '../../util/db/getters'
@@ -10,8 +10,8 @@ import { storage } from '../../../storage'
 import { arrayToHexString } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
-async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
-	const eventData = getCampaignCreatedData(ctx)
+async function handleCampaignCreatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getCampaignCreatedData(ctx, event)
 	let campaignId = arrayToHexString(eventData.campaignId)
 
 	if (await getCampaign(ctx.store, campaignId)) {
@@ -19,9 +19,9 @@ async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
 		return
 	}
 
-	const storageData = await storage.flow.getCampaignStorageData(ctx, eventData.campaignId)
+	const storageData = await storage.flow.getCampaignStorageData(ctx, block, eventData.campaignId)
     if (!storageData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, campaignId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, campaignId))
 		return
     }
 
@@ -32,9 +32,9 @@ async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
 		return
 	}
 
-	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, eventData.campaignId)
+	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, block, eventData.campaignId)
     if (!stateStorageData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, campaignId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, campaignId))
 		return
     }
 
@@ -64,7 +64,7 @@ async function handleCampaignCreatedEvent(ctx: EventHandlerContext) {
 	// Fetch metadata from ipfs
 	let metadata = await fetchCampaignMetadata(campaign.cid, orgId);
 	if (!metadata) {
-		ctx.log.warn(ObjectNotExistsWarn(`${ctx.event.name} - Metadata`, campaign.cid))
+		ctx.log.warn(ObjectNotExistsWarn(`${event.name} - Metadata`, campaign.cid))
 	}
 	campaign.name = metadata?.name ?? '';
 	campaign.email = metadata?.email ?? '';

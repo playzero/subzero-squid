@@ -1,4 +1,4 @@
-import { EventHandlerContext } from '../../types/contexts'
+import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
 import { getOrgCreatedData } from './getters'
 import { CurrencyId } from '../../../types/generated/v63'
 
@@ -12,8 +12,8 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
-async function handleOrgCreatedEvent(ctx: EventHandlerContext) {
-	const eventData = getOrgCreatedData(ctx)
+async function handleOrgCreatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const eventData = getOrgCreatedData(ctx, event)
 	let orgId = arrayToHexString(eventData.orgId)
 	let treasury = arrayToHexString(eventData.treasuryId)
 
@@ -22,14 +22,14 @@ async function handleOrgCreatedEvent(ctx: EventHandlerContext) {
 		return
 	}
 
-	const storageData = await storage.control.getOrgStorageData(ctx, eventData.orgId)
+	const storageData = await storage.control.getOrgStorageData(ctx, block, eventData.orgId)
     if (!storageData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, orgId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, orgId))
 		return
     }
-	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, eventData.orgId)
+	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, block, eventData.orgId)
     if (!stateStorageData) {
-		ctx.log.warn(StorageNotExistsWarn(ctx.event.name, orgId))
+		ctx.log.warn(StorageNotExistsWarn(event.name, orgId))
 		return
     }
 
@@ -66,7 +66,7 @@ async function handleOrgCreatedEvent(ctx: EventHandlerContext) {
 	// Fetch metadata from ipfs
 	let metadata = await fetchOrgMetadata(storageData.cid.toString(), orgId)
 	if (!metadata) {
-		ctx.log.warn(ObjectNotExistsWarn(`${ctx.event.name} - Metadata`, org.cid))
+		ctx.log.warn(ObjectNotExistsWarn(`${event.name} - Metadata`, org.cid))
 	}
 	org.name = metadata?.name ?? ''
 	org.description = metadata?.description ?? ''
