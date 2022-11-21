@@ -1,4 +1,5 @@
-import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
+export { Event, Block } from '../../../types/generated/support'
+import { Context, EventItem } from '../../../processor'
 import { getCampaignContributedData } from './getters'
 
 import { CampaignContributor } from '../../../model'

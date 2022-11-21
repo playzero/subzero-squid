@@ -6,7 +6,7 @@ import { handleOrgUpdatedEvent } from './events/orgUpdated';
 
 export default {
 	name: 'Control',
-	extrinsicHandlers: {},
+	callHandlers: {},
 	eventHandlers: {
 		'OrgCreated': handleOrgCreatedEvent,
 		'OrgUpdated': handleOrgUpdatedEvent,

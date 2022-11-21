@@ -28,7 +28,7 @@ export async function get<TModel>(
 // TODO: review "get" relations, ex. ['creatorIdentity']
 
 function getOrg(store: Store, orgId: string): Promise<Organization | null> {
-	return get(store, Organization, orgId, ['creatorIdentity']);
+	return get(store, Organization, orgId, ['creatorIdentity'])
 }
 
 function getOrgMember(store: Store, orgId: string, member: string): Promise<OrganizationMember | null> {

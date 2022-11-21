@@ -1,11 +1,11 @@
 import { UnknownVersionError } from '../../common/errors'
 import { SenseEntitiesStorage, SensePropertiesStorage } from '../../types/generated/storage'
 import { Entity, EntityProperty, PropertyType } from '../../types/generated/v63'
-import { BlockContext } from '../../types/generated/support'
+import { BlockContext, Block } from '../../types/generated/support'
 
 
-export async function getEntityStorageData(ctx: BlockContext, hash: Uint8Array): Promise<Entity | undefined> {
-    const storage = new SenseEntitiesStorage(ctx)
+export async function getEntityStorageData(ctx: BlockContext, block: Block, hash: Uint8Array): Promise<Entity | undefined> {
+    const storage = new SenseEntitiesStorage(ctx, block)
     if (!storage.isExists) return undefined
 
     if (storage.isV63) {
@@ -15,8 +15,8 @@ export async function getEntityStorageData(ctx: BlockContext, hash: Uint8Array):
     }
 }
 
-export async function getEntityPropertyStorageData(ctx: BlockContext, propertyType: PropertyType, hash: Uint8Array): Promise<EntityProperty | undefined> {
-    const storage = new SensePropertiesStorage(ctx)
+export async function getEntityPropertyStorageData(ctx: BlockContext, block: Block, propertyType: PropertyType, hash: Uint8Array): Promise<EntityProperty | undefined> {
+    const storage = new SensePropertiesStorage(ctx, block)
     if (!storage.isExists) return undefined
 
     if (storage.isV63) {

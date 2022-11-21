@@ -8,7 +8,8 @@ import {
     SignalRejectedEvent,
     SignalVotedEvent
 } from '../../../types/generated/events'
-import { EventContext, Event } from '../../types/contexts'
+export { Event } from '../../../types/generated/support'
+import { Context } from '../../../processor'
 import { UnknownVersionError } from '../../../common/errors'
 
 

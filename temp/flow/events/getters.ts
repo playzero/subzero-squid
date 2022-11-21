@@ -5,8 +5,8 @@ import {
     FlowFailedEvent,
     FlowSucceededEvent
 } from '../../../types/generated/events'
-import { Event } from '../../../types/generated/support'
-import { EventContext } from '../../types/contexts'
+export { Event } from '../../../types/generated/support'
+import { Context } from '../../../processor'
 import { UnknownVersionError } from '../../../common/errors'
 
 

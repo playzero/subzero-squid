@@ -4,14 +4,14 @@ export class UnknownVersionError extends Error {
     }
 }
 
-export function StorageNotExistsWarn(entity: string, hashOrIndex: string | number) {
+export function StorageNotExistsWarn(handler: string, entity: string,  hashOrIndex: string | number) {
     return `Storage doesn't exist for ${entity}: ${hashOrIndex}`
 }
 
-export function ObjectNotExistsWarn(entity: string, hashOrIndex: string | number) {
+export function ObjectNotExistsWarn(handler: string, entity: string, hashOrIndex: string | number) {
     return `Object doesn't exist for ${entity}: ${hashOrIndex}`
 }
 
-export function ObjectExistsWarn(entity: string, hashOrIndex: string | number) {
+export function ObjectExistsWarn(handler: string, entity: string, hashOrIndex: string | number) {
     return `Object already exist for ${entity}: ${hashOrIndex}`
 }

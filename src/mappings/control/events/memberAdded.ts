@@ -1,6 +1,6 @@
-import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
-import { getMemberAddedData } from './getters'
+import { Context, EventItem, Block } from '../../../processor'
 
+import { getMemberAddedData } from './getters'
 import { getOrg, getOrgMember } from '../../util/db/getters'
 import { upsertIdentity } from '../../util/db/identity'
 import { OrganizationMember } from '../../../model'
@@ -9,19 +9,18 @@ import { arrayToHexString, addressCodec } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn } from '../../../common/errors'
 
 
-async function handleMemberAddedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
-	const eventData = getMemberAddedData(ctx, event)
+async function handleMemberAddedEvent(ctx: Context, block: Block, item: EventItem) {
+	const eventData = getMemberAddedData(ctx, item.event)
 	let address = addressCodec.encode(eventData.who)
 	let orgId = arrayToHexString(eventData.orgId)
 
 	if (await getOrgMember(ctx.store, orgId, address)) {
-		ctx.log.warn(ObjectExistsWarn('Member', `${orgId}-${address}`.toLowerCase()))
+		ctx.log.warn(ObjectExistsWarn(item.name, 'Member', `${orgId}-${address}`.toLowerCase()))
 		return
 	}
-
 	const org = await getOrg(ctx.store, orgId)
 	if (!org) {
-		ctx.log.warn(ObjectNotExistsWarn('Org', orgId))
+		ctx.log.warn(ObjectNotExistsWarn(item.name, 'Org', orgId))
 		return
 	}
 

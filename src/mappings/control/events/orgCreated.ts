@@ -1,7 +1,8 @@
-import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
-import { getOrgCreatedData } from './getters'
+import { Context, EventItem, Block } from '../../../processor'
 import { CurrencyId } from '../../../types/generated/v63'
+import { Event } from '../../../types/generated/support'
 
+import { getOrgCreatedData } from './getters'
 import { getOrg } from '../../util/db/getters'
 import { upsertIdentity } from '../../util/db/identity'
 import { Organization } from '../../../model'
@@ -12,24 +13,24 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
-async function handleOrgCreatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
-	const eventData = getOrgCreatedData(ctx, event)
+async function handleOrgCreatedEvent(ctx: Context, block: Block, item: EventItem) {
+	const eventData = getOrgCreatedData(ctx, item.event)
 	let orgId = arrayToHexString(eventData.orgId)
 	let treasury = arrayToHexString(eventData.treasuryId)
 
 	if (await getOrg(ctx.store, orgId)) {
-		ctx.log.warn(ObjectExistsWarn('Org', orgId))
+		ctx.log.warn(ObjectExistsWarn(item.name, 'Org', orgId))
 		return
 	}
 
 	const storageData = await storage.control.getOrgStorageData(ctx, block, eventData.orgId)
     if (!storageData) {
-		ctx.log.warn(StorageNotExistsWarn(event.name, orgId))
+		ctx.log.warn(StorageNotExistsWarn(item.name, 'Org', orgId))
 		return
     }
 	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, block, eventData.orgId)
     if (!stateStorageData) {
-		ctx.log.warn(StorageNotExistsWarn(event.name, orgId))
+		ctx.log.warn(StorageNotExistsWarn(item.name, 'OrgState', orgId))
 		return
     }
 
@@ -66,7 +67,7 @@ async function handleOrgCreatedEvent(ctx: EventHandlerContext, block: SubstrateB
 	// Fetch metadata from ipfs
 	let metadata = await fetchOrgMetadata(storageData.cid.toString(), orgId)
 	if (!metadata) {
-		ctx.log.warn(ObjectNotExistsWarn(`${event.name} - Metadata`, org.cid))
+		ctx.log.warn(ObjectNotExistsWarn(item.name, 'Metadata', org.cid))
 	}
 	org.name = metadata?.name ?? ''
 	org.description = metadata?.description ?? ''

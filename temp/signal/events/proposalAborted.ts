@@ -1,4 +1,5 @@
-import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
+export { Event, Block } from '../../../types/generated/support'
+import { Context } from '../../../processor'
 import { getProposalAbortedData } from './getters'
 
 import { getProposal } from '../../util/db/getters'
@@ -7,7 +8,7 @@ import { storage } from '../../../storage'
 import { arrayToHexString } from '../../util/helpers'
 import { StorageNotExistsWarn, ObjectNotExistsWarn } from '../../../common/errors'
 
-async function handleProposalAbortedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+async function handleProposalAbortedEvent(ctx: Context, block: Block, event: Event) {
 	let proposalIdArray = getProposalAbortedData(ctx, event)
 	let proposalId = arrayToHexString(proposalIdArray)
 	let proposal = await getProposal(ctx.store, proposalId)

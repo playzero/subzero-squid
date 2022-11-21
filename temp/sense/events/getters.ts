@@ -2,8 +2,8 @@ import {
     SenseEntityCreatedEvent,
     SensePropertyUpdatedEvent
 } from '../../../types/generated/events'
-import { Event } from '../../../types/generated/support'
-import { EventContext } from '../../types/contexts'
+export { Event } from '../../../types/generated/support'
+import { Context } from '../../../processor'
 import { PropertyType } from '../../../types/generated/v63'
 import { UnknownVersionError } from '../../../common/errors'
 

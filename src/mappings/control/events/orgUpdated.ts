@@ -1,6 +1,7 @@
-import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
-import { getOrgUpdatedData } from './getters'
+import { Context, EventItem, Block } from '../../../processor'
+import { Event } from '../../../types/generated/support'
 
+import { getOrgUpdatedData } from './getters'
 import { getOrg } from '../../util/db/getters'
 import { upsertIdentity } from '../../util/db/identity'
 
@@ -8,13 +9,13 @@ import { addressCodec, arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
-async function handleOrgUpdatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
-	const eventData = getOrgUpdatedData(ctx, event)
+async function handleOrgUpdatedEvent(ctx: Context, block: Block, item: EventItem) {
+	const eventData = getOrgUpdatedData(ctx, item.event)
 	let orgId = arrayToHexString(eventData.orgId)
 
 	let org = await getOrg(ctx.store, orgId);
 	if (!org) {
-		ctx.log.warn(ObjectNotExistsWarn('Org', orgId))
+		ctx.log.warn(ObjectNotExistsWarn(item.name, 'Org', orgId))
 		return
 	}
 
@@ -39,7 +40,7 @@ async function handleOrgUpdatedEvent(ctx: EventHandlerContext, block: SubstrateB
 		org.membershipFee = eventData.membershipFee;
 	}
 
-	org.updatedAtBlock = ctx.block.height;
+	org.updatedAtBlock = block.header.height;
 
 	await ctx.store.save(org);
 }

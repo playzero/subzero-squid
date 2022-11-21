@@ -1,5 +1,6 @@
-import { EventHandlerContext, SubstrateBlock, Event } from '../../types/contexts'
-import { getCampaignActivatedData } from './getters'
+export { Event, Block } from '../../../types/generated/support'
+import { Context, EventItem } from '../../../processor'
+import { getCampaignSucceededData } from './getters'
 
 import { getCampaign } from '../../util/db/getters'
 import { storage } from '../../../storage'
@@ -8,8 +9,8 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
-async function handleCampaignActivatedEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
-	const campaignIdArray = getCampaignActivatedData(ctx, event)
+async function handleCampaignSucceededEvent(ctx: EventHandlerContext, block: SubstrateBlock, event: Event) {
+	const campaignIdArray = getCampaignSucceededData(ctx, event)
 	let campaignId = arrayToHexString(campaignIdArray)
 
 	let campaign = await getCampaign(ctx.store, campaignId)
@@ -27,4 +28,4 @@ async function handleCampaignActivatedEvent(ctx: EventHandlerContext, block: Sub
 	await ctx.store.save(campaign)
 }
 
-export { handleCampaignActivatedEvent }
+export { handleCampaignSucceededEvent }

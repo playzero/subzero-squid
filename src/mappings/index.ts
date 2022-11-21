@@ -1,23 +1,21 @@
-import flow from './flow'
+// import flow from './flow'
 import control from './control'
-import identity from './identity'
-import sense from './sense'
-import signal from './signal'
+// import identity from './identity'
+// import sense from './sense'
+// import signal from './signal'
+import { EventItem, CallItem, Context, Block } from '../processor'
 
-const extrinsicHandlers: Record<string, (context: any, block: any, item: any) => void > = {};
-const eventHandlers: Record<string, (context: any, block: any, item: any) => void > = {};
 
-[control, flow, signal, sense, identity].forEach((pallet) => {
-	const mergeHandlers = (
-		handlers: Record<string, (context: any, block: any, item: any) => void >,
-		saveHandlers: Record<string, (context: any, block: any, item: any) => void >) =>
-	{
-		for (const name in handlers) {
-			saveHandlers[`${pallet.name}.${name}`] = handlers[name]
-		}
-	};
-	mergeHandlers(pallet.extrinsicHandlers, extrinsicHandlers)
-	mergeHandlers(pallet.eventHandlers, eventHandlers)
+const callHandlers: Record<string, (context: Context, block: Block, item: CallItem) => Promise<void> > = {};
+const eventHandlers: Record<string, (context: Context, block: Block, item: EventItem) => Promise<void> > = {};
+
+[control].forEach((pallet) => {
+	for (const name in pallet.callHandlers) {
+		callHandlers[`${pallet.name}.${name}`] = pallet.callHandlers[name]
+	}
+	for (const name in pallet.eventHandlers) {
+		eventHandlers[`${pallet.name}.${name}`] = pallet.eventHandlers[name]
+	}
 });
 
-export { extrinsicHandlers, eventHandlers }
+export { callHandlers, eventHandlers }

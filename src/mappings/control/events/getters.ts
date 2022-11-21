@@ -1,5 +1,6 @@
 import { OrgType, AccessModel, FeeModel} from '../../../types/generated/v63'
-import { EventContext, Event } from '../../types/contexts'
+import { Event } from '../../../types/generated/support'
+import { Context } from '../../../processor'
 import {
     ControlMemberAddedEvent,
     ControlMemberRemovedEvent,
@@ -35,7 +36,7 @@ interface OrgUpdatedData {
     blockNumber: number
 }
 
-export function getMemberAddedData(ctx: EventContext, ev: Event): MemberUpdatedData {
+export function getMemberAddedData(ctx: Context, ev: Event): MemberUpdatedData {
     const event = new ControlMemberAddedEvent(ctx, ev)
     if (event.isV63) {
         const { orgId, who, blockNumber } = event.asV63
@@ -45,7 +46,7 @@ export function getMemberAddedData(ctx: EventContext, ev: Event): MemberUpdatedD
     }
 }
 
-export function getMemberRemovedData(ctx: EventContext, ev: Event): MemberUpdatedData {
+export function getMemberRemovedData(ctx: Context, ev: Event): MemberUpdatedData {
     const event = new ControlMemberRemovedEvent(ctx, ev)
     if (event.isV63) {
         const { orgId, who, blockNumber } = event.asV63
@@ -55,7 +56,7 @@ export function getMemberRemovedData(ctx: EventContext, ev: Event): MemberUpdate
     }
 }
 
-export function getOrgCreatedData(ctx: EventContext, ev: Event): OrgCreatedData {
+export function getOrgCreatedData(ctx: Context, ev: Event): OrgCreatedData {
     const event = new ControlOrgCreatedEvent(ctx, ev)
     if (event.isV63) {
         const { orgId, creator, treasuryId, createdAt, realmIndex } = event.asV63
@@ -65,7 +66,7 @@ export function getOrgCreatedData(ctx: EventContext, ev: Event): OrgCreatedData 
     }
 }
 
-export function getOrgUpdatedData(ctx: EventContext, ev: Event): OrgUpdatedData {
+export function getOrgUpdatedData(ctx: Context, ev: Event): OrgUpdatedData {
     const event = new ControlOrgUpdatedEvent(ctx, ev)
     if (event.isV63) {
         const {
