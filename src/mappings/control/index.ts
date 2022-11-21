@@ -13,4 +13,4 @@ export default {
 		'MemberAdded': handleMemberAddedEvent,
 		'MemberRemoved': handleMemberRemovedEvent,
 	},
-} as Pallet;
+} as Pallet

@@ -3,11 +3,12 @@ import control from './control'
 // import identity from './identity'
 // import sense from './sense'
 // import signal from './signal'
-import { EventItem, CallItem, Context, Block } from '../processor'
+import { Context, Block } from '../processor'
+import { Call, Event } from '../types/generated/support';
 
 
-const callHandlers: Record<string, (context: Context, block: Block, item: CallItem) => Promise<void> > = {};
-const eventHandlers: Record<string, (context: Context, block: Block, item: EventItem) => Promise<void> > = {};
+const callHandlers: Record<string, (context: any, block: any, call: any, name: string) => Promise<void> > = {};
+const eventHandlers: Record<string, (context: any, block: any, event: any, name: string) => Promise<void> > = {};
 
 [control].forEach((pallet) => {
 	for (const name in pallet.callHandlers) {

@@ -1,4 +1,4 @@
-import { Context, EventItem, Block } from '../../../processor'
+import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getOrgUpdatedData } from './getters'
@@ -9,13 +9,13 @@ import { addressCodec, arrayToHexString } from '../../util/helpers'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 
-async function handleOrgUpdatedEvent(ctx: Context, block: Block, item: EventItem) {
-	const eventData = getOrgUpdatedData(ctx, item.event)
+async function handleOrgUpdatedEvent(ctx: Context, block: Block, event: Event, name: string) {
+	const eventData = getOrgUpdatedData(ctx, event)
 	let orgId = arrayToHexString(eventData.orgId)
 
 	let org = await getOrg(ctx.store, orgId);
 	if (!org) {
-		ctx.log.warn(ObjectNotExistsWarn(item.name, 'Org', orgId))
+		ctx.log.warn(ObjectNotExistsWarn(name, 'Org', orgId))
 		return
 	}
 

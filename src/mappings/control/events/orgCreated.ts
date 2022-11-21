@@ -1,4 +1,4 @@
-import { Context, EventItem, Block } from '../../../processor'
+import { Context, Block } from '../../../processor'
 import { CurrencyId } from '../../../types/generated/v63'
 import { Event } from '../../../types/generated/support'
 
@@ -13,24 +13,24 @@ import { arrayToHexString } from '../../util/helpers'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
-async function handleOrgCreatedEvent(ctx: Context, block: Block, item: EventItem) {
-	const eventData = getOrgCreatedData(ctx, item.event)
+async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, name: string) {
+	const eventData = getOrgCreatedData(ctx, event)
 	let orgId = arrayToHexString(eventData.orgId)
 	let treasury = arrayToHexString(eventData.treasuryId)
 
 	if (await getOrg(ctx.store, orgId)) {
-		ctx.log.warn(ObjectExistsWarn(item.name, 'Org', orgId))
+		ctx.log.warn(ObjectExistsWarn(name, 'Org', orgId))
 		return
 	}
 
-	const storageData = await storage.control.getOrgStorageData(ctx, block, eventData.orgId)
+	const storageData = await storage.control.getOrgStorageData(ctx, block.header, eventData.orgId)
     if (!storageData) {
-		ctx.log.warn(StorageNotExistsWarn(item.name, 'Org', orgId))
+		ctx.log.warn(StorageNotExistsWarn(name, 'Org', orgId))
 		return
     }
-	const stateStorageData = await storage.control.getOrgStateStorageData(ctx, block, eventData.orgId)
-    if (!stateStorageData) {
-		ctx.log.warn(StorageNotExistsWarn(item.name, 'OrgState', orgId))
+	const orgState = await storage.control.getOrgStateStorageData(ctx, block.header, eventData.orgId)
+    if (!orgState) {
+		ctx.log.warn(StorageNotExistsWarn(name, 'OrgState', orgId))
 		return
     }
 
@@ -55,7 +55,7 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, item: EventItem
 	org.membershipFee = storageData.membershipFee
 	org.createdAtBlock = storageData.created
 	org.updatedAtBlock = storageData.mutated
-	org.state = stateStorageData.__kind
+	org.state = orgState.__kind
 	org.govCurrency = getCurrencyValue(storageData.govCurrency) // ProtocolTokenId
 	org.payCurrency = getCurrencyValue(storageData.payCurrency) // PaymentTokenId
 	org.memberLimit = storageData.memberLimit
@@ -66,9 +66,6 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, item: EventItem
 
 	// Fetch metadata from ipfs
 	let metadata = await fetchOrgMetadata(storageData.cid.toString(), orgId)
-	if (!metadata) {
-		ctx.log.warn(ObjectNotExistsWarn(item.name, 'Metadata', org.cid))
-	}
 	org.name = metadata?.name ?? ''
 	org.description = metadata?.description ?? ''
 	org.website = metadata?.website ?? ''

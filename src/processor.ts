@@ -2,8 +2,6 @@ import {
     BatchContext,
     BatchProcessorItem,
     SubstrateBatchProcessor,
-    BatchProcessorEventItem,
-    BatchProcessorCallItem,
     BatchBlock
 } from "@subsquid/substrate-processor"
 import { Store, TypeormDatabase } from "@subsquid/typeorm-store"
@@ -27,9 +25,14 @@ for (const callName in callHandlers) {
 processor.includeAllBlocks()
 
 export type Item = BatchProcessorItem<typeof processor>
-export type EventItem = BatchProcessorEventItem<typeof processor>
-export type CallItem = BatchProcessorCallItem<typeof processor>
 export type Context = BatchContext<Store, Item>
+
+// Need some investigatoin: after declaration of types 
+// EventItem and CallItem the Event doesn't have field "args"
+
+// type EventItem = BatchProcessorEventItem<typeof processor>
+// type CallItem = BatchProcessorCallItem<typeof processor>
+
 export type Block = BatchBlock<Item>
 
 processor.run(new TypeormDatabase(), run)
@@ -39,12 +42,12 @@ async function run(ctx: Context): Promise<void> {
         for (const item of block.items) {
             if (item.kind === 'event') {
                 if (item.name in eventHandlers) {
-                    await eventHandlers[item.name](ctx, block, item)
+                    await eventHandlers[item.name](ctx, block, item.event, item.name)
                 }
             }
             if (item.kind === 'call') {
                 if (item.name in callHandlers) {
-                    await callHandlers[item.name](ctx, block, item)
+                    await callHandlers[item.name](ctx, block, item.call, item.name)
                 }
             }
         }
