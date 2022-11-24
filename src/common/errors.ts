@@ -13,5 +13,5 @@ export function ObjectNotExistsWarn(handler: string, entity: string, hashOrIndex
 }
 
 export function ObjectExistsWarn(handler: string, entity: string, hashOrIndex: string | number) {
-    return `Object already exist for ${entity}: ${hashOrIndex}`
+    return `Object already exists for ${entity}: ${hashOrIndex}`
 }
