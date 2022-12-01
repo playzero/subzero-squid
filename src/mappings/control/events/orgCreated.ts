@@ -9,8 +9,8 @@ import { Organization } from '../../../model'
 import { fetchOrgMetadata } from '../../util/ipfs/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString } from '../../util/helpers'
-import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
+import { arrayToHexString, slugify } from '../../util/helpers'
+import { ObjectExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
 async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, name: string) {
@@ -73,6 +73,10 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
 	org.repo = metadata?.repo ?? ''
 	org.logo = metadata?.logo ?? ''
 	org.header = metadata?.header ?? ''
+
+	// TODO: pottential duplicates, there is no check uniqueness check implemented
+	// TODO: if the "name" was updated on IPFS, we have no callback to update the slug
+	org.slug = slugify(org.name)
 
 	await ctx.store.save(org)
 }
