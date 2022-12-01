@@ -43,6 +43,7 @@ type Organization @entity {
     members: [OrganizationMember!] @derivedFrom(field: "organization")
     campaigns: [Campaign!]! @derivedFrom(field: "organization")
     proposals: [Proposal]! @derivedFrom(field: "organization")
+    slug: String!
 
     # Metadata:
     cid: String!

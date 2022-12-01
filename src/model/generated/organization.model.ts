@@ -78,6 +78,9 @@ export class Organization {
   proposals!: Proposal[]
 
   @Column_("text", {nullable: false})
+  slug!: string
+
+  @Column_("text", {nullable: false})
   cid!: string
 
   @Column_("text", {nullable: false})
