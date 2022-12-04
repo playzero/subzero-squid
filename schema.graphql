@@ -1,3 +1,11 @@
+type ChainState @entity {
+  id: ID!
+  tokenBalance: BigInt!
+  tokenHolders: Int!
+  timestamp: DateTime! @index
+  blockNumber: Int! @index
+}
+
 type Identity @entity {
     id: ID!
     address: String!
@@ -11,6 +19,12 @@ type Identity @entity {
     # Additionals:
     web3name: String
     discord: String
+
+    # Balance:
+    free: BigInt!
+    reserved: BigInt!
+    total: BigInt!
+    updatedAt: Int
 
     createdOrganizations: [Organization!]! @derivedFrom(field: "creatorIdentity")
     controllerOrganizations: [Organization!]! @derivedFrom(field: "primeIdentity")

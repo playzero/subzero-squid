@@ -1,10 +1,10 @@
-import { codec } from '@subsquid/ss58';
-import { networkAddressPrefix } from '../../config.json';
+import { codec } from '@subsquid/ss58'
+import config from '../../config'
 
 export const arrayToHexString = (hash: Uint8Array) => `0x${Buffer.from(hash).toString('hex')}`;
 export const hexStringToString = (data: string) =>
 	`${Buffer.from(data.startsWith('0x') ? data.substring(2) : data, 'hex').toString('utf-8')}`;
-export const addressCodec = codec(networkAddressPrefix);
+export const addressCodec = codec(config.prefix);
 export const signerCodec = codec(42);
 
 export const encodeSigner = (signer: string) => signer;

@@ -2,9 +2,9 @@ import { OrganizationMetadata, CampaignMetadata, ProposalMetadata } from '../../
 import { isCIDValid } from '../helpers'
 import { to } from 'await-to-js'
 import fetch from 'node-fetch'
-import { ipfsGateway } from '../../../config.json'
+import config from '../../../config'
 
-const getIpfsUrlByCid = (cid: string): string => `${ipfsGateway}${cid}`;
+const getIpfsUrlByCid = (cid: string): string => `${config.ipfsGateway}${cid}`;
 
 type Metadata = OrganizationMetadata | CampaignMetadata | ProposalMetadata | null;
 

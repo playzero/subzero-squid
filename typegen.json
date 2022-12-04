@@ -28,14 +28,22 @@
     "Signal.Finalized",
 
     "Sense.EntityCreated",
-    "Sense.PropertyUpdated"
+    "Sense.PropertyUpdated",
+
+    "Balances.Transfer",
+    "Balances.Endowed",
+    "Balances.BalanceSet",
+    "Balances.Reserved",
+    "Balances.Unreserved",
+    "Balances.ReserveRepatriated",
+    "Balances.Deposit",
+    "Balances.Withdraw",
+    "Balances.Slashed"
   ],
   "calls": [
     "Identity.set_identity"
   ],
   "storage": [
-    "System.Account",
-
     "Control.Orgs",
     "Control.MemberStates",
     "Control.OrgStates",
@@ -48,7 +56,11 @@
     "Signal.ProposalVoting",
 
     "Sense.Entities",
-    "Sense.Properties"
+    "Sense.Properties",
+
+    "System.Account",
+    "Balances.Account",
+    "Balances.TotalIssuance"
   ],
   "constants": true
 }
