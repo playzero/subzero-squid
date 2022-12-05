@@ -64,9 +64,6 @@ export async function saveAccounts(ctx: Context, block: SubstrateBlock, accountI
 }
 
 export function processBalancesEventItem(ctx: Context, event: any, name: string, accountIdsHex: Set<string>) {
-    if (name.startsWith('Balances')) {
-        ctx.log.warn('!!!!! ' + name)
-    }
     switch (name) {
         case 'Balances.BalanceSet': {
             const account = getBalanceSetAccount(ctx, event)
