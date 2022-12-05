@@ -25,7 +25,6 @@ const processor = new SubstrateBatchProcessor()
     .addEvent('Balances.Deposit', { data: { event: { args: true } }} as const)
     .addEvent('Balances.Withdraw', { data: { event: { args: true } }} as const)
     .addEvent('Balances.Slashed', { data: { event: { args: true } }} as const)
-    // .setTypesBundle(config.typesBundle)
 
 for (const eventName in eventHandlers) {
     processor.addEvent(eventName, {data: { event: { args: true } }} as const)
@@ -39,13 +38,6 @@ processor.includeAllBlocks()
 
 export type Item = BatchProcessorItem<typeof processor>
 export type Context = BatchContext<Store, Item>
-
-// Need some investigatoin: after declaration of types 
-// EventItem and CallItem the Event doesn't have field "args"
-
-// type EventItem = BatchProcessorEventItem<typeof processor>
-// type CallItem = BatchProcessorCallItem<typeof processor>
-
 export type Block = BatchBlock<Item>
 
 processor.run(new TypeormDatabase(), run)
@@ -70,6 +62,7 @@ async function run(ctx: Context): Promise<void> {
             if (item.kind === 'event') {
                 if (item.name in eventHandlers) {
                     await eventHandlers[item.name](ctx, block, item.event, item.name)
+                } else {
                     processBalancesEventItem(ctx, item.event, item.name, accountIdsHex)
                 }
             }
@@ -83,10 +76,12 @@ async function run(ctx: Context): Promise<void> {
             lastStateTimestamp = (await getLastChainState(ctx.store))?.timestamp.getTime() || 0
         }
         if (block.header.timestamp - lastStateTimestamp >= SAVE_PERIOD) {
-            const accountIdsU8 = [...accountIdsHex].map((id) => decodeHex(id))
-
-            await saveAccounts(ctx, block.header, accountIdsU8)
-            await saveRegularChainState(ctx, block.header)
+            
+            if (accountIdsHex.size != 0) {
+                const accountIdsU8 = [...accountIdsHex].map((id) => decodeHex(id))
+                await saveAccounts(ctx, block.header, accountIdsU8)
+                await saveRegularChainState(ctx, block.header)
+            }
 
             lastStateTimestamp = block.header.timestamp
             accountIdsHex.clear()
@@ -94,8 +89,10 @@ async function run(ctx: Context): Promise<void> {
     }
 
     const block = ctx.blocks[ctx.blocks.length - 1]
-    const accountIdsU8 = [...accountIdsHex].map((id) => decodeHex(id))
 
-    await saveAccounts(ctx, block.header, accountIdsU8)
-    await saveCurrentChainState(ctx, block.header)
+    if (accountIdsHex.size != 0) {
+        const accountIdsU8 = [...accountIdsHex].map((id) => decodeHex(id))
+        await saveAccounts(ctx, block.header, accountIdsU8)
+        await saveCurrentChainState(ctx, block.header)
+    }
 }

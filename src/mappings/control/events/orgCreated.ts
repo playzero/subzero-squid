@@ -9,14 +9,14 @@ import { Organization } from '../../../model'
 import { fetchOrgMetadata } from '../../util/ipfs/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString, slugify } from '../../util/helpers'
+import { arrayToHexString, slugify, addressCodec } from '../../util/helpers'
 import { ObjectExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
 async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, name: string) {
 	const eventData = getOrgCreatedData(ctx, event)
 	let orgId = arrayToHexString(eventData.orgId)
-	let treasury = arrayToHexString(eventData.treasuryId)
+	let treasury = addressCodec.encode(eventData.treasuryId)
 
 	if (await getOrg(ctx.store, orgId)) {
 		ctx.log.warn(ObjectExistsWarn(name, 'Org', orgId))
@@ -34,8 +34,8 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
 		return
     }
 
-	let creator = arrayToHexString(storageData.creator)
-	let prime = arrayToHexString(storageData.prime)
+	let creator = addressCodec.encode(storageData.creator)
+	let prime = addressCodec.encode(storageData.prime)
 
 	let creatorIdentity = await upsertIdentity(ctx.store, creator, null)
 	let primeIdentity = await upsertIdentity(ctx.store, prime, null)

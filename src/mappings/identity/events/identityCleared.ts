@@ -2,10 +2,10 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getIdentityClearedData } from './getters'
-import { IdentityUpsertData } from '../../types/identity';
+import { IdentityUpsertData } from '../../types/identity'
 import { upsertIdentity } from '../../util/db/identity'
 
-import { addressCodec } from '../../util/helpers';
+import { addressCodec } from '../../util/helpers'
 
 async function handleIdentityClearedEvent(ctx: Context, block: Block, event: Event, name: string) {
 	const who = getIdentityClearedData(ctx, event)

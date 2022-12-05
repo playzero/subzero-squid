@@ -1,5 +1,5 @@
 import * as ss58 from '@subsquid/ss58'
-import {SubstrateBlock, toHex} from '@subsquid/substrate-processor'
+import { SubstrateBlock, toHex } from '@subsquid/substrate-processor'
 import {
     BalancesBalanceSetEvent,
     BalancesDepositEvent,
@@ -19,18 +19,18 @@ import { Event } from './types/generated/support'
 
 import config from './config'
 import { Context } from './processor'
-import { Identity } from './model'
+import { Identity, BalanceHistory } from './model'
 
 
 export async function saveAccounts(ctx: Context, block: SubstrateBlock, accountIds: Uint8Array[]) {
     const balances = await getBalances(ctx, block, accountIds)
-    if (!balances) {
+    if (!balances || balances?.length == 0) {
         ctx.log.warn('No balances')
         return
     }
 
     const accounts = new Map<string, Identity>()
-    const deletions = new Map<string, Identity>()
+    const historyBalances = new Map<string, BalanceHistory>()
 
     for (let i = 0; i < accountIds.length; i++) {
         const id = encodeId(accountIds[i])
@@ -38,30 +38,35 @@ export async function saveAccounts(ctx: Context, block: SubstrateBlock, accountI
 
         if (!balance) continue
         const total = balance.free + balance.reserved
-        if (total > 0n) {
-            accounts.set(
+        let b = new BalanceHistory({
+            id: block.height.toString() + '-' + id,
+            block: block.height,
+            address: id,
+            free: balance.free,
+            reserved: balance.reserved,
+            total
+        })
+        historyBalances.set(b.id, b)
+        accounts.set(
+            id,
+            new Identity({
                 id,
-                new Identity({
-                    id,
-                    free: balance.free,
-                    reserved: balance.reserved,
-                    total,
-                    updatedAt: block.height,
-                })
-            )
-        } else {
-            deletions.set(id, new Identity({ id }))
-        }
+                address: id,
+                balance: b
+            })
+        )
     }
 
+    await ctx.store.save([...historyBalances.values()])
     await ctx.store.save([...accounts.values()])
-    await ctx.store.remove([...deletions.values()])
 
-    ctx.log.child('accounts').info(`updated: ${accounts.size}, deleted: ${deletions.size}`)
+    ctx.log.child('accounts').info(`updated: ${accounts.size}`)
 }
 
-
-export function processBalancesEventItem(ctx: Context, event: Event, name: string, accountIdsHex: Set<string>) {
+export function processBalancesEventItem(ctx: Context, event: any, name: string, accountIdsHex: Set<string>) {
+    if (name.startsWith('Balances')) {
+        ctx.log.warn('!!!!! ' + name)
+    }
     switch (name) {
         case 'Balances.BalanceSet': {
             const account = getBalanceSetAccount(ctx, event)

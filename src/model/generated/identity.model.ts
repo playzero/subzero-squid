@@ -1,5 +1,5 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_} from "typeorm"
-import * as marshal from "./marshal"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
+import {BalanceHistory} from "./balanceHistory.model"
 import {Organization} from "./organization.model"
 import {OrganizationMember} from "./organizationMember.model"
 import {Campaign} from "./campaign.model"
@@ -46,17 +46,9 @@ export class Identity {
   @Column_("text", {nullable: true})
   discord!: string | undefined | null
 
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  free!: bigint
-
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  reserved!: bigint
-
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  total!: bigint
-
-  @Column_("int4", {nullable: true})
-  updatedAt!: number | undefined | null
+  @Index_()
+  @ManyToOne_(() => BalanceHistory, {nullable: true})
+  balance!: BalanceHistory | undefined | null
 
   @OneToMany_(() => Organization, e => e.creatorIdentity)
   createdOrganizations!: Organization[]
