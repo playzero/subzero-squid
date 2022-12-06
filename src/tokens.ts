@@ -39,7 +39,7 @@ export async function saveTokensAccounts(ctx: Context, block: SubstrateBlock, ac
         if (!balance) continue
         const total = balance.free + balance.reserved
         let b = new AccountBalance({
-            id: block.height.toString() + '-' + accountId,
+            id: block.height.toString() + '-' + accountId + currencyId,
             block: block.height,
             address: accountId,
             currencyId: currencyId,
