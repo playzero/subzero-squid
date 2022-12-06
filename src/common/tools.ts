@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as ss58 from '@subsquid/ss58'
 import { decodeHex } from '@subsquid/util-internal-hex'
-import { networkAddressPrefix } from '../config.json'
+import config from '../config'
 
-export const ss58codec = ss58.codec(networkAddressPrefix)
+export const ss58codec = ss58.codec(config.prefix)
 
 export function getOriginAccountId(origin: any) {
     // eslint-disable-next-line sonarjs/no-small-switch

@@ -1,5 +1,15 @@
 import type {Result, Option} from './support'
 
+export type BalanceStatus = BalanceStatus_Free | BalanceStatus_Reserved
+
+export interface BalanceStatus_Free {
+  __kind: 'Free'
+}
+
+export interface BalanceStatus_Reserved {
+  __kind: 'Reserved'
+}
+
 export type CurrencyId = CurrencyId_Token | CurrencyId_ForeignAsset
 
 export interface CurrencyId_Token {
@@ -82,6 +92,13 @@ export interface IdentityInfo {
   pgpFingerprint: (Uint8Array | undefined)
   image: Data
   twitter: Data
+}
+
+export interface AccountData {
+  free: bigint
+  reserved: bigint
+  miscFrozen: bigint
+  feeFrozen: bigint
 }
 
 export type MemberState = MemberState_Inactive | MemberState_Active | MemberState_Pending | MemberState_Kicked | MemberState_Banned | MemberState_Exited
@@ -599,13 +616,6 @@ export interface Majority_Relative {
 
 export interface Majority_Absolute {
   __kind: 'Absolute'
-}
-
-export interface AccountData {
-  free: bigint
-  reserved: bigint
-  miscFrozen: bigint
-  feeFrozen: bigint
 }
 
 export interface Type_158 {

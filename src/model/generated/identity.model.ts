@@ -1,4 +1,5 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, OneToMany as OneToMany_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
+import {BalanceHistory} from "./balanceHistory.model"
 import {Organization} from "./organization.model"
 import {OrganizationMember} from "./organizationMember.model"
 import {Campaign} from "./campaign.model"
@@ -44,6 +45,10 @@ export class Identity {
 
   @Column_("text", {nullable: true})
   discord!: string | undefined | null
+
+  @Index_()
+  @ManyToOne_(() => BalanceHistory, {nullable: true})
+  balance!: BalanceHistory | undefined | null
 
   @OneToMany_(() => Organization, e => e.creatorIdentity)
   createdOrganizations!: Organization[]
