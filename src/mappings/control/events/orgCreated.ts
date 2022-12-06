@@ -1,5 +1,5 @@
 import { Context, Block } from '../../../processor'
-import { CurrencyId } from '../../../types/generated/v63'
+import { getCurrencyValue } from '../../../common/tools'
 import { Event } from '../../../types/generated/support'
 
 import { getOrgCreatedData } from './getters'
@@ -79,14 +79,6 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
 	org.slug = slugify(org.name)
 
 	await ctx.store.save(org)
-}
-
-function getCurrencyValue(currency: CurrencyId) {
-	if (currency.__kind == 'Token') {
-		return currency.__kind
-	} else {
-		return currency.value.toString()
-	}
 }
 
 export { handleOrgCreatedEvent }

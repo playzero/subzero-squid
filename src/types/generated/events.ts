@@ -865,3 +865,266 @@ export class SignalVotedEvent {
     return this._chain.decodeEvent(this.event)
   }
 }
+
+export class TokensBalanceSetEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.BalanceSet')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * A balance was set by root.
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.BalanceSet') === '3f56a4a163d9a349f4c507f05504bcd8f7406e05ee2cf2afb71a1c95fe6e7d1c'
+  }
+
+  /**
+   * A balance was set by root.
+   */
+  get asV63(): {currencyId: v63.CurrencyId, who: Uint8Array, free: bigint, reserved: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensDepositedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.Deposited')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Deposited some balance into an account
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.Deposited') === '35102e9f3a659dee57ab6c44339be31cb90f32cda97fce9385fc2d7a377f802c'
+  }
+
+  /**
+   * Deposited some balance into an account
+   */
+  get asV63(): {currencyId: v63.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensEndowedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.Endowed')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * An account was created with some free balance.
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.Endowed') === '35102e9f3a659dee57ab6c44339be31cb90f32cda97fce9385fc2d7a377f802c'
+  }
+
+  /**
+   * An account was created with some free balance.
+   */
+  get asV63(): {currencyId: v63.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensReserveRepatriatedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.ReserveRepatriated')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Some reserved balance was repatriated (moved from reserved to
+   * another account).
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.ReserveRepatriated') === 'a93dbb961e7f37d006d3220134514ba1066319d31be02d782186e789abcfc997'
+  }
+
+  /**
+   * Some reserved balance was repatriated (moved from reserved to
+   * another account).
+   */
+  get asV63(): {currencyId: v63.CurrencyId, from: Uint8Array, to: Uint8Array, amount: bigint, status: v63.BalanceStatus} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensReservedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.Reserved')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Some balance was reserved (moved from free to reserved).
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.Reserved') === '35102e9f3a659dee57ab6c44339be31cb90f32cda97fce9385fc2d7a377f802c'
+  }
+
+  /**
+   * Some balance was reserved (moved from free to reserved).
+   */
+  get asV63(): {currencyId: v63.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensSlashedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.Slashed')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Some balances were slashed (e.g. due to mis-behavior)
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.Slashed') === '611c8b13cd678a091c12c056524c777a2fa70819508e6433c85e94de0ee4fa98'
+  }
+
+  /**
+   * Some balances were slashed (e.g. due to mis-behavior)
+   */
+  get asV63(): {currencyId: v63.CurrencyId, who: Uint8Array, freeAmount: bigint, reservedAmount: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensTransferEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.Transfer')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Transfer succeeded.
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.Transfer') === '0f49550afefd50a4550d665734a88abea6cef833393aac4878f8f5f4a1c23321'
+  }
+
+  /**
+   * Transfer succeeded.
+   */
+  get asV63(): {currencyId: v63.CurrencyId, from: Uint8Array, to: Uint8Array, amount: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensUnreservedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.Unreserved')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Some balance was unreserved (moved from reserved to free).
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.Unreserved') === '35102e9f3a659dee57ab6c44339be31cb90f32cda97fce9385fc2d7a377f802c'
+  }
+
+  /**
+   * Some balance was unreserved (moved from reserved to free).
+   */
+  get asV63(): {currencyId: v63.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class TokensWithdrawnEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Tokens.Withdrawn')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Some balances were withdrawn (e.g. pay for transaction fee)
+   */
+  get isV63(): boolean {
+    return this._chain.getEventHash('Tokens.Withdrawn') === '35102e9f3a659dee57ab6c44339be31cb90f32cda97fce9385fc2d7a377f802c'
+  }
+
+  /**
+   * Some balances were withdrawn (e.g. pay for transaction fee)
+   */
+  get asV63(): {currencyId: v63.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}

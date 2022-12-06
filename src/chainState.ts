@@ -6,6 +6,15 @@ import { BalancesTotalIssuanceStorage } from './types/generated/storage'
 import { Block, ChainContext } from './types/generated/support'
 
 
+export async function getLastChainState(store: Store) {
+    return await store.get(ChainState, {
+        where: {},
+        order: {
+            timestamp: 'DESC',
+        },
+    })
+}
+
 export async function getChainState(ctx: BatchContext<Store, unknown>, block: SubstrateBlock) {
     const state = new ChainState({ id: block.id })
 

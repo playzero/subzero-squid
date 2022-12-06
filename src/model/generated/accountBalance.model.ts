@@ -2,8 +2,8 @@ import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, I
 import * as marshal from "./marshal"
 
 @Entity_()
-export class BalanceHistory {
-  constructor(props?: Partial<BalanceHistory>) {
+export class AccountBalance {
+  constructor(props?: Partial<AccountBalance>) {
     Object.assign(this, props)
   }
 
@@ -16,6 +16,10 @@ export class BalanceHistory {
   @Index_()
   @Column_("text", {nullable: false})
   address!: string
+
+  @Index_()
+  @Column_("text", {nullable: false})
+  currencyId!: string
 
   @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
   free!: bigint

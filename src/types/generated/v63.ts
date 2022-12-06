@@ -284,6 +284,12 @@ export interface AccountInfo {
   data: AccountData
 }
 
+export interface Type_517 {
+  free: bigint
+  reserved: bigint
+  frozen: bigint
+}
+
 export interface BlockLength {
   max: Type_158
 }

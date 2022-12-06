@@ -654,3 +654,58 @@ export class SystemAccountStorage {
     return this._chain.getStorageItemTypeHash('System', 'Account') != null
   }
 }
+
+export class TokensAccountsStorage {
+  private readonly _chain: Chain
+  private readonly blockHash: string
+
+  constructor(ctx: BlockContext)
+  constructor(ctx: ChainContext, block: Block)
+  constructor(ctx: BlockContext, block?: Block) {
+    block = block || ctx.block
+    this.blockHash = block.hash
+    this._chain = ctx._chain
+  }
+
+  /**
+   *  The balance of a token type under an account.
+   * 
+   *  NOTE: If the total is ever zero, decrease account ref account.
+   * 
+   *  NOTE: This is only used in the case that this module is used to store
+   *  balances.
+   */
+  get isV63() {
+    return this._chain.getStorageItemTypeHash('Tokens', 'Accounts') === 'bc59892f5e1d451c39c67e82ed63e06183d9028016536d3083d176a3e0d401a2'
+  }
+
+  /**
+   *  The balance of a token type under an account.
+   * 
+   *  NOTE: If the total is ever zero, decrease account ref account.
+   * 
+   *  NOTE: This is only used in the case that this module is used to store
+   *  balances.
+   */
+  async getAsV63(key1: Uint8Array, key2: v63.CurrencyId): Promise<v63.Type_517> {
+    assert(this.isV63)
+    return this._chain.getStorage(this.blockHash, 'Tokens', 'Accounts', key1, key2)
+  }
+
+  async getManyAsV63(keys: [Uint8Array, v63.CurrencyId][]): Promise<(v63.Type_517)[]> {
+    assert(this.isV63)
+    return this._chain.queryStorage(this.blockHash, 'Tokens', 'Accounts', keys)
+  }
+
+  async getAllAsV63(): Promise<(v63.Type_517)[]> {
+    assert(this.isV63)
+    return this._chain.queryStorage(this.blockHash, 'Tokens', 'Accounts')
+  }
+
+  /**
+   * Checks whether the storage item is defined for the current chain version.
+   */
+  get isExists(): boolean {
+    return this._chain.getStorageItemTypeHash('Tokens', 'Accounts') != null
+  }
+}

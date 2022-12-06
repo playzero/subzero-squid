@@ -1,5 +1,4 @@
-import * as ss58 from '@subsquid/ss58'
-import { SubstrateBlock, toHex } from '@subsquid/substrate-processor'
+import { SubstrateBlock, toHex, decodeHex } from '@subsquid/substrate-processor'
 import {
     BalancesBalanceSetEvent,
     BalancesDepositEvent,
@@ -17,12 +16,16 @@ import {
 } from './types/generated/storage'
 import { Event } from './types/generated/support'
 
-import config from './config'
 import { Context } from './processor'
-import { Identity, BalanceHistory } from './model'
+import { Identity, AccountBalance } from './model'
+import { encodeId } from './common/tools'
 
 
-export async function saveAccounts(ctx: Context, block: SubstrateBlock, accountIds: Uint8Array[]) {
+export async function saveBalancesAccounts(ctx: Context, block: SubstrateBlock, accountIdsHex: Set<string>) {
+    if (accountIdsHex.size != 0) {
+        return
+    }
+    const accountIds = [...accountIdsHex].map((id) => decodeHex(id))
     const balances = await getBalances(ctx, block, accountIds)
     if (!balances || balances?.length == 0) {
         ctx.log.warn('No balances')
@@ -30,37 +33,38 @@ export async function saveAccounts(ctx: Context, block: SubstrateBlock, accountI
     }
 
     const accounts = new Map<string, Identity>()
-    const historyBalances = new Map<string, BalanceHistory>()
+    const accountBalances = new Map<string, AccountBalance>()
 
     for (let i = 0; i < accountIds.length; i++) {
-        const id = encodeId(accountIds[i])
+        const accountId = encodeId(accountIds[i])
         const balance = balances[i]
 
         if (!balance) continue
         const total = balance.free + balance.reserved
-        let b = new BalanceHistory({
-            id: block.height.toString() + '-' + id,
+        let b = new AccountBalance({
+            id: block.height.toString() + '-' + accountId,
             block: block.height,
-            address: id,
+            address: accountId,
+            currencyId: 'ZERO',
             free: balance.free,
             reserved: balance.reserved,
             total
         })
-        historyBalances.set(b.id, b)
+        accountBalances.set(b.id, b)
         accounts.set(
-            id,
+            accountId,
             new Identity({
-                id,
-                address: id,
+                id: accountId,
+                address: accountId,
                 balance: b
             })
         )
     }
 
-    await ctx.store.save([...historyBalances.values()])
+    await ctx.store.save([...accountBalances.values()])
     await ctx.store.save([...accounts.values()])
 
-    ctx.log.child('accounts').info(`updated: ${accounts.size}`)
+    ctx.log.child('accounts-balances').info(`updated: ${accounts.size}`)
 }
 
 export function processBalancesEventItem(ctx: Context, event: any, name: string, accountIdsHex: Set<string>) {
@@ -254,21 +258,4 @@ export class UnknownVersionError extends Error {
     constructor(name: string) {
         super(`There is no relevant version for ${name}`)
     }
-}
-
-export function getOriginAccountId(origin: any): string | undefined {
-    if (origin && origin.__kind === 'system' && origin.value.__kind === 'Signed') {
-        const id = origin.value.value
-        if (id.__kind === 'Id') {
-            return id.value
-        } else {
-            return id
-        }
-    } else {
-        return undefined
-    }
-}
-
-export function encodeId(id: Uint8Array) {
-    return ss58.codec(config.prefix).encode(id)
 }
