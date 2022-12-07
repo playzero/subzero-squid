@@ -64,9 +64,6 @@ export async function saveBalancesAccounts(ctx: Context, block: SubstrateBlock, 
             balance: hBalance,
             identity: identity
         })
-        if (identity.balances === undefined) {
-            identity.balances = []
-        }
         accountBalances.set(accountId, aBalance)
     }
 
