@@ -1,5 +1,6 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, Index as Index_} from "typeorm"
-import * as marshal from "./marshal"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
+import {HistoricalBalance} from "./historicalBalance.model"
+import {Identity} from "./identity.model"
 
 @Entity_()
 export class AccountBalance {
@@ -10,23 +11,11 @@ export class AccountBalance {
   @PrimaryColumn_()
   id!: string
 
-  @Column_("int4", {nullable: false})
-  block!: number
+  @Index_()
+  @ManyToOne_(() => HistoricalBalance, {nullable: true})
+  balance!: HistoricalBalance
 
   @Index_()
-  @Column_("text", {nullable: false})
-  address!: string
-
-  @Index_()
-  @Column_("text", {nullable: false})
-  currencyId!: string
-
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  free!: bigint
-
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  reserved!: bigint
-
-  @Column_("numeric", {transformer: marshal.bigintTransformer, nullable: false})
-  total!: bigint
+  @ManyToOne_(() => Identity, {nullable: true})
+  identity!: Identity
 }

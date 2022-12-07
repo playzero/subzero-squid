@@ -7,11 +7,7 @@ const config: ProcessorConfig = {
     dataSource: {
         archive: 'http://localhost:8888/graphql',
         chain: 'wss://node.dev.sub.zero.io',
-    },
-    // typesBundle: 'zeroTypesBundle.json',
-    // blockRange: {
-    //     from: 7567700,
-    // },
+    }
 }
 
 export default config

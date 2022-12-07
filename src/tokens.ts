@@ -16,8 +16,9 @@ import { Event } from './types/generated/support'
 import { getCurrencyValue } from './common/tools'
 
 import { Context } from './processor'
-import { Identity, AccountBalance } from './model'
+import { HistoricalBalance, AccountBalance } from './model'
 import { encodeId } from './common/tools'
+import { upsertIdentity } from './mappings/util/db/identity'
 
 
 export async function saveTokensAccounts(ctx: Context, block: SubstrateBlock, accountIdTokens: Record<string, Set<CurrencyId>>) {
@@ -26,19 +27,25 @@ export async function saveTokensAccounts(ctx: Context, block: SubstrateBlock, ac
     }
     const balances = await getTokensAccountBalances(ctx, block, accountIdTokens)
     if (!balances || balances?.length == 0) {
-        ctx.log.warn('No balances')
+        ctx.log.warn('Tokens: no balances')
         return
     }
 
-    const accounts = new Map<string, Identity>()
     const accountBalances = new Map<string, AccountBalance>()
+    const historicalBalances = new Map<string, HistoricalBalance>()
 
     for (let i = 0; i < balances.length; i++) {
         let [accountId, currencyId, balance] = balances[i]
 
         if (!balance) continue
         const total = balance.free + balance.reserved
-        let b = new AccountBalance({
+
+        let identity = await upsertIdentity(ctx.store, accountId, null);
+        if (identity === undefined) {
+            continue
+        }
+
+        let hBalance = new HistoricalBalance({
             id: block.height.toString() + '-' + accountId + currencyId,
             block: block.height,
             address: accountId,
@@ -47,73 +54,77 @@ export async function saveTokensAccounts(ctx: Context, block: SubstrateBlock, ac
             reserved: balance.reserved,
             total
         })
-        accountBalances.set(b.id, b)
-        accounts.set(
-            accountId,
-            new Identity({
-                id: accountId,
-                address: accountId,
-                balance: b
-            })
-        )
+        historicalBalances.set(accountId+currencyId, hBalance)
+        let aBalance = new AccountBalance({
+            id: accountId + currencyId,
+            balance: hBalance,
+            identity: identity
+        })
+        accountBalances.set(accountId+currencyId, aBalance)
     }
-
+    await ctx.store.save([...historicalBalances.values()])
     await ctx.store.save([...accountBalances.values()])
-    await ctx.store.save([...accounts.values()])
 
-    ctx.log.child('accounts-tokens').info(`updated: ${accounts.size}`)
+    ctx.log.child('accounts-tokens').info(`updated: ${accountBalances.size}`)
 }
 
 export function processTokensEventItem(ctx: Context, event: any, name: string, accountTokens: Record<string, Set<CurrencyId>>) {
     switch (name) {
         case 'Tokens.BalanceSet': {
             const account = getBalanceSetAccount(ctx, event)
-            accountTokens[account[0]].add(account[1])
+            addAccountCurrency(account[0], account[1], accountTokens)
             break
         }
         case 'Tokens.Endowed': {
             const account = getEndowedAccount(ctx, event)
-            accountTokens[account[0]].add(account[1])
+            addAccountCurrency(account[0], account[1], accountTokens)
             break
         }
         case 'Tokens.Deposited': {
             const account = getDepositAccount(ctx, event)
-            accountTokens[account[0]].add(account[1])
+            addAccountCurrency(account[0], account[1], accountTokens)
             break
         }
         case 'Tokens.Reserved': {
             const account = getReservedAccount(ctx, event)
-            accountTokens[account[0]].add(account[1])
+            addAccountCurrency(account[0], account[1], accountTokens)
             break
         }
         case 'Tokens.Unreserved': {
             const account = getUnreservedAccount(ctx, event)
-            accountTokens[account[0]].add(account[1])
+            addAccountCurrency(account[0], account[1], accountTokens)
             break
         }
         case 'Tokens.Withdrawn': {
             const account = getWithdrawAccount(ctx, event)
-            accountTokens[account[0]].add(account[1])
+            addAccountCurrency(account[0], account[1], accountTokens)
             break
         }
         case 'Tokens.Slashed': {
             const account = getSlashedAccount(ctx, event)
-            accountTokens[account[0]].add(account[1])
+            addAccountCurrency(account[0], account[1], accountTokens)
             break
         }
         case 'Tokens.Transfer': {
             const accounts = getTransferAccounts(ctx, event)
-            accountTokens[accounts[0]].add(accounts[2])
-            accountTokens[accounts[1]].add(accounts[2])
+            addAccountCurrency(accounts[0], accounts[2], accountTokens)
+            addAccountCurrency(accounts[1], accounts[2], accountTokens)
             break
         }
         case 'Tokens.ReserveRepatriated': {
             const accounts = getReserveRepatriatedAccounts(ctx, event)
-            accountTokens[accounts[0]].add(accounts[2])
-            accountTokens[accounts[1]].add(accounts[2])
+            addAccountCurrency(accounts[0], accounts[2], accountTokens)
+            addAccountCurrency(accounts[1], accounts[2], accountTokens)
             break
         }
     }
+}
+
+function addAccountCurrency(account: string, currency: CurrencyId, accountTokens: Record<string, Set<CurrencyId>>) {
+    if (!(account in accountTokens)) {
+        accountTokens[account] = new Set<CurrencyId>()
+    }
+    accountTokens[account].add(currency)
 }
 
 function getBalanceSetAccount(ctx: Context, event: Event): [string, CurrencyId] {
@@ -215,10 +226,10 @@ async function getTokensAccountBalances(ctx: Context, block: SubstrateBlock, acc
     const storage = new TokensAccountsStorage(ctx, block)
     if (!storage.isExists) return undefined
 
-    let storageKeys: [Buffer, string][] = []
+    let storageKeys: [Uint8Array, CurrencyId][] = []
     for (let accountId in accountIdTokens) {
         accountIdTokens[accountId].forEach((currencyId) => {
-            storageKeys.push([decodeHex(accountId), getCurrencyValue(currencyId)])
+            storageKeys.push([decodeHex(accountId), currencyId])
         })
     }
 
@@ -231,7 +242,7 @@ async function getTokensAccountBalances(ctx: Context, block: SubstrateBlock, acc
 
     let result: [string, string, Balance][] = []
     storageKeys.forEach(([accountId, currencyId], i) => {
-        result.push([encodeId(accountId), currencyId, { free: data[i].free, reserved: data[i].reserved }])
+        result.push([encodeId(accountId), getCurrencyValue(currencyId), { free: data[i].free, reserved: data[i].reserved }])
     })
 
     return result

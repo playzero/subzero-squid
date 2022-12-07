@@ -39,7 +39,7 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
 
 	let creatorIdentity = await upsertIdentity(ctx.store, creator, null)
 	let primeIdentity = await upsertIdentity(ctx.store, prime, null)
-	let treasuryIdentity = await upsertIdentity(ctx.store, treasury, null);
+	let treasuryIdentity = await upsertIdentity(ctx.store, treasury, null)
 
 	let org = new Organization()
 	org.id = orgId

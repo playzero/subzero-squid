@@ -17,23 +17,24 @@ import {
 import { Event } from './types/generated/support'
 
 import { Context } from './processor'
-import { Identity, AccountBalance } from './model'
+import { HistoricalBalance, AccountBalance } from './model'
 import { encodeId } from './common/tools'
+import { upsertIdentity } from './mappings/util/db/identity'
 
 
 export async function saveBalancesAccounts(ctx: Context, block: SubstrateBlock, accountIdsHex: Set<string>) {
-    if (accountIdsHex.size != 0) {
+    if (accountIdsHex.size == 0) {
         return
     }
     const accountIds = [...accountIdsHex].map((id) => decodeHex(id))
     const balances = await getBalances(ctx, block, accountIds)
     if (!balances || balances?.length == 0) {
-        ctx.log.warn('No balances')
+        ctx.log.warn('Balances: no balances')
         return
     }
 
-    const accounts = new Map<string, Identity>()
     const accountBalances = new Map<string, AccountBalance>()
+    const historicalBalances = new Map<string, HistoricalBalance>()
 
     for (let i = 0; i < accountIds.length; i++) {
         const accountId = encodeId(accountIds[i])
@@ -42,7 +43,13 @@ export async function saveBalancesAccounts(ctx: Context, block: SubstrateBlock, 
         if (!balance) continue
         const total = balance.free + balance.reserved
         let currencyId = 'ZERO'
-        let b = new AccountBalance({
+
+        let identity = await upsertIdentity(ctx.store, accountId, null);
+        if (identity === undefined) {
+            continue
+        }
+
+        let hBalance = new HistoricalBalance({
             id: block.height.toString() + '-' + accountId + currencyId,
             block: block.height,
             address: accountId,
@@ -51,21 +58,22 @@ export async function saveBalancesAccounts(ctx: Context, block: SubstrateBlock, 
             reserved: balance.reserved,
             total
         })
-        accountBalances.set(b.id, b)
-        accounts.set(
-            accountId,
-            new Identity({
-                id: accountId,
-                address: accountId,
-                balance: b
-            })
-        )
+        historicalBalances.set(accountId, hBalance)
+        let aBalance = new AccountBalance({
+            id: accountId + currencyId,
+            balance: hBalance,
+            identity: identity
+        })
+        if (identity.balances === undefined) {
+            identity.balances = []
+        }
+        accountBalances.set(accountId, aBalance)
     }
 
+    await ctx.store.save([...historicalBalances.values()])
     await ctx.store.save([...accountBalances.values()])
-    await ctx.store.save([...accounts.values()])
 
-    ctx.log.child('accounts-balances').info(`updated: ${accounts.size}`)
+    ctx.log.child('accounts-balances').info(`updated: ${accountBalances.size}`)
 }
 
 export function processBalancesEventItem(ctx: Context, event: any, name: string, accountIdsHex: Set<string>) {

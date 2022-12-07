@@ -1,4 +1,5 @@
 export * from "./chainState.model"
+export * from "./historicalBalance.model"
 export * from "./accountBalance.model"
 export * from "./identity.model"
 export * from "./organization.model"

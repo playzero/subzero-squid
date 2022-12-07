@@ -5,13 +5,13 @@ import { getPropertyUpdatedData } from './getters'
 import { getSenseEntity } from '../../util/db/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString } from '../../util/helpers'
+import { addressCodec } from '../../util/helpers'
 import { ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
 async function handlePropertyUpdatedEvent(ctx: Context, block: Block, event: Event, name: string) {
     const eventData = getPropertyUpdatedData(ctx, event)
-	let accountId = arrayToHexString(eventData.accountId)
+	let accountId = addressCodec.encode(eventData.accountId)
 
     let entity = await getSenseEntity(ctx.store, accountId)
     if (!entity) {
