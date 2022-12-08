@@ -5,7 +5,7 @@ const config: ProcessorConfig = {
     prefix: 25,
     ipfsGateway: 'https://gamedao.infura-ipfs.io/ipfs/',
     dataSource: {
-        archive: 'http://localhost:8888/graphql',
+        archive: 'http://indexer-gateway:8000/graphql',
         chain: 'wss://node.dev.sub.zero.io',
     }
 }

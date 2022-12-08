@@ -64,6 +64,9 @@ export class Proposal {
   @Column_("text", {nullable: true})
   slashingRule!: string | undefined | null
 
+  @Column_("int4", {nullable: false})
+  createdAtBlock!: number
+
   @Column_("text", {nullable: false})
   cid!: string
 

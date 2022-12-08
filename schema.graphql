@@ -147,6 +147,7 @@ type Proposal @entity {
     beneficiary: String
     beneficiaryIdentity: Identity
     slashingRule: String
+    createdAtBlock: Int!
 
     # Metadata:
     cid: String!

@@ -1,4 +1,5 @@
 import { Context, Block } from '../../../processor'
+import { SubstrateBlock } from '@subsquid/substrate-processor'
 import { Event } from '../../../types/generated/support'
 
 import { getProposalCreatedData } from './getters'
@@ -64,6 +65,7 @@ async function handleProposalCreatedEvent(ctx: Context, block: Block, event: Eve
 	proposal.id = proposalId
 	proposal.creator = arrayToHexString(proposalData.owner)
 	proposal.creatorIdentity = await upsertIdentity(ctx.store, arrayToHexString(proposalData.owner), null)
+	proposal.createdAtBlock = block.header.height
 	proposal.organization = org
 	proposal.campaign = campaign
 	proposal.type = proposalData.proposalType.__kind

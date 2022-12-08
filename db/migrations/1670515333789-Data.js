@@ -1,5 +1,5 @@
-module.exports = class Data1668960690639 {
-  name = 'Data1668960690639'
+module.exports = class Data1670515333789 {
+  name = 'Data1670515333789'
 
   async up(db) {
     await db.query(`ALTER TABLE "proposal" DROP CONSTRAINT "FK_7d1bbb4c8b93797430bc3bcd454"`)
@@ -8,9 +8,20 @@ module.exports = class Data1668960690639 {
     await db.query(`DROP INDEX "public"."IDX_7d1bbb4c8b93797430bc3bcd45"`)
     await db.query(`DROP INDEX "public"."IDX_78e8f198409b4db925b1a44d09"`)
     await db.query(`DROP INDEX "public"."IDX_2fecc2ceb81f30a7f46be802cb"`)
+    await db.query(`CREATE TABLE "chain_state" ("id" character varying NOT NULL, "token_balance" numeric NOT NULL, "token_holders" integer NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "block_number" integer NOT NULL, CONSTRAINT "PK_e28e46a238ada7cbbcf711b3f6c" PRIMARY KEY ("id"))`)
+    await db.query(`CREATE INDEX "IDX_b15977afb801d90143ea51cdec" ON "chain_state" ("timestamp") `)
+    await db.query(`CREATE INDEX "IDX_5596acea2cba293bbdc32b577c" ON "chain_state" ("block_number") `)
+    await db.query(`CREATE TABLE "historical_balance" ("id" character varying NOT NULL, "block" integer NOT NULL, "address" text NOT NULL, "currency_id" text NOT NULL, "free" numeric NOT NULL, "reserved" numeric NOT NULL, "total" numeric NOT NULL, CONSTRAINT "PK_74ac29ad0bdffb6d1281a1e17e8" PRIMARY KEY ("id"))`)
+    await db.query(`CREATE INDEX "IDX_182e1c4040a7932e81ee1dd947" ON "historical_balance" ("address") `)
+    await db.query(`CREATE INDEX "IDX_a2a6218b73a74f3540e0ecf7a1" ON "historical_balance" ("currency_id") `)
+    await db.query(`CREATE TABLE "account_balance" ("id" character varying NOT NULL, "balance_id" character varying, "identity_id" character varying, CONSTRAINT "PK_bd893045760f719e24a95a42562" PRIMARY KEY ("id"))`)
+    await db.query(`CREATE INDEX "IDX_401dbe0674ebfda5e58638f27c" ON "account_balance" ("balance_id") `)
+    await db.query(`CREATE INDEX "IDX_abaa61ef32e9f5c3bf4dcd2ac3" ON "account_balance" ("identity_id") `)
     await db.query(`CREATE TABLE "sense_entity" ("id" character varying NOT NULL, "experience" numeric NOT NULL, "trust" numeric NOT NULL, "reputation" numeric NOT NULL, "created_at_block" integer NOT NULL, "updated_at_block" integer NOT NULL, "cid" text NOT NULL, "identity_id" character varying, CONSTRAINT "PK_b37964c035bf9449acdcd249e56" PRIMARY KEY ("id"))`)
     await db.query(`CREATE INDEX "IDX_3f4f7852f20759dcd32335b1e5" ON "sense_entity" ("identity_id") `)
-    await db.query(`ALTER TABLE "proposal" DROP COLUMN "created_at_block"`)
+    await db.query(`CREATE TABLE "current_chain_state" ("id" character varying NOT NULL, "token_balance" numeric NOT NULL, "token_holders" integer NOT NULL, "timestamp" TIMESTAMP WITH TIME ZONE NOT NULL, "block_number" integer NOT NULL, CONSTRAINT "PK_635aee56410df525938bf40f669" PRIMARY KEY ("id"))`)
+    await db.query(`CREATE INDEX "IDX_b610f50e22008c895b1c9912bd" ON "current_chain_state" ("timestamp") `)
+    await db.query(`CREATE INDEX "IDX_a9c38ffcf2e78137f75e24f88c" ON "current_chain_state" ("block_number") `)
     await db.query(`ALTER TABLE "proposal" DROP COLUMN "metadata_id"`)
     await db.query(`ALTER TABLE "campaign" DROP COLUMN "metadata_id"`)
     await db.query(`ALTER TABLE "organization" DROP COLUMN "metadata_id"`)
@@ -26,6 +37,7 @@ module.exports = class Data1668960690639 {
     await db.query(`ALTER TABLE "campaign" ADD "markdown" text NOT NULL`)
     await db.query(`ALTER TABLE "campaign" ADD "logo" text NOT NULL`)
     await db.query(`ALTER TABLE "campaign" ADD "header" text NOT NULL`)
+    await db.query(`ALTER TABLE "organization" ADD "slug" text NOT NULL`)
     await db.query(`ALTER TABLE "organization" ADD "cid" text NOT NULL`)
     await db.query(`ALTER TABLE "organization" ADD "name" text NOT NULL`)
     await db.query(`ALTER TABLE "organization" ADD "description" text NOT NULL`)
@@ -79,6 +91,8 @@ module.exports = class Data1668960690639 {
     await db.query(`ALTER TABLE "organization" ADD CONSTRAINT "FK_5f2442a79f529d80abe10ad509b" FOREIGN KEY ("treasury_identity_id") REFERENCES "identity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     await db.query(`ALTER TABLE "proposal_voter" ADD CONSTRAINT "FK_3e308d731ed7a77a761f99bb2b3" FOREIGN KEY ("voting_id") REFERENCES "voting"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     await db.query(`ALTER TABLE "proposal_voter" ADD CONSTRAINT "FK_996f3867ec20cf438eef4d22180" FOREIGN KEY ("identity_id") REFERENCES "identity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+    await db.query(`ALTER TABLE "account_balance" ADD CONSTRAINT "FK_401dbe0674ebfda5e58638f27c1" FOREIGN KEY ("balance_id") REFERENCES "historical_balance"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
+    await db.query(`ALTER TABLE "account_balance" ADD CONSTRAINT "FK_abaa61ef32e9f5c3bf4dcd2ac38" FOREIGN KEY ("identity_id") REFERENCES "identity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
     await db.query(`ALTER TABLE "sense_entity" ADD CONSTRAINT "FK_3f4f7852f20759dcd32335b1e58" FOREIGN KEY ("identity_id") REFERENCES "identity"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`)
   }
 
@@ -89,9 +103,20 @@ module.exports = class Data1668960690639 {
     await db.query(`CREATE INDEX "IDX_7d1bbb4c8b93797430bc3bcd45" ON "proposal" ("metadata_id") `)
     await db.query(`CREATE INDEX "IDX_78e8f198409b4db925b1a44d09" ON "campaign" ("metadata_id") `)
     await db.query(`CREATE INDEX "IDX_2fecc2ceb81f30a7f46be802cb" ON "organization" ("metadata_id") `)
+    await db.query(`DROP TABLE "chain_state"`)
+    await db.query(`DROP INDEX "public"."IDX_b15977afb801d90143ea51cdec"`)
+    await db.query(`DROP INDEX "public"."IDX_5596acea2cba293bbdc32b577c"`)
+    await db.query(`DROP TABLE "historical_balance"`)
+    await db.query(`DROP INDEX "public"."IDX_182e1c4040a7932e81ee1dd947"`)
+    await db.query(`DROP INDEX "public"."IDX_a2a6218b73a74f3540e0ecf7a1"`)
+    await db.query(`DROP TABLE "account_balance"`)
+    await db.query(`DROP INDEX "public"."IDX_401dbe0674ebfda5e58638f27c"`)
+    await db.query(`DROP INDEX "public"."IDX_abaa61ef32e9f5c3bf4dcd2ac3"`)
     await db.query(`DROP TABLE "sense_entity"`)
     await db.query(`DROP INDEX "public"."IDX_3f4f7852f20759dcd32335b1e5"`)
-    await db.query(`ALTER TABLE "proposal" ADD "created_at_block" integer NOT NULL`)
+    await db.query(`DROP TABLE "current_chain_state"`)
+    await db.query(`DROP INDEX "public"."IDX_b610f50e22008c895b1c9912bd"`)
+    await db.query(`DROP INDEX "public"."IDX_a9c38ffcf2e78137f75e24f88c"`)
     await db.query(`ALTER TABLE "proposal" ADD "metadata_id" character varying`)
     await db.query(`ALTER TABLE "campaign" ADD "metadata_id" character varying`)
     await db.query(`ALTER TABLE "organization" ADD "metadata_id" character varying`)
@@ -107,6 +132,7 @@ module.exports = class Data1668960690639 {
     await db.query(`ALTER TABLE "campaign" DROP COLUMN "markdown"`)
     await db.query(`ALTER TABLE "campaign" DROP COLUMN "logo"`)
     await db.query(`ALTER TABLE "campaign" DROP COLUMN "header"`)
+    await db.query(`ALTER TABLE "organization" DROP COLUMN "slug"`)
     await db.query(`ALTER TABLE "organization" DROP COLUMN "cid"`)
     await db.query(`ALTER TABLE "organization" DROP COLUMN "name"`)
     await db.query(`ALTER TABLE "organization" DROP COLUMN "description"`)
@@ -160,6 +186,8 @@ module.exports = class Data1668960690639 {
     await db.query(`ALTER TABLE "organization" DROP CONSTRAINT "FK_5f2442a79f529d80abe10ad509b"`)
     await db.query(`ALTER TABLE "proposal_voter" DROP CONSTRAINT "FK_3e308d731ed7a77a761f99bb2b3"`)
     await db.query(`ALTER TABLE "proposal_voter" DROP CONSTRAINT "FK_996f3867ec20cf438eef4d22180"`)
+    await db.query(`ALTER TABLE "account_balance" DROP CONSTRAINT "FK_401dbe0674ebfda5e58638f27c1"`)
+    await db.query(`ALTER TABLE "account_balance" DROP CONSTRAINT "FK_abaa61ef32e9f5c3bf4dcd2ac38"`)
     await db.query(`ALTER TABLE "sense_entity" DROP CONSTRAINT "FK_3f4f7852f20759dcd32335b1e58"`)
   }
 }

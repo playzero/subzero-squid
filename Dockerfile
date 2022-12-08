@@ -28,9 +28,8 @@ RUN echo -e "loglevel=silent\nupdate-notifier=false" > /squid/.npmrc
 ADD db db
 ADD assets assets
 ADD schema.graphql .
-ADD zeroTypesBundle.json .
 
-# TODO: temporary fix
+# FIXME: add/fix dependencies
 RUN npm install -D await-to-js
 
 # TODO: use shorter PROMETHEUS_PORT
