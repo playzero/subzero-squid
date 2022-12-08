@@ -1,5 +1,5 @@
 import { Context, Block } from '../../../processor'
-import { CurrencyId } from '../../../types/generated/v63'
+import { getCurrencyValue } from '../../../common/tools'
 import { Event } from '../../../types/generated/support'
 
 import { getOrgCreatedData } from './getters'
@@ -39,7 +39,7 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
 
 	let creatorIdentity = await upsertIdentity(ctx.store, creator, null)
 	let primeIdentity = await upsertIdentity(ctx.store, prime, null)
-	let treasuryIdentity = await upsertIdentity(ctx.store, treasury, null);
+	let treasuryIdentity = await upsertIdentity(ctx.store, treasury, null)
 
 	let org = new Organization()
 	org.id = orgId
@@ -79,14 +79,6 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
 	org.slug = slugify(org.name)
 
 	await ctx.store.save(org)
-}
-
-function getCurrencyValue(currency: CurrencyId) {
-	if (currency.__kind == 'Token') {
-		return currency.__kind
-	} else {
-		return currency.value.toString()
-	}
 }
 
 export { handleOrgCreatedEvent }

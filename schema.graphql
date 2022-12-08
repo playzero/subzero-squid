@@ -6,13 +6,20 @@ type ChainState @entity {
     blockNumber: Int! @index
 }
 
-type BalanceHistory @entity {
+type HistoricalBalance @entity {
     id: ID!
     block: Int!
     address: String! @index
+    currencyId: String! @index
     free: BigInt!
     reserved: BigInt!
     total: BigInt!
+}
+
+type AccountBalance @entity {
+    id: ID!
+    balance: HistoricalBalance!
+    identity: Identity!
 }
 
 type Identity @entity {
@@ -29,8 +36,8 @@ type Identity @entity {
     web3name: String
     discord: String
 
-    # Latest balance
-    balance: BalanceHistory
+    # Latest balances
+    balances: [AccountBalance!]! @derivedFrom(field: "identity") 
 
     createdOrganizations: [Organization!]! @derivedFrom(field: "creatorIdentity")
     controllerOrganizations: [Organization!]! @derivedFrom(field: "primeIdentity")
@@ -140,6 +147,7 @@ type Proposal @entity {
     beneficiary: String
     beneficiaryIdentity: Identity
     slashingRule: String
+    createdAtBlock: Int!
 
     # Metadata:
     cid: String!

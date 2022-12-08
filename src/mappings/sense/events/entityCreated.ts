@@ -7,13 +7,13 @@ import { storage } from '../../../storage'
 import { SenseEntity } from '../../../model'
 import { upsertIdentity } from '../../util/db/identity'
 
-import { arrayToHexString } from '../../util/helpers'
+import { addressCodec } from '../../util/helpers'
 import { ObjectExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 
 async function handleEntityCreatedEvent(ctx: Context, block: Block, event: Event, name: string) {
 	const eventData = getEntityCreatedData(ctx, event)
-	let accountId = arrayToHexString(eventData.accountId)
+	let accountId = addressCodec.encode(eventData.accountId)
 
 	if (await getSenseEntity(ctx.store, accountId)) {
 		ctx.log.warn(ObjectExistsWarn(name, 'SenseEntity', accountId))

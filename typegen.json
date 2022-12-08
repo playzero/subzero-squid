@@ -38,7 +38,17 @@
     "Balances.ReserveRepatriated",
     "Balances.Deposit",
     "Balances.Withdraw",
-    "Balances.Slashed"
+    "Balances.Slashed",
+
+    "Tokens.Transfer",
+    "Tokens.Endowed",
+    "Tokens.BalanceSet",
+    "Tokens.Reserved",
+    "Tokens.Unreserved",
+    "Tokens.ReserveRepatriated",
+    "Tokens.Deposited",
+    "Tokens.Withdrawn",
+    "Tokens.Slashed"
   ],
   "calls": [
     "Identity.set_identity"
@@ -60,7 +70,8 @@
 
     "System.Account",
     "Balances.Account",
-    "Balances.TotalIssuance"
+    "Balances.TotalIssuance",
+    "Tokens.Accounts"
   ],
   "constants": true
 }
