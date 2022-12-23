@@ -26,18 +26,18 @@ export interface MemberState_Exited {
   __kind: 'Exited'
 }
 
-export type BattlepassState = BattlepassState_Draft | BattlepassState_Active | BattlepassState_Closed
+export type BattlepassState = BattlepassState_DRAFT | BattlepassState_ACTIVE | BattlepassState_ENDED
 
-export interface BattlepassState_Draft {
-  __kind: 'Draft'
+export interface BattlepassState_DRAFT {
+  __kind: 'DRAFT'
 }
 
-export interface BattlepassState_Active {
-  __kind: 'Active'
+export interface BattlepassState_ACTIVE {
+  __kind: 'ACTIVE'
 }
 
-export interface BattlepassState_Closed {
-  __kind: 'Closed'
+export interface BattlepassState_ENDED {
+  __kind: 'ENDED'
 }
 
 export interface Battlepass {
@@ -48,6 +48,4 @@ export interface Battlepass {
   season: number
   price: number
   collectionId: number
-  created: number
-  mutated: number
 }

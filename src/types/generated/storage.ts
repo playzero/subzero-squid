@@ -1,8 +1,7 @@
 import assert from 'assert'
 import {Block, Chain, ChainContext, BlockContext, Result, Option} from './support'
 import * as v63 from './v63'
-import * as v64 from './v64'
-import * as v67 from './v67'
+import * as v66 from './v66'
 
 export class BalancesAccountStorage {
   private readonly _chain: Chain
@@ -147,36 +146,7 @@ export class BattlepassBattlepassStatesStorage {
    * 
    *  BattlepassStates: map Hash => BattlepassState
    */
-  get isV64() {
-    return this._chain.getStorageItemTypeHash('Battlepass', 'BattlepassStates') === '9e1714309e2209f383d6d4161099cad7fa12fbcb6b715fd2ae5d0f427d45e50f'
-  }
-
-  /**
-   *  Battlepass state.
-   * 
-   *  BattlepassStates: map Hash => BattlepassState
-   */
-  async getAsV64(key: Uint8Array): Promise<v64.BattlepassState | undefined> {
-    assert(this.isV64)
-    return this._chain.getStorage(this.blockHash, 'Battlepass', 'BattlepassStates', key)
-  }
-
-  async getManyAsV64(keys: Uint8Array[]): Promise<(v64.BattlepassState | undefined)[]> {
-    assert(this.isV64)
-    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'BattlepassStates', keys.map(k => [k]))
-  }
-
-  async getAllAsV64(): Promise<(v64.BattlepassState)[]> {
-    assert(this.isV64)
-    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'BattlepassStates')
-  }
-
-  /**
-   *  Battlepass state.
-   * 
-   *  BattlepassStates: map Hash => BattlepassState
-   */
-  get isV67() {
+  get isV66() {
     return this._chain.getStorageItemTypeHash('Battlepass', 'BattlepassStates') === '7c03af505c9f504a83acbf3693a4881afd7095826f8573863d847b29e2afca28'
   }
 
@@ -185,18 +155,18 @@ export class BattlepassBattlepassStatesStorage {
    * 
    *  BattlepassStates: map Hash => BattlepassState
    */
-  async getAsV67(key: Uint8Array): Promise<v67.BattlepassState | undefined> {
-    assert(this.isV67)
+  async getAsV66(key: Uint8Array): Promise<v66.BattlepassState | undefined> {
+    assert(this.isV66)
     return this._chain.getStorage(this.blockHash, 'Battlepass', 'BattlepassStates', key)
   }
 
-  async getManyAsV67(keys: Uint8Array[]): Promise<(v67.BattlepassState | undefined)[]> {
-    assert(this.isV67)
+  async getManyAsV66(keys: Uint8Array[]): Promise<(v66.BattlepassState | undefined)[]> {
+    assert(this.isV66)
     return this._chain.queryStorage(this.blockHash, 'Battlepass', 'BattlepassStates', keys.map(k => [k]))
   }
 
-  async getAllAsV67(): Promise<(v67.BattlepassState)[]> {
-    assert(this.isV67)
+  async getAllAsV66(): Promise<(v66.BattlepassState)[]> {
+    assert(this.isV66)
     return this._chain.queryStorage(this.blockHash, 'Battlepass', 'BattlepassStates')
   }
 
@@ -225,36 +195,7 @@ export class BattlepassBattlepassesStorage {
    * 
    *  Battlepasses: map Hash => Battlepass
    */
-  get isV64() {
-    return this._chain.getStorageItemTypeHash('Battlepass', 'Battlepasses') === '2c38818cf86779cd3cde2895c11ef43f6ce95b5f5241ea8448805cef34e5ebb8'
-  }
-
-  /**
-   *  Battlepass by its id.
-   * 
-   *  Battlepasses: map Hash => Battlepass
-   */
-  async getAsV64(key: Uint8Array): Promise<v64.Battlepass | undefined> {
-    assert(this.isV64)
-    return this._chain.getStorage(this.blockHash, 'Battlepass', 'Battlepasses', key)
-  }
-
-  async getManyAsV64(keys: Uint8Array[]): Promise<(v64.Battlepass | undefined)[]> {
-    assert(this.isV64)
-    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'Battlepasses', keys.map(k => [k]))
-  }
-
-  async getAllAsV64(): Promise<(v64.Battlepass)[]> {
-    assert(this.isV64)
-    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'Battlepasses')
-  }
-
-  /**
-   *  Battlepass by its id.
-   * 
-   *  Battlepasses: map Hash => Battlepass
-   */
-  get isV67() {
+  get isV66() {
     return this._chain.getStorageItemTypeHash('Battlepass', 'Battlepasses') === '057231845e16567da0d414a87c1183537f60c29cb56303d195fe4bcd910e764a'
   }
 
@@ -263,18 +204,18 @@ export class BattlepassBattlepassesStorage {
    * 
    *  Battlepasses: map Hash => Battlepass
    */
-  async getAsV67(key: Uint8Array): Promise<v67.Battlepass | undefined> {
-    assert(this.isV67)
+  async getAsV66(key: Uint8Array): Promise<v66.Battlepass | undefined> {
+    assert(this.isV66)
     return this._chain.getStorage(this.blockHash, 'Battlepass', 'Battlepasses', key)
   }
 
-  async getManyAsV67(keys: Uint8Array[]): Promise<(v67.Battlepass | undefined)[]> {
-    assert(this.isV67)
+  async getManyAsV66(keys: Uint8Array[]): Promise<(v66.Battlepass | undefined)[]> {
+    assert(this.isV66)
     return this._chain.queryStorage(this.blockHash, 'Battlepass', 'Battlepasses', keys.map(k => [k]))
   }
 
-  async getAllAsV67(): Promise<(v67.Battlepass)[]> {
-    assert(this.isV67)
+  async getAllAsV66(): Promise<(v66.Battlepass)[]> {
+    assert(this.isV66)
     return this._chain.queryStorage(this.blockHash, 'Battlepass', 'Battlepasses')
   }
 

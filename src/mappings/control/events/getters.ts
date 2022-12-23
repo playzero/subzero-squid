@@ -59,8 +59,8 @@ export function getMemberRemovedData(ctx: Context, ev: Event): MemberUpdatedData
 
 export function getMemberUpdatedData(ctx: Context, ev: Event): [Uint8Array, Uint8Array, MemberState] {
     const event = new ControlMemberUpdatedEvent(ctx, ev)
-    if (event.isV64) {
-        const { orgId, who, state, blockNumber } = event.asV64
+    if (event.isV66) {
+        const { orgId, who, state, blockNumber } = event.asV66
         return [who, orgId, state]
     } else {
         throw new UnknownVersionError(event.constructor.name)
