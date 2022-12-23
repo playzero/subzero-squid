@@ -1,6 +1,7 @@
 import assert from 'assert'
 import {Chain, ChainContext, EventContext, Event, Result, Option} from './support'
 import * as v63 from './v63'
+import * as v64 from './v64'
 
 export class BalancesBalanceSetEvent {
   private readonly _chain: Chain
@@ -265,6 +266,35 @@ export class BalancesWithdrawEvent {
   }
 }
 
+export class BattlepassBattlepassActivatedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Battlepass.BattlepassActivated')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * BattlePass activated
+   */
+  get isV67(): boolean {
+    return this._chain.getEventHash('Battlepass.BattlepassActivated') === 'ed9ce68bcc372a15c62e00f3ce751cb6e3a85f61f6b0120cdf6f66c1b12bd7f4'
+  }
+
+  /**
+   * BattlePass activated
+   */
+  get asV67(): {byWho: Uint8Array, orgId: Uint8Array, battlepassId: Uint8Array} {
+    assert(this.isV67)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
 export class BattlepassBattlepassClaimedEvent {
   private readonly _chain: Chain
   private readonly event: Event
@@ -292,33 +322,19 @@ export class BattlepassBattlepassClaimedEvent {
     assert(this.isV64)
     return this._chain.decodeEvent(this.event)
   }
-}
 
-export class BattlepassBattlepassClosedEvent {
-  private readonly _chain: Chain
-  private readonly event: Event
-
-  constructor(ctx: EventContext)
-  constructor(ctx: ChainContext, event: Event)
-  constructor(ctx: EventContext, event?: Event) {
-    event = event || ctx.event
-    assert(event.name === 'Battlepass.BattlepassClosed')
-    this._chain = ctx._chain
-    this.event = event
+  /**
+   * BattlePass claimed
+   */
+  get isV67(): boolean {
+    return this._chain.getEventHash('Battlepass.BattlepassClaimed') === '91b65ec51f0be74163e08c1db4ffd953096cb532abd4723bc59943ae482f0a5c'
   }
 
   /**
-   * BattlePass closed
+   * BattlePass claimed
    */
-  get isV64(): boolean {
-    return this._chain.getEventHash('Battlepass.BattlepassClosed') === '0fa51cd501a9f703a217300e60f07f8ed56483b99f84dca81ba6770dd290f8d3'
-  }
-
-  /**
-   * BattlePass closed
-   */
-  get asV64(): {closedBy: Uint8Array, orgId: Uint8Array, battlepassId: Uint8Array} {
-    assert(this.isV64)
+  get asV67(): {byWho: Uint8Array, forWho: Uint8Array, orgId: Uint8Array, battlepassId: Uint8Array, nftId: number} {
+    assert(this.isV67)
     return this._chain.decodeEvent(this.event)
   }
 }
@@ -348,6 +364,35 @@ export class BattlepassBattlepassCreatedEvent {
    */
   get asV64(): {orgId: Uint8Array, battlepassId: Uint8Array, season: number} {
     assert(this.isV64)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class BattlepassBattlepassEndedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Battlepass.BattlepassEnded')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * BattlePass ended
+   */
+  get isV67(): boolean {
+    return this._chain.getEventHash('Battlepass.BattlepassEnded') === 'ed9ce68bcc372a15c62e00f3ce751cb6e3a85f61f6b0120cdf6f66c1b12bd7f4'
+  }
+
+  /**
+   * BattlePass ended
+   */
+  get asV67(): {byWho: Uint8Array, orgId: Uint8Array, battlepassId: Uint8Array} {
+    assert(this.isV67)
     return this._chain.decodeEvent(this.event)
   }
 }
@@ -429,6 +474,35 @@ export class ControlMemberRemovedEvent {
    */
   get asV63(): {orgId: Uint8Array, who: Uint8Array, blockNumber: number} {
     assert(this.isV63)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class ControlMemberUpdatedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Control.MemberUpdated')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * A member state has been updated
+   */
+  get isV64(): boolean {
+    return this._chain.getEventHash('Control.MemberUpdated') === '6069a7b283e802eb4c0771681dd9a8b3b907bb28dc8cc80b636d8717f0238e8b'
+  }
+
+  /**
+   * A member state has been updated
+   */
+  get asV64(): {orgId: Uint8Array, who: Uint8Array, state: v64.MemberState, blockNumber: number} {
+    assert(this.isV64)
     return this._chain.decodeEvent(this.event)
   }
 }

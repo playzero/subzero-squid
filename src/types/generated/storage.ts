@@ -2,6 +2,7 @@ import assert from 'assert'
 import {Block, Chain, ChainContext, BlockContext, Result, Option} from './support'
 import * as v63 from './v63'
 import * as v64 from './v64'
+import * as v67 from './v67'
 
 export class BalancesAccountStorage {
   private readonly _chain: Chain
@@ -171,6 +172,35 @@ export class BattlepassBattlepassStatesStorage {
   }
 
   /**
+   *  Battlepass state.
+   * 
+   *  BattlepassStates: map Hash => BattlepassState
+   */
+  get isV67() {
+    return this._chain.getStorageItemTypeHash('Battlepass', 'BattlepassStates') === '7c03af505c9f504a83acbf3693a4881afd7095826f8573863d847b29e2afca28'
+  }
+
+  /**
+   *  Battlepass state.
+   * 
+   *  BattlepassStates: map Hash => BattlepassState
+   */
+  async getAsV67(key: Uint8Array): Promise<v67.BattlepassState | undefined> {
+    assert(this.isV67)
+    return this._chain.getStorage(this.blockHash, 'Battlepass', 'BattlepassStates', key)
+  }
+
+  async getManyAsV67(keys: Uint8Array[]): Promise<(v67.BattlepassState | undefined)[]> {
+    assert(this.isV67)
+    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'BattlepassStates', keys.map(k => [k]))
+  }
+
+  async getAllAsV67(): Promise<(v67.BattlepassState)[]> {
+    assert(this.isV67)
+    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'BattlepassStates')
+  }
+
+  /**
    * Checks whether the storage item is defined for the current chain version.
    */
   get isExists(): boolean {
@@ -220,59 +250,39 @@ export class BattlepassBattlepassesStorage {
   }
 
   /**
-   * Checks whether the storage item is defined for the current chain version.
+   *  Battlepass by its id.
+   * 
+   *  Battlepasses: map Hash => Battlepass
    */
-  get isExists(): boolean {
-    return this._chain.getStorageItemTypeHash('Battlepass', 'Battlepasses') != null
-  }
-}
-
-export class BattlepassClaimedBattlepassStorage {
-  private readonly _chain: Chain
-  private readonly blockHash: string
-
-  constructor(ctx: BlockContext)
-  constructor(ctx: ChainContext, block: Block)
-  constructor(ctx: BlockContext, block?: Block) {
-    block = block || ctx.block
-    this.blockHash = block.hash
-    this._chain = ctx._chain
+  get isV67() {
+    return this._chain.getStorageItemTypeHash('Battlepass', 'Battlepasses') === '057231845e16567da0d414a87c1183537f60c29cb56303d195fe4bcd910e764a'
   }
 
   /**
-   *  Claimed Battlepass-NFT by user account.
+   *  Battlepass by its id.
    * 
-   *  ClaimedBattlepass: map (AccountId, Hash) => BattlepassNft
+   *  Battlepasses: map Hash => Battlepass
    */
-  get isV64() {
-    return this._chain.getStorageItemTypeHash('Battlepass', 'ClaimedBattlepass') === '128ae474c5575a0bda003e3a23daa455ba5a8a5bf33468f949805e25bde4e9ce'
+  async getAsV67(key: Uint8Array): Promise<v67.Battlepass | undefined> {
+    assert(this.isV67)
+    return this._chain.getStorage(this.blockHash, 'Battlepass', 'Battlepasses', key)
   }
 
-  /**
-   *  Claimed Battlepass-NFT by user account.
-   * 
-   *  ClaimedBattlepass: map (AccountId, Hash) => BattlepassNft
-   */
-  async getAsV64(key1: Uint8Array, key2: Uint8Array): Promise<v64.BattlepassNft | undefined> {
-    assert(this.isV64)
-    return this._chain.getStorage(this.blockHash, 'Battlepass', 'ClaimedBattlepass', key1, key2)
+  async getManyAsV67(keys: Uint8Array[]): Promise<(v67.Battlepass | undefined)[]> {
+    assert(this.isV67)
+    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'Battlepasses', keys.map(k => [k]))
   }
 
-  async getManyAsV64(keys: [Uint8Array, Uint8Array][]): Promise<(v64.BattlepassNft | undefined)[]> {
-    assert(this.isV64)
-    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'ClaimedBattlepass', keys)
-  }
-
-  async getAllAsV64(): Promise<(v64.BattlepassNft)[]> {
-    assert(this.isV64)
-    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'ClaimedBattlepass')
+  async getAllAsV67(): Promise<(v67.Battlepass)[]> {
+    assert(this.isV67)
+    return this._chain.queryStorage(this.blockHash, 'Battlepass', 'Battlepasses')
   }
 
   /**
    * Checks whether the storage item is defined for the current chain version.
    */
   get isExists(): boolean {
-    return this._chain.getStorageItemTypeHash('Battlepass', 'ClaimedBattlepass') != null
+    return this._chain.getStorageItemTypeHash('Battlepass', 'Battlepasses') != null
   }
 }
 
