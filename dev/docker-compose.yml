@@ -63,7 +63,7 @@ services:
       DATABASE_URL: postgres://postgres:postgres@db:5432/graph-gamedao?schema=public
 
   graph:
-    image: hasura/graphql-engine:v2.12.0
+    image: hasura/graphql-engine:v2.12.1
     restart: always
     ports:
       - 9080:8080
