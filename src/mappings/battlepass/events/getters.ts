@@ -21,13 +21,7 @@ export function getBattlepassCreatedData(ctx: Context, ev: Event): Uint8Array {
 
 export function getBattlepassClaimedData(ctx: Context, ev: Event): [Uint8Array, Uint8Array, number] {
     const event = new BattlepassBattlepassClaimedEvent(ctx, ev)
-
-    // TODO: remove v64 version support, it's needed temporarily only for the dev purposes
-    if (event.isV64) {
-        const { claimer, orgId, battlepassId } = event.asV64
-        return [ claimer, battlepassId, -1 ]
-    }
-    else if (event.isV67) {
+    if (event.isV67) {
         const { byWho, forWho, orgId, battlepassId, nftId } = event.asV67
         return [ byWho, battlepassId, nftId ]
     } else {
