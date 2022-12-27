@@ -380,7 +380,25 @@
             "table": {
               "name": "historical_balance",
               "schema": "public"
-            }
+            },
+            "select_permissions": [
+              {
+                "role": "public",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "block",
+                    "address",
+                    "currency_id",
+                    "free",
+                    "reserved",
+                    "total"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ]
           },
           {
             "table": {

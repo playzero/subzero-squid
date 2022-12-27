@@ -10,6 +10,8 @@ import {
 	Battlepass
 } from '../../../model'
 import { Store } from '@subsquid/typeorm-store'
+import { Nft } from '../../../model/generated/nft.model';
+import { NftCollection } from '../../../model/generated/nftCollection.model';
 
 type EntityConstructor<T> = {
 	new (...args: any[]): T;
@@ -68,6 +70,14 @@ function getBattlepass(store: Store, battlepassId: string): Promise<Battlepass |
 	return get(store, Battlepass, battlepassId);
 }
 
+function getNft(store: Store, id: string): Promise<Nft | null> {
+	return get(store, Nft, id);
+}
+
+function getNftCollection(store: Store, id: string): Promise<NftCollection | null> {
+	return get(store, NftCollection, id);
+}
+
 export {
 	getOrg,
 	getOrgMember,
@@ -77,5 +87,7 @@ export {
 	getVoting,
 	getProposalVoter,
 	getSenseEntity,
-	getBattlepass
+	getBattlepass,
+	getNft,
+	getNftCollection
 };
