@@ -1,5 +1,11 @@
 # Squid for Zero Network
 
+The concept is next:
+
+* Use the trigger (event or extrinsic).
+* Get the data from the trigger itself or from the chain storage.
+* Save normalized data into the relational db.
+
 ## Project structure
 
 * `schema.graphql` - database schema definition.
@@ -17,15 +23,19 @@
 
 ### 1. Setup local environment
 
-Run db, squid archiver, gamedao-service and hasura using `dev/docker-compose.yml`.
-Target chain for the archiver could be changed via ingest's service command, ex.: `"-e", "wss://node.dev.sub.zero.io"`
-After archiver is fully sync with a chain, we are good to go and run a local Squid, which
-will be connected to the local archiver. Make sure to check if `src/config.ts` has proper `dataSource` config for
-both chain and archive, ex.: `archive: 'http://localhost:8888/graphql', chain: 'wss://node.dev.sub.zero.io'`
+Everything needed for the local setup and Squid to work is located in `dev/docker-compose.yml`.
+
+* Check `docker-compose.yml`. A target chain for the archiver could be changed via `ingest`'s service command, 
+ex.: `"-e", "wss://node.dev.sub.zero.io"`
+* Run `cd dev && docker-compose up -d`. As a result, db, squid archiver, gamedao-service and hasura will be started. 
+* Wait until the archiver is fully synced with a chain.
+* Check the squid configs. Make sure to check if `src/config.ts` has proper `dataSource` config for both chain and 
+archive, ex.: `archive: 'http://localhost:8888/graphql', chain: 'wss://node.dev.sub.zero.io'`.
+* Run a local Squid, which will be connected to the local archiver to get the data feed and types introspection information.
 
 ### 1.1. Run the Squid
 
-Considering step 1 is complete and db, archiver and the other services are running, you can can build and run the processor.
+Considering step 1 is complete and db, archiver and the other services are running, you can can build and run the Squid (processor).
 
 ```bash
 # 1. Install dependencies
@@ -41,9 +51,9 @@ make process
 ### 2. Feature flow
 
 * If the feature needs additional events, storage and the other types from the chain, 
-update `typegen.json` and generate types `make typegen`. As a result `src/types/generated` will be updated.
-* If the feature needs a db schema changes, update `schema.graphql` and generate TypeORM classes `make codegen`. 
-As a result `src/model/generated` will be updated. Then [generate a migration](#3-generate-database-migration).
+update `typegen.json` and generate types with `make typegen`. As a result `src/types/generated` will be updated.
+* If the feature needs a db schema changes, update `schema.graphql` and generate TypeORM classes with `make codegen`. 
+As a result `src/model/generated` will be updated. Then [generate a migration and apply it](#3-generate-database-migration).
 * If the feature needs a data retreival from the chain storage, add/update getters at `src/storage`, which
 will be used later by the event/call handlers.
 * Depending on the feature flow (standard or non-standard), update the event/call handlers. For standard flow - 
@@ -56,17 +66,17 @@ will be used later by the event/call handlers.
 ### 2.1. Standard vs non-standard feature flow
 
 For the most cases, the standard feature flow is enough. So, before starting a new feature development, 
-you should understand if you can index an object only relying on an event or a call (standard "internal" flow),
+you should understand if it's possible to process an object only relying on an event or a call (standard "internal" flow),
 or do you need also an extra information and processing from the other events, calls or blocks in order 
 to store an object (non-standart "external" flow).
 
 For `balances`, `tokens` we'd like to accumulate all the account ids, which were involved in the balance 
 change before making a storage call. This way we are reducing storage calls significantly, but from 
-the other side we need to operate above the event and also above the block.
+the other side we need to operate above the event and also above the block level.
 The `chainState` needs non-standard flow as well, because it operates not on the event or extrinsic level,
 but on the block level.
 
-For the other gamedao-protocol objects we don't need this extra processing and the standard flow is reasonably enough.
+For the `gamedao-protocol` objects we don't need this extra processing and the standard flow is reasonably enough.
 
 ### 3. Generate database migration
 
