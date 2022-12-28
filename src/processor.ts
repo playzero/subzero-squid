@@ -8,7 +8,6 @@ import { Store, TypeormDatabase } from "@subsquid/typeorm-store"
 import { eventHandlers, callHandlers } from './mappings'
 import config from './config'
 import { saveCurrentChainState, saveRegularChainState, getLastChainState } from './chainState'
-import { ChainState } from './model'
 import { processBalancesEventItem, saveBalancesAccounts } from './balances'
 import { processTokensEventItem, saveTokensAccounts } from './tokens'
 import { CurrencyId } from "./types/generated/v63"

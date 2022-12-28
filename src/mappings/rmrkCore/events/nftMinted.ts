@@ -11,21 +11,21 @@ import { Nft } from '../../../model/generated/nft.model'
 
 
 async function handleNftMintedEvent(ctx: Context, block: Block, event: Event, name: string) {
-	const [ owner, collectionId, nftId ] = getNftMintedData(ctx, event)
+    const [ owner, collectionId, nftId ] = getNftMintedData(ctx, event)
 
-	let collection = await getNftCollection(ctx.store, collectionId.toString())
-	if (!collection) {
-		ctx.log.warn(ObjectNotExistsWarn(name, 'Collection', collectionId))
-		return
-	}
-	const nftData = await storage.rmrkCore.getNftStorageData(ctx, block.header, nftId, collectionId)
+    let collection = await getNftCollection(ctx.store, collectionId.toString())
+    if (!collection) {
+        ctx.log.warn(ObjectNotExistsWarn(name, 'Collection', collectionId))
+        return
+    }
+    const nftData = await storage.rmrkCore.getNftStorageData(ctx, block.header, nftId, collectionId)
     if (!nftData) {
-		ctx.log.warn(StorageNotExistsWarn(name, 'Nft', collectionId.toString() + ' - ' + nftId.toString()))
-		return
+        ctx.log.warn(StorageNotExistsWarn(name, 'Nft', collectionId.toString() + ' - ' + nftId.toString()))
+        return
     }
 
-	let nft = new Nft()
-	nft.id = nftId.toString()
+    let nft = new Nft()
+    nft.id = nftId.toString()
     nft.owner = getNftOwnerValue(owner)
     nft.metadata = nftData.metadata.toString()
     nft.equipped = nftData.equipped
@@ -33,7 +33,7 @@ async function handleNftMintedEvent(ctx: Context, block: Block, event: Event, na
     nft.transferable = nftData.transferable
     nft.collection = collection
 
-	await ctx.store.save(nft)
+    await ctx.store.save(nft)
 }
 
 export { handleNftMintedEvent }
