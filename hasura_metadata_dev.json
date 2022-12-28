@@ -424,6 +424,28 @@
           },
           {
             "table": {
+              "name": "current_chain_state",
+              "schema": "public"
+            },
+            "select_permissions": [
+              {
+                "role": "public",
+                "permission": {
+                  "columns": [
+                    "id",
+                    "token_balance",
+                    "token_holders",
+                    "timestamp",
+                    "block_number"
+                  ],
+                  "filter": {},
+                  "allow_aggregations": true
+                }
+              }
+            ]
+          },
+          {
+            "table": {
               "name": "battlepass",
               "schema": "public"
             },
