@@ -34,6 +34,7 @@ const processor = new SubstrateBatchProcessor()
     .addEvent('Tokens.Deposited', { data: { event: { args: true } }} as const)
     .addEvent('Tokens.Withdrawn', { data: { event: { args: true } }} as const)
     .addEvent('Tokens.Slashed', { data: { event: { args: true } }} as const)
+    .includeAllBlocks()
 
 for (const eventName in eventHandlers) {
     processor.addEvent(eventName, {data: { event: { args: true } }} as const)
@@ -41,9 +42,6 @@ for (const eventName in eventHandlers) {
 for (const callName in callHandlers) {
     processor.addCall(callName, {data: { call: { origin: true } }} as const)
 }
-processor
-
-processor.includeAllBlocks()
 
 export type Item = BatchProcessorItem<typeof processor>
 export type Context = BatchContext<Store, Item>

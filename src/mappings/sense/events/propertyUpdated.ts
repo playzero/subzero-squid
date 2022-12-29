@@ -11,19 +11,19 @@ import { ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/error
 
 async function handlePropertyUpdatedEvent(ctx: Context, block: Block, event: Event, name: string) {
     const eventData = getPropertyUpdatedData(ctx, event)
-	let accountId = addressCodec.encode(eventData.accountId)
+    let accountId = addressCodec.encode(eventData.accountId)
 
     let entity = await getSenseEntity(ctx.store, accountId)
     if (!entity) {
-		ctx.log.warn(ObjectNotExistsWarn(name, 'SenseEntity', accountId))
-		return
-	}
+        ctx.log.warn(ObjectNotExistsWarn(name, 'SenseEntity', accountId))
+        return
+    }
 
     // TODO: update Event with value instead of looking into a storage
     const storageData = await storage.sense.getEntityPropertyStorageData(ctx, block.header, eventData.propertyType, eventData.accountId)
     if (!storageData) {
-		ctx.log.warn(StorageNotExistsWarn(name, 'EntityProperty', accountId))
-		return
+        ctx.log.warn(StorageNotExistsWarn(name, 'EntityProperty', accountId))
+        return
     }
 
     if (eventData.propertyType.__kind == 'Experience') {
