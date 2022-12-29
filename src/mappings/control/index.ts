@@ -1,4 +1,4 @@
-import { Pallet } from '../types/pallet'
+import { Pallet } from '..'
 import { handleMemberAddedEvent } from './events/memberAdded'
 import { handleOrgCreatedEvent } from './events/orgCreated'
 import { handleMemberRemovedEvent } from './events/memberRemoved'

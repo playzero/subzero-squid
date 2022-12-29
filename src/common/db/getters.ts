@@ -8,10 +8,10 @@ import {
 	ProposalVoter,
 	SenseEntity,
 	Battlepass
-} from '../../../model'
+} from '../../model'
 import { Store } from '@subsquid/typeorm-store'
-import { Nft } from '../../../model/generated/nft.model';
-import { NftCollection } from '../../../model/generated/nftCollection.model';
+import { Nft } from '../../model/generated/nft.model';
+import { NftCollection } from '../../model/generated/nftCollection.model';
 
 type EntityConstructor<T> = {
 	new (...args: any[]): T;
@@ -27,8 +27,6 @@ export async function get<TModel>(
 	// @ts-ignore
 	return (await store.findOne<TModel>(entityConstructor, { where: { id }, relations })) ?? null;
 }
-
-// TODO: review "get" relations, ex. ['creatorIdentity']
 
 function getOrg(store: Store, orgId: string): Promise<Organization | null> {
 	return get(store, Organization, orgId, ['creatorIdentity'])

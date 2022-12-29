@@ -2,13 +2,13 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getCampaignCreatedData } from './getters'
-import { getOrg, getCampaign } from '../../util/db/getters'
-import { upsertIdentity } from '../../util/db/identity'
+import { getOrg, getCampaign } from '../../../common/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
 import { Campaign } from '../../../model'
-import { fetchCampaignMetadata } from '../../util/ipfs/getters'
+import { fetchCampaignMetadata } from '../../../common/ipfs/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString } from '../../util/helpers'
+import { arrayToHexString } from '../../../common/tools'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 async function handleCampaignCreatedEvent(ctx: Context, block: Block, event: Event, name: string) {

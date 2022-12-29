@@ -1,6 +1,6 @@
-import { Pallet } from '../types/pallet';
-import { handleIdentitySetExtrinsic } from './extrinsics/set_identity';
-import { handleIdentityClearedEvent } from './events/identityCleared';
+import { Pallet } from '..'
+import { handleIdentitySetExtrinsic } from './extrinsics/set_identity'
+import { handleIdentityClearedEvent } from './events/identityCleared'
 
 export default {
 	name: 'Identity',
@@ -10,4 +10,4 @@ export default {
 	eventHandlers: {
 		'IdentityCleared': handleIdentityClearedEvent
 	}
-} as Pallet;
+} as Pallet

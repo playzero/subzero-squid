@@ -6,10 +6,10 @@ import {
 	getCampaignSucceededData,
 	getCampaignFailedData
 } from './getters'
-import { getCampaign } from '../../util/db/getters'
+import { getCampaign } from '../../../common/db/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString } from '../../util/helpers'
+import { arrayToHexString } from '../../../common/tools'
 import { ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 

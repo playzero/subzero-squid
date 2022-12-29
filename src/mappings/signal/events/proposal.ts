@@ -9,10 +9,10 @@ import {
 	getProposalAbortedData
 } from './getters'
 
-import { getProposal } from '../../util/db/getters'
+import { getProposal } from '../../../common/db/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString } from '../../util/helpers'
+import { arrayToHexString } from '../../../common/tools'
 import { StorageNotExistsWarn, ObjectNotExistsWarn } from '../../../common/errors'
 
 

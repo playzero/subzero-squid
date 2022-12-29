@@ -2,11 +2,11 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getProposalVotedData } from './getters'
-import { getProposal, getVoting, getProposalVoter } from '../../util/db/getters'
-import { upsertIdentity } from '../../util/db/identity'
+import { getProposal, getVoting, getProposalVoter } from '../../../common/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
 import { ProposalVoter } from '../../../model'
 
-import { arrayToHexString } from '../../util/helpers'
+import { arrayToHexString } from '../../../common/tools'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 

@@ -1,6 +1,6 @@
-import { Pallet } from '../types/pallet';
-import { handleEntityCreatedEvent } from './events/entityCreated';
-import { handlePropertyUpdatedEvent } from './events/propertyUpdated';
+import { Pallet } from '..'
+import { handleEntityCreatedEvent } from './events/entityCreated'
+import { handlePropertyUpdatedEvent } from './events/propertyUpdated'
 
 export default {
 	name: 'Sense',
@@ -9,4 +9,4 @@ export default {
 		'EntityCreated': handleEntityCreatedEvent,
 		'PropertyUpdated': handlePropertyUpdatedEvent,
 	}
-} as Pallet;
+} as Pallet

@@ -1,10 +1,37 @@
-import { OrganizationMetadata, CampaignMetadata, ProposalMetadata } from '../../types/metadata'
-import { isCIDValid } from '../helpers'
 import { to } from 'await-to-js'
 import fetch from 'node-fetch'
 import config from '../../../config'
 
-const getIpfsUrlByCid = (cid: string): string => `${config.ipfsGateway}${cid}`;
+const getIpfsUrlByCid = (cid: string): string => `${config.ipfsGateway}${cid}`
+const isCIDValid = (cid: string | null) => cid !== null && cid.length < 50 && !!cid.match(/^[a-z0-9]+$/i)
+
+interface CampaignMetadata {
+	name: string;
+	email: string;
+	title: string;
+	description: string;
+	markdown: string;
+	logo: string;
+	header: string;
+}
+
+interface OrganizationMetadata {
+	name: string;
+	description: string;
+	website?: string;
+	email?: string;
+	repo?: string;
+	logo?: string;
+	header?: string;
+	url?: string;
+	location?: string;
+	tags?: [string];
+}
+
+interface ProposalMetadata {
+	name: string;
+	description: string;
+}
 
 type Metadata = OrganizationMetadata | CampaignMetadata | ProposalMetadata | null;
 

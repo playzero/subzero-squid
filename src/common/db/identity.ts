@@ -1,12 +1,23 @@
-import { IdentityUpsertData } from '../../types/identity'
-
-import { Identity } from '../../../model'
+import { Identity } from '../../model'
 
 import { get } from './getters'
 import { Store } from '@subsquid/typeorm-store'
 
 function getIdentity(store: Store, identity: string): Promise<Identity | null> {
 	return get(store, Identity, identity)
+}
+
+export interface IdentityUpsertData {
+	address: string;
+	displayName: string | null;
+	legalName: string | null;
+	email: string | null;
+	riot: string | null;
+	image: string | null;
+	twitter: string | null;
+	web: string | null;
+	web3name?: string | null;
+	discord?: string | null;
 }
 
 async function upsertIdentity(store: Store, identity: string, data: IdentityUpsertData | null): Promise<Identity> {

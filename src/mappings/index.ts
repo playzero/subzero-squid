@@ -6,6 +6,11 @@ import signal from './signal'
 import battlepass from './battlepass'
 import rmrkCore from './rmrkCore'
 
+interface Pallet {
+	name: string;
+	callHandlers: Record<string, (context: any, block: any, call: any, name: string) => Promise<void> >;
+	eventHandlers: Record<string, (context: any, block: any, event: any, name: string) => Promise<void> >;
+}
 
 const callHandlers: Record<string, (context: any, block: any, call: any, name: string) => Promise<void> > = {};
 const eventHandlers: Record<string, (context: any, block: any, event: any, name: string) => Promise<void> > = {};
@@ -19,4 +24,4 @@ const eventHandlers: Record<string, (context: any, block: any, event: any, name:
 	}
 });
 
-export { callHandlers, eventHandlers }
+export { callHandlers, eventHandlers, Pallet }

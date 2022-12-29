@@ -2,10 +2,10 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getPropertyUpdatedData } from './getters'
-import { getSenseEntity } from '../../util/db/getters'
+import { getSenseEntity } from '../../../common/db/getters'
 import { storage } from '../../../storage'
 
-import { addressCodec } from '../../util/helpers'
+import { addressCodec } from '../../../common/tools'
 import { ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 

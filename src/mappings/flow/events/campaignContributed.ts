@@ -3,10 +3,10 @@ import { Event } from '../../../types/generated/support'
 
 import { getCampaignContributedData } from './getters'
 import { CampaignContributor } from '../../../model'
-import { upsertIdentity } from '../../util/db/identity'
-import { getCampaign, getCampaignContributor } from '../../util/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
+import { getCampaign, getCampaignContributor } from '../../../common/db/getters'
 
-import { addressCodec, arrayToHexString } from '../../util/helpers'
+import { addressCodec, arrayToHexString } from '../../../common/tools'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 

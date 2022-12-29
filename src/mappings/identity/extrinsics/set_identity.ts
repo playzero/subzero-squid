@@ -6,8 +6,7 @@ import { Data } from '../../../types/generated/v63'
 import { SubstrateCall } from '@subsquid/substrate-processor'
 import { getIdentitySetData } from './getters'
 
-import { IdentityUpsertData } from '../../types/identity';
-import { upsertIdentity } from '../../util/db/identity'
+import { upsertIdentity, IdentityUpsertData } from '../../../common/db/identity'
 
 import { getOriginAccountId } from '../../../common/tools'
 

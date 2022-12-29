@@ -1,4 +1,4 @@
-import { Pallet } from '../types/pallet'
+import { Pallet } from '..'
 import { handleCollectionCreatedEvent } from './events/collectionCreated'
 import { handleNftMintedEvent } from './events/nftMinted'
 

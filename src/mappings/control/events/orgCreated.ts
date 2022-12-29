@@ -3,13 +3,13 @@ import { getCurrencyValue } from '../../../common/tools'
 import { Event } from '../../../types/generated/support'
 
 import { getOrgCreatedData } from './getters'
-import { getOrg } from '../../util/db/getters'
-import { upsertIdentity } from '../../util/db/identity'
+import { getOrg } from '../../../common/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
 import { Organization } from '../../../model'
-import { fetchOrgMetadata } from '../../util/ipfs/getters'
+import { fetchOrgMetadata } from '../../../common/ipfs/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString, slugify, addressCodec } from '../../util/helpers'
+import { arrayToHexString, slugify, addressCodec } from '../../../common/tools'
 import { ObjectExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 

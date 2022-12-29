@@ -2,12 +2,12 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getMemberAddedData } from './getters'
-import { getOrg, getOrgMember } from '../../util/db/getters'
-import { upsertIdentity } from '../../util/db/identity'
+import { getOrg, getOrgMember } from '../../../common/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
 import { OrganizationMember } from '../../../model'
 import { storage } from '../../../storage'
 
-import { arrayToHexString, addressCodec } from '../../util/helpers'
+import { arrayToHexString, addressCodec } from '../../../common/tools'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 

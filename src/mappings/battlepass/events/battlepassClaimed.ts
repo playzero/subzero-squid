@@ -2,10 +2,10 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getBattlepassClaimedData } from './getters'
-import { getBattlepass, getNft } from '../../util/db/getters'
-import { upsertIdentity } from '../../util/db/identity'
+import { getBattlepass, getNft } from '../../../common/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
 
-import { arrayToHexString, addressCodec } from '../../util/helpers'
+import { arrayToHexString, addressCodec } from '../../../common/tools'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 import { BattlepassNft } from '../../../model'
 

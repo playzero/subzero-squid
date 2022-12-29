@@ -3,13 +3,13 @@ import { SubstrateBlock } from '@subsquid/substrate-processor'
 import { Event } from '../../../types/generated/support'
 
 import { getProposalCreatedData } from './getters'
-import { getProposal, getVoting, getOrg, getCampaign } from '../../util/db/getters'
-import { upsertIdentity } from '../../util/db/identity'
+import { getProposal, getVoting, getOrg, getCampaign } from '../../../common/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
 import { Voting, Proposal } from '../../../model'
-import { fetchProposalMetadata } from '../../util/ipfs/getters'
+import { fetchProposalMetadata } from '../../../common/ipfs/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString } from '../../util/helpers'
+import { arrayToHexString } from '../../../common/tools'
 import { ObjectExistsWarn, ObjectNotExistsWarn, StorageNotExistsWarn } from '../../../common/errors'
 
 

@@ -4,7 +4,7 @@ import { AccountIdOrCollectionNftTuple, CurrencyId } from '../types/generated/v6
 import { decodeHex } from '@subsquid/util-internal-hex'
 import config from '../config'
 
-export const ss58codec = ss58.codec(config.prefix)
+export const addressCodec = ss58.codec(config.prefix)
 
 export function getOriginAccountId(origin: any) {
     // eslint-disable-next-line sonarjs/no-small-switch
@@ -14,7 +14,7 @@ export function getOriginAccountId(origin: any) {
             // eslint-disable-next-line sonarjs/no-nested-switch, sonarjs/no-small-switch
             switch (origin.value.__kind) {
                 case 'Signed':
-                    return ss58codec.encode(decodeHex(origin.value.value))
+                    return addressCodec.encode(decodeHex(origin.value.value))
                 default:
                     return undefined
             }
@@ -36,10 +36,25 @@ export function getNftOwnerValue(owner: AccountIdOrCollectionNftTuple) {
 	if (owner.__kind == 'CollectionAndNftTuple') {
 		return owner.value.toString()
 	} else {
-		return ss58codec.encode(owner.value)
+		return addressCodec.encode(owner.value)
 	}
 }
 
 export function encodeId(id: Uint8Array) {
     return ss58.codec(config.prefix).encode(id)
 }
+
+export const arrayToHexString = (hash: Uint8Array) => `0x${Buffer.from(hash).toString('hex')}`
+
+export const slugify = (text: string) => {
+	return text
+	  .toString()                   // Cast to string (optional)
+	  .normalize('NFKD')            // The normalize() using NFKD method returns the Unicode Normalization Form of a given string.
+	  .toLowerCase()                // Convert the string to lowercase letters
+	  .trim()                       // Remove whitespace from both sides of a string (optional)
+	  .replace(/\s+/g, '-')         // Replace spaces with -
+	  .replace(/[^\w\-]+/g, '')     // Remove all non-word chars
+	  .replace(/\_/g,'-')           // Replace _ with -
+	  .replace(/\-\-+/g, '-')       // Replace multiple - with single -
+	  .replace(/\-$/g, '');         // Remove trailing -
+  }

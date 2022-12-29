@@ -1,7 +1,7 @@
-import { Pallet } from '../types/pallet';
-import { handleCampaignContributedEvent } from './events/campaignContributed';
-import { handleCampaignCreatedEvent } from './events/campaignCreated';
-import { handleCampaignEvent } from './events/campaign';
+import { Pallet } from '..'
+import { handleCampaignContributedEvent } from './events/campaignContributed'
+import { handleCampaignCreatedEvent } from './events/campaignCreated'
+import { handleCampaignEvent } from './events/campaign'
 
 export default {
 	name: 'Flow',

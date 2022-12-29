@@ -2,12 +2,12 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getBattlepassCreatedData } from './getters'
-import { getBattlepass, getOrg } from '../../util/db/getters'
-import { upsertIdentity } from '../../util/db/identity'
+import { getBattlepass, getOrg } from '../../../common/db/getters'
+import { upsertIdentity } from '../../../common/db/identity'
 import { Battlepass } from '../../../model'
 import { storage } from '../../../storage'
 
-import { arrayToHexString, addressCodec } from '../../util/helpers'
+import { arrayToHexString, addressCodec } from '../../../common/tools'
 import { ObjectExistsWarn, StorageNotExistsWarn, ObjectNotExistsWarn } from '../../../common/errors'
 
 

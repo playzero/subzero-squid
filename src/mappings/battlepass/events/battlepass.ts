@@ -2,10 +2,10 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getBattlepassEndedData, getBattlepassActivatedData } from './getters'
-import { getBattlepass } from '../../util/db/getters'
+import { getBattlepass } from '../../../common/db/getters'
 import { storage } from '../../../storage'
 
-import { arrayToHexString } from '../../util/helpers'
+import { arrayToHexString } from '../../../common/tools'
 import { StorageNotExistsWarn, ObjectNotExistsWarn } from '../../../common/errors'
 
 

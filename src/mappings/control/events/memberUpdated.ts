@@ -2,9 +2,9 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getMemberUpdatedData } from './getters'
-import { getOrgMember } from '../../util/db/getters'
+import { getOrgMember } from '../../../common/db/getters'
 
-import { arrayToHexString, addressCodec } from '../../util/helpers'
+import { arrayToHexString, addressCodec } from '../../../common/tools'
 import { ObjectNotExistsWarn } from '../../../common/errors'
 
 

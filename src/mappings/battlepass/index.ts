@@ -1,4 +1,4 @@
-import { Pallet } from '../types/pallet'
+import { Pallet } from '..'
 import { handleBattlepassCreatedEvent } from './events/battlepassCreated'
 import { handleBattlepassClaimedEvent } from './events/battlepassClaimed'
 import { handleBattlepassEvent } from './events/battlepass'

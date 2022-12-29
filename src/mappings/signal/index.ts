@@ -1,4 +1,4 @@
-import { Pallet } from '../types/pallet'
+import { Pallet } from '..'
 import { handleProposalCreatedEvent } from './events/proposalCreated'
 import { handleProposalVotedEvent } from './events/proposalVoted'
 import { handleProposalEvent } from './events/proposal'
