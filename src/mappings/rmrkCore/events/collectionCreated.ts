@@ -2,13 +2,13 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getCollectionCreatedData } from './getters'
-import { getNftCollection } from '../../util/db/getters'
+import { getNftCollection } from '../../../common/db/getters'
 import { storage } from '../../../storage'
 
 import { StorageNotExistsWarn, ObjectExistsWarn } from '../../../common/errors'
 import { NftCollection } from '../../../model/generated/nftCollection.model'
-import { addressCodec } from '../../util/helpers'
-import { upsertIdentity } from '../../util/db/identity'
+import { addressCodec } from '../../../common/tools'
+import { upsertIdentity } from '../../../common/db/identity'
 
 
 async function handleCollectionCreatedEvent(ctx: Context, block: Block, event: Event, name: string) {

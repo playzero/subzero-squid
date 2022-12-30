@@ -2,7 +2,7 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getNftMintedData } from './getters'
-import { getNftCollection } from '../../util/db/getters'
+import { getNftCollection } from '../../../common/db/getters'
 import { storage } from '../../../storage'
 
 import { StorageNotExistsWarn, ObjectNotExistsWarn } from '../../../common/errors'
