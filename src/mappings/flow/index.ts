@@ -1,7 +1,7 @@
 import { Pallet } from '..'
 import { handleCampaignContributedEvent } from './events/campaignContributed'
 import { handleCampaignCreatedEvent } from './events/campaignCreated'
-import { handleCampaignEvent } from './events/campaign'
+import { handleCampaignStateChangedEvent } from './events/campaignStateChanged'
 
 export default {
     name: 'Flow',
@@ -9,8 +9,8 @@ export default {
     eventHandlers: {
         'Created': handleCampaignCreatedEvent,
         'Contributed': handleCampaignContributedEvent,
-        'Activated': handleCampaignEvent,
-        'Succeeded': handleCampaignEvent,
-        'Failed': handleCampaignEvent
+        'Activated': handleCampaignStateChangedEvent,
+        'Succeeded': handleCampaignStateChangedEvent,
+        'Failed': handleCampaignStateChangedEvent
     }
 } as Pallet

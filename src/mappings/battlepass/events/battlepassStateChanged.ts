@@ -15,7 +15,7 @@ const getData: Record<string, (context: any, event: any) => Uint8Array > = {
 }
 
 
-async function handleBattlepassEvent(ctx: Context, block: Block, event: Event, name: string) {
+async function handleBattlepassStateChangedEvent(ctx: Context, block: Block, event: Event, name: string) {
     if (!(name in getData)) {
         ctx.log.warn(`Unknown Battlepass event: ${name}`)
         return
@@ -44,4 +44,4 @@ async function handleBattlepassEvent(ctx: Context, block: Block, event: Event, n
     await ctx.store.save(battlepass)
 }
 
-export { handleBattlepassEvent }
+export { handleBattlepassStateChangedEvent }

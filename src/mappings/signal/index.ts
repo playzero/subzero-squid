@@ -1,7 +1,7 @@
 import { Pallet } from '..'
 import { handleProposalCreatedEvent } from './events/proposalCreated'
 import { handleProposalVotedEvent } from './events/proposalVoted'
-import { handleProposalEvent } from './events/proposal'
+import { handleProposalStateChangedEvent } from './events/proposalStateChanged'
 
 
 export default {
@@ -10,11 +10,11 @@ export default {
     eventHandlers: {
         'Created': handleProposalCreatedEvent,
         'Voted': handleProposalVotedEvent,
-        'Activated': handleProposalEvent,
-        'Accepted': handleProposalEvent,
-        'Rejected': handleProposalEvent,
-        'Expired': handleProposalEvent,
-        'Aborted': handleProposalEvent,
-        'Finalized': handleProposalEvent,
+        'Activated': handleProposalStateChangedEvent,
+        'Accepted': handleProposalStateChangedEvent,
+        'Rejected': handleProposalStateChangedEvent,
+        'Expired': handleProposalStateChangedEvent,
+        'Aborted': handleProposalStateChangedEvent,
+        'Finalized': handleProposalStateChangedEvent,
     }
 } as Pallet;

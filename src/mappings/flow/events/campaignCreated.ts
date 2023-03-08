@@ -33,9 +33,9 @@ async function handleCampaignCreatedEvent(ctx: Context, block: Block, event: Eve
         return
     }
 
-    const stateStorageData = await storage.control.getOrgStateStorageData(ctx, block.header, eventData.campaignId)
+    const stateStorageData = await storage.flow.getCampaignStateStorageData(ctx, block.header, eventData.campaignId)
     if (!stateStorageData) {
-        ctx.log.warn(StorageNotExistsWarn(name, 'OrgState', campaignId))
+        ctx.log.warn(StorageNotExistsWarn(name, 'CampaignState', campaignId))
         return
     }
 

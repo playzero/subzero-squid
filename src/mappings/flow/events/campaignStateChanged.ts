@@ -19,7 +19,7 @@ const getData: Record<string, (context: any, event: any) => Uint8Array > = {
     'Flow.Failed': getCampaignFailedData,
 }
 
-async function handleCampaignEvent(ctx: Context, block: Block, event: Event, name: string) {
+async function handleCampaignStateChangedEvent(ctx: Context, block: Block, event: Event, name: string) {
     if (!(name in getData)) {
         ctx.log.warn(`Unknown Flow event: ${name}`)
         return
@@ -32,9 +32,9 @@ async function handleCampaignEvent(ctx: Context, block: Block, event: Event, nam
         ctx.log.warn(ObjectNotExistsWarn(name, 'Campaign', campaignId))
         return
     }
-    const stateStorageData = await storage.control.getOrgStateStorageData(ctx, block.header, campaignIdArray)
+    const stateStorageData = await storage.flow.getCampaignStateStorageData(ctx, block.header, campaignIdArray)
     if (!stateStorageData) {
-        ctx.log.warn(StorageNotExistsWarn(name, 'OrgState', campaignId))
+        ctx.log.warn(StorageNotExistsWarn(name, 'CampaignState', campaignId))
         return
     }
 
@@ -42,4 +42,4 @@ async function handleCampaignEvent(ctx: Context, block: Block, event: Event, nam
     await ctx.store.save(campaign)
 }
 
-export { handleCampaignEvent }
+export { handleCampaignStateChangedEvent }

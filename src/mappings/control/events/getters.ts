@@ -1,4 +1,4 @@
-import { OrgType, AccessModel, FeeModel, MemberState} from '../../../types/generated/v70'
+import { OrgType, AccessModel, FeeModel, MemberState, OrgState, OrgState_Active} from '../../../types/generated/v70'
 import { Event } from '../../../types/generated/support'
 import { Context } from '../../../processor'
 import {
@@ -6,7 +6,9 @@ import {
     ControlMemberRemovedEvent,
     ControlMemberUpdatedEvent,
     ControlOrgCreatedEvent,
-    ControlOrgUpdatedEvent
+    ControlOrgUpdatedEvent,
+    ControlOrgEnabledEvent,
+    ControlOrgDisabledEvent
 
 } from '../../../types/generated/events'
 import { UnknownVersionError } from '../../../common/errors'
@@ -88,6 +90,26 @@ export function getOrgUpdatedData(ctx: Context, ev: Event): OrgUpdatedData {
             orgId, primeId, orgType, accessModel,
             memberLimit, feeModel, membershipFee, blockNumber
         }
+    } else {
+        throw new UnknownVersionError(event.constructor.name)
+    }
+}
+
+export function getOrgEnabledData(ctx: Context, ev: Event): Uint8Array {
+    const event = new ControlOrgEnabledEvent(ctx, ev)
+    if (event.isV70) {
+        const orgId = event.asV70
+        return orgId
+    } else {
+        throw new UnknownVersionError(event.constructor.name)
+    }
+}
+
+export function getOrgDisabledData(ctx: Context, ev: Event): Uint8Array {
+    const event = new ControlOrgDisabledEvent(ctx, ev)
+    if (event.isV70) {
+        const orgId = event.asV70
+        return orgId
     } else {
         throw new UnknownVersionError(event.constructor.name)
     }
