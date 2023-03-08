@@ -2,7 +2,7 @@ import { Pallet } from '..'
 import { handleBattlepassCreatedEvent } from './events/battlepassCreated'
 import { handleBattlepassClaimedEvent } from './events/battlepassClaimed'
 import { handleBattlepassUpdatedEvent } from './events/battlepassUpdated'
-import { handleBattlepassEvent } from './events/battlepass'
+import { handleBattlepassStateChangedEvent } from './events/battlepassStateChanged'
 
 export default {
     name: 'Battlepass',
@@ -11,7 +11,7 @@ export default {
         'BattlepassCreated': handleBattlepassCreatedEvent,
         'BattlepassClaimed': handleBattlepassClaimedEvent,
         'BattlepassUpdated': handleBattlepassUpdatedEvent,
-        'BattlepassActivated': handleBattlepassEvent,
-        'BattlepassEnded': handleBattlepassEvent,
+        'BattlepassActivated': handleBattlepassStateChangedEvent,
+        'BattlepassEnded': handleBattlepassStateChangedEvent,
     },
 } as Pallet

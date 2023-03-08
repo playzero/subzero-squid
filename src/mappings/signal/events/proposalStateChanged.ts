@@ -25,7 +25,7 @@ const getData: Record<string, (context: any, event: any) => Uint8Array > = {
     'Signal.Finalized': getProposalFinalizedData,
 }
 
-async function handleProposalEvent(ctx: Context, block: Block, event: Event, name: string) {
+async function handleProposalStateChangedEvent(ctx: Context, block: Block, event: Event, name: string) {
     if (!(name in getData)) {
         ctx.log.warn(`Unknown Signal event: ${name}`)
         return
@@ -39,11 +39,11 @@ async function handleProposalEvent(ctx: Context, block: Block, event: Event, nam
     }
     const proposalState = await storage.signal.getProposalStateStorageData(ctx, block.header, proposalIdArray)
     if (!proposalState) {
-        ctx.log.warn(StorageNotExistsWarn(name, 'Proposal', proposalId))
+        ctx.log.warn(StorageNotExistsWarn(name, 'ProposalState', proposalId))
         return
     }
     proposal.state = proposalState.__kind
     await ctx.store.save(proposal)
 }
 
-export { handleProposalEvent }
+export { handleProposalStateChangedEvent }

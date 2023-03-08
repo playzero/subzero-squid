@@ -4,6 +4,7 @@ import { handleOrgCreatedEvent } from './events/orgCreated'
 import { handleMemberRemovedEvent } from './events/memberRemoved'
 import { handleMemberUpdatedEvent } from './events/memberUpdated'
 import { handleOrgUpdatedEvent } from './events/orgUpdated'
+import { handleOrgStateChangedEvent } from './events/orgStateChanged'
 
 
 export default {
@@ -12,6 +13,8 @@ export default {
     eventHandlers: {
         'OrgCreated': handleOrgCreatedEvent,
         'OrgUpdated': handleOrgUpdatedEvent,
+        'OrgEnabled': handleOrgStateChangedEvent,
+        'OrgDisabled': handleOrgStateChangedEvent,
         'MemberAdded': handleMemberAddedEvent,
         'MemberRemoved': handleMemberRemovedEvent,
         'MemberUpdated': handleMemberUpdatedEvent,
