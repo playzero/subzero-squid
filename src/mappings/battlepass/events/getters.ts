@@ -24,7 +24,7 @@ export function getBattlepassClaimedData(ctx: Context, ev: Event): [Uint8Array, 
     const event = new BattlepassBattlepassClaimedEvent(ctx, ev)
     if (event.isV70) {
         const { byWho, forWho, orgId, battlepassId, nftId } = event.asV70
-        return [ byWho, battlepassId, nftId ]
+        return [ forWho, battlepassId, nftId ]
     } else {
         throw new UnknownVersionError(event.constructor.name)
     }

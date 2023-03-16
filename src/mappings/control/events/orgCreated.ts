@@ -66,7 +66,7 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
 
     // Fetch metadata from ipfs
     let metadata = await fetchOrgMetadata(storageData.cid.toString(), orgId)
-    org.name = metadata?.name ?? ''
+    org.name = metadata?.name ?? storageData.name.toString()
     org.description = metadata?.description ?? ''
     org.website = metadata?.website ?? ''
     org.email = metadata?.email ?? ''
