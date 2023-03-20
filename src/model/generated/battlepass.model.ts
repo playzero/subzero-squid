@@ -46,4 +46,10 @@ export class Battlepass {
 
   @Column_("text", {nullable: false})
   cid!: string
+
+  @Column_("text", {nullable: true})
+  description!: string | undefined | null
+
+  @Column_("text", {nullable: true})
+  image!: string | undefined | null
 }
