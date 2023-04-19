@@ -43,12 +43,14 @@ function getFromAdditional(name: string, additional: [Data, Data][]) {
     if (!additional) {
         return null
     }
+    let value: null | string = null
     additional.forEach((field) => {
         const [k, v] = field
         if (k.__kind == name) {
-            return getValue(v)
+            value = getValue(v)
         }
     })
+    return value
 }
 
 export { handleIdentitySetExtrinsic };
