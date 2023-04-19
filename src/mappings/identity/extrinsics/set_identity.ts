@@ -46,7 +46,7 @@ function getFromAdditional(name: string, additional: [Data, Data][]) {
     let value: null | string = null
     additional.forEach((field) => {
         const [k, v] = field
-        if (k.__kind == name) {
+        if (getValue(k) == name) {
             value = getValue(v)
         }
     })
