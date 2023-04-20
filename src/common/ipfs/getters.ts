@@ -76,4 +76,4 @@ async function fetchProposalMetadata(cid: string, proposalId: string): Promise<P
     return await fetchMetadata(cid, proposalId, 'proposal', metadata);
 }
 
-export { fetchOrgMetadata, fetchCampaignMetadata, fetchProposalMetadata };
+export { fetchOrgMetadata, fetchCampaignMetadata, fetchProposalMetadata, fetchMetadata };

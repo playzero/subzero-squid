@@ -84,7 +84,7 @@ async function handleProposalCreatedEvent(ctx: Context, block: Block, event: Eve
 
     // Fetch metadata from ipfs
     let metadata = await fetchProposalMetadata(proposalData.cid.toString(), proposalId)
-    proposal.name = metadata?.name ?? ''
+    proposal.name = metadata?.name ?? proposalData.title.toString()
     proposal.description = metadata?.description ?? ''
     await ctx.store.save(proposal)
 }

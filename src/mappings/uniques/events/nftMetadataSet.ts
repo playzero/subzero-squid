@@ -5,6 +5,7 @@ import { getNftMetadataSetData } from './getters'
 import { getNft } from '../../../common/db/getters'
 
 import { ObjectNotExistsWarn } from '../../../common/errors'
+import { fetchMetadata } from '../../../common/ipfs/getters'
 
 
 async function handleNftMetadataSetEvent(ctx: Context, block: Block, event: Event, name: string) {
@@ -18,6 +19,12 @@ async function handleNftMetadataSetEvent(ctx: Context, block: Block, event: Even
 
     nft.metadata = metadata.toString()
     nft.metadataIsFrozen = isFrozen
+
+    // Fetch metadata from ipfs
+    let meta = await fetchMetadata(nft.metadata, nftId.toString(), 'nft', null)
+    nft.name = meta?.name ?? nft.name
+    nft.description = meta?.description ?? nft.description
+    nft.image = meta?.image ?? nft.image
 
     await ctx.store.save(nft)
 }

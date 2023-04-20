@@ -3,6 +3,7 @@ import { Event } from '../../../types/generated/support'
 
 import { getBattlepassCreatedData } from './getters'
 import { getBattlepass, getOrg } from '../../../common/db/getters'
+import { fetchMetadata } from '../../../common/ipfs/getters'
 import { upsertIdentity } from '../../../common/db/identity'
 import { Battlepass } from '../../../model'
 import { storage } from '../../../storage'
@@ -43,13 +44,18 @@ async function handleBattlepassCreatedEvent(ctx: Context, block: Block, event: E
     battlepass.id = bpassId
     battlepass.creator = creatorIdentity
     battlepass.org = org
-    battlepass.name = bpassData.name.toString()
     battlepass.state = state.__kind
     battlepass.season = bpassData.season.toString()
     battlepass.price = BigInt(bpassData.price)
     battlepass.createdAtBlock = block.header.height
     battlepass.updatedAtBlock = block.header.height
     battlepass.cid = bpassData.cid.toString()
+
+    // Fetch metadata from ipfs
+    let metadata = await fetchMetadata(bpassData.cid.toString(), bpassId, 'battlepass', null)
+    battlepass.name = metadata?.name ?? bpassData.name.toString()
+    battlepass.description = metadata?.description ?? ''
+    battlepass.image = metadata?.image ?? ''
 
     await ctx.store.save(battlepass)
 }

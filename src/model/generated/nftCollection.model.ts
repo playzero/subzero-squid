@@ -22,4 +22,13 @@ export class NftCollection {
 
   @Column_("int4", {nullable: true})
   max!: number | undefined | null
+
+  @Column_("text", {nullable: true})
+  name!: string | undefined | null
+
+  @Column_("text", {nullable: true})
+  description!: string | undefined | null
+
+  @Column_("text", {nullable: true})
+  image!: string | undefined | null
 }

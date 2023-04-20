@@ -76,10 +76,7 @@ async function handleOrgCreatedEvent(ctx: Context, block: Block, event: Event, n
     org.url = metadata?.url ?? ''
     org.location = metadata?.location ?? ''
     org.tags = metadata?.tags ?? []
-
-    // TODO: pottential duplicates, there is no uniqueness check implemented
-    // TODO: if the "name" was updated on IPFS, we have no callback to update the slug
-    org.slug = slugify(org.name)
+    org.slug = slugify(org.name + '-' + org.id)
 
     await ctx.store.save(org)
 }

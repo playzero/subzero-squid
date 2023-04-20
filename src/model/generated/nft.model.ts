@@ -24,4 +24,13 @@ export class Nft {
   @Index_()
   @ManyToOne_(() => NftCollection, {nullable: true})
   collection!: NftCollection
+
+  @Column_("text", {nullable: true})
+  name!: string | undefined | null
+
+  @Column_("text", {nullable: true})
+  description!: string | undefined | null
+
+  @Column_("text", {nullable: true})
+  image!: string | undefined | null
 }

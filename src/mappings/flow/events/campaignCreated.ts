@@ -64,7 +64,7 @@ async function handleCampaignCreatedEvent(ctx: Context, block: Block, event: Eve
 
     // Fetch metadata from ipfs
     let metadata = await fetchCampaignMetadata(campaign.cid, orgId);
-    campaign.name = metadata?.name ?? '';
+    campaign.name = metadata?.name ?? storageData.name.toString();
     campaign.email = metadata?.email ?? '';
     campaign.title = metadata?.title ?? '';
     campaign.description = metadata?.description ?? '';
