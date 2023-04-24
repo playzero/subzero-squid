@@ -4,7 +4,7 @@ import identity from './identity'
 import sense from './sense'
 import signal from './signal'
 import battlepass from './battlepass'
-import uniques from './uniques'
+import nfts from './nfts'
 
 interface Pallet {
     name: string;
@@ -15,7 +15,7 @@ interface Pallet {
 const callHandlers: Record<string, (context: any, block: any, call: any, name: string) => Promise<void> > = {};
 const eventHandlers: Record<string, (context: any, block: any, event: any, name: string) => Promise<void> > = {};
 
-[control, flow, identity, sense, signal, battlepass, uniques].forEach((pallet) => {
+[control, flow, identity, sense, signal, battlepass, nfts].forEach((pallet) => {
     for (const name in pallet.callHandlers) {
         callHandlers[`${pallet.name}.${name}`] = pallet.callHandlers[name]
     }

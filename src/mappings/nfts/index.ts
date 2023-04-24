@@ -3,18 +3,14 @@ import { handleCollectionCreatedEvent } from './events/collectionCreated'
 import { handleNftMintedEvent } from './events/nftMinted'
 import { handleCollectionMetadataSetEvent } from './events/collectionMetadataSet'
 import { handleNftMetadataSetEvent } from './events/nftMetadataSet'
-import { handleCollectionMaxSupplySetEvent } from './events/collectionMaxSupplySet'
-import { handleCollectionDestroyedEvent } from './events/collectionDestroyed'
 
 export default {
-    name: 'Uniques',
+    name: 'Nfts',
     callHandlers: {},
     eventHandlers: {
         'Created': handleCollectionCreatedEvent,
         'Issued': handleNftMintedEvent,
         'CollectionMetadataSet': handleCollectionMetadataSetEvent,
-        'MetadataSet': handleNftMetadataSetEvent,
-        'CollectionMaxSupplySet': handleCollectionMaxSupplySetEvent,
-        'Destroyed': handleCollectionDestroyedEvent,
+        'ItemMetadataSet': handleNftMetadataSetEvent
     },
 } as Pallet

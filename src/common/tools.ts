@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as ss58 from '@subsquid/ss58'
-import { CurrencyId } from '../types/generated/v70'
+import { CurrencyId } from '../types/generated/v74'
 import { decodeHex } from '@subsquid/util-internal-hex'
 import config from '../config'
 

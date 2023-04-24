@@ -37,12 +37,10 @@
     "Battlepass.BattlepassActivated",
     "Battlepass.BattlepassEnded",
 
-    "Uniques.Created",
-    "Uniques.Issued",
-    "Uniques.CollectionMetadataSet",
-    "Uniques.MetadataSet",
-    "Uniques.CollectionMaxSupplySet",
-    "Uniques.Destroyed",
+    "Nfts.Created",
+    "Nfts.CollectionMetadataSet",
+    "Nfts.Issued",
+    "Nfts.ItemMetadataSet",
 
     "Balances.Transfer",
     "Balances.Endowed",

@@ -65,7 +65,7 @@ async function handleOrgUpdatedEvent(ctx: Context, block: Block, event: Event, n
         org.url = metadata?.url ?? org.url
         org.location = metadata?.location ?? org.location
         org.tags = metadata?.tags ?? org.tags
-        org.slug = slugify(org.name + '-' + org.id)
+        org.slug = metadata?.slug ?? slugify(org.name + '-' + org.id)
     }
 
     org.updatedAtBlock = block.header.height;

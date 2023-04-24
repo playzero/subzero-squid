@@ -9,7 +9,7 @@ import { fetchMetadata } from '../../../common/ipfs/getters'
 
 
 async function handleCollectionMetadataSetEvent(ctx: Context, block: Block, event: Event, name: string) {
-    const [collectionId, metadata, isFrozen] = getCollectionMetadataSetData(ctx, event)
+    const [collectionId, metadata] = getCollectionMetadataSetData(ctx, event)
 
     let collection = await getNftCollection(ctx.store, collectionId.toString())
     if (!collection) {
@@ -18,7 +18,6 @@ async function handleCollectionMetadataSetEvent(ctx: Context, block: Block, even
     }
 
     collection.metadata = metadata.toString()
-    collection.metadataIsFrozen = isFrozen
 
     // Fetch metadata from ipfs
     let meta = await fetchMetadata(collection.metadata, collectionId.toString(), 'collection', null)
