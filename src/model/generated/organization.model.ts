@@ -77,6 +77,7 @@ export class Organization {
   @OneToMany_(() => Proposal, e => e.organization)
   proposals!: Proposal[]
 
+  @Index_({unique: true})
   @Column_("text", {nullable: false})
   slug!: string
 

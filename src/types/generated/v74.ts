@@ -239,7 +239,7 @@ export interface EntityProperty {
   mutated: number
 }
 
-export interface Type_746 {
+export interface Type_589 {
   index: number
   owner: Uint8Array
   title: Uint8Array
@@ -286,7 +286,7 @@ export interface ProposalState_Finalized {
   __kind: 'Finalized'
 }
 
-export interface Type_752 {
+export interface Type_595 {
   index: number
   unit: Unit
   ayes: [Uint8Array, bigint, (bigint | undefined)][]
@@ -308,7 +308,7 @@ export interface AccountInfo {
   data: AccountData
 }
 
-export interface Type_714 {
+export interface Type_563 {
   free: bigint
   reserved: bigint
   frozen: bigint
@@ -325,26 +325,14 @@ export interface Schedule {
   hostFnWeights: HostFnWeights
 }
 
-export interface TrackInfo {
-  name: string
-  maxDeciding: number
-  decisionDeposit: bigint
-  preparePeriod: number
-  decisionPeriod: number
-  confirmPeriod: number
-  minEnactmentPeriod: number
-  minApproval: Curve
-  minSupport: Curve
-}
-
 export interface BlockLength {
-  max: Type_420
+  max: Type_182
 }
 
 export interface BlockWeights {
   baseBlock: Weight
   maxBlock: Weight
-  perClass: Type_417
+  perClass: Type_178
 }
 
 export interface RuntimeDbWeight {
@@ -361,6 +349,11 @@ export interface RuntimeVersion {
   apis: [Uint8Array, number][]
   transactionVersion: number
   stateVersion: number
+}
+
+export interface V3MultiLocation {
+  parents: number
+  interior: V3Junctions
 }
 
 export type TokenSymbol = TokenSymbol_ZERO | TokenSymbol_PLAY | TokenSymbol_GAME | TokenSymbol_DOT
@@ -668,7 +661,6 @@ export interface Majority_Absolute {
 
 export interface Limits {
   eventTopics: number
-  stackHeight: (number | undefined)
   globals: number
   locals: number
   parameters: number
@@ -676,7 +668,6 @@ export interface Limits {
   tableSize: number
   brTableSize: number
   subjectLen: number
-  callDepth: number
   payloadLen: number
 }
 
@@ -738,99 +729,123 @@ export interface InstructionWeights {
 }
 
 export interface HostFnWeights {
-  caller: bigint
-  isContract: bigint
-  codeHash: bigint
-  ownCodeHash: bigint
-  callerIsOrigin: bigint
-  address: bigint
-  gasLeft: bigint
-  balance: bigint
-  valueTransferred: bigint
-  minimumBalance: bigint
-  blockNumber: bigint
-  now: bigint
-  weightToFee: bigint
-  gas: bigint
-  input: bigint
-  inputPerByte: bigint
-  return: bigint
-  returnPerByte: bigint
-  terminate: bigint
-  random: bigint
-  depositEvent: bigint
-  depositEventPerTopic: bigint
-  depositEventPerByte: bigint
-  debugMessage: bigint
-  setStorage: bigint
-  setStoragePerNewByte: bigint
-  setStoragePerOldByte: bigint
-  setCodeHash: bigint
-  clearStorage: bigint
-  clearStoragePerByte: bigint
-  containsStorage: bigint
-  containsStoragePerByte: bigint
-  getStorage: bigint
-  getStoragePerByte: bigint
-  takeStorage: bigint
-  takeStoragePerByte: bigint
-  transfer: bigint
-  call: bigint
-  delegateCall: bigint
-  callTransferSurcharge: bigint
-  callPerClonedByte: bigint
-  instantiate: bigint
-  instantiateTransferSurcharge: bigint
-  instantiatePerSaltByte: bigint
-  hashSha2256: bigint
-  hashSha2256PerByte: bigint
-  hashKeccak256: bigint
-  hashKeccak256PerByte: bigint
-  hashBlake2256: bigint
-  hashBlake2256PerByte: bigint
-  hashBlake2128: bigint
-  hashBlake2128PerByte: bigint
-  ecdsaRecover: bigint
-  ecdsaToEthAddress: bigint
-  reentranceCount: bigint
-  accountReentranceCount: bigint
-  instantiationNonce: bigint
+  caller: Weight
+  isContract: Weight
+  codeHash: Weight
+  ownCodeHash: Weight
+  callerIsOrigin: Weight
+  address: Weight
+  gasLeft: Weight
+  balance: Weight
+  valueTransferred: Weight
+  minimumBalance: Weight
+  blockNumber: Weight
+  now: Weight
+  weightToFee: Weight
+  gas: Weight
+  input: Weight
+  inputPerByte: Weight
+  return: Weight
+  returnPerByte: Weight
+  terminate: Weight
+  random: Weight
+  depositEvent: Weight
+  depositEventPerTopic: Weight
+  depositEventPerByte: Weight
+  debugMessage: Weight
+  debugMessagePerByte: Weight
+  setStorage: Weight
+  setStoragePerNewByte: Weight
+  setStoragePerOldByte: Weight
+  setCodeHash: Weight
+  clearStorage: Weight
+  clearStoragePerByte: Weight
+  containsStorage: Weight
+  containsStoragePerByte: Weight
+  getStorage: Weight
+  getStoragePerByte: Weight
+  takeStorage: Weight
+  takeStoragePerByte: Weight
+  transfer: Weight
+  call: Weight
+  delegateCall: Weight
+  callTransferSurcharge: Weight
+  callPerClonedByte: Weight
+  instantiate: Weight
+  instantiateTransferSurcharge: Weight
+  instantiatePerInputByte: Weight
+  instantiatePerSaltByte: Weight
+  hashSha2256: Weight
+  hashSha2256PerByte: Weight
+  hashKeccak256: Weight
+  hashKeccak256PerByte: Weight
+  hashBlake2256: Weight
+  hashBlake2256PerByte: Weight
+  hashBlake2128: Weight
+  hashBlake2128PerByte: Weight
+  ecdsaRecover: Weight
+  ecdsaToEthAddress: Weight
+  reentranceCount: Weight
+  accountReentranceCount: Weight
+  instantiationNonce: Weight
 }
 
-export type Curve = Curve_LinearDecreasing | Curve_SteppedDecreasing | Curve_Reciprocal
-
-export interface Curve_LinearDecreasing {
-  __kind: 'LinearDecreasing'
-  length: number
-  floor: number
-  ceil: number
-}
-
-export interface Curve_SteppedDecreasing {
-  __kind: 'SteppedDecreasing'
-  begin: number
-  end: number
-  step: number
-  period: number
-}
-
-export interface Curve_Reciprocal {
-  __kind: 'Reciprocal'
-  factor: bigint
-  xOffset: bigint
-  yOffset: bigint
-}
-
-export interface Type_420 {
+export interface Type_182 {
   normal: number
   operational: number
   mandatory: number
 }
 
-export interface Type_417 {
+export interface Type_178 {
   normal: WeightsPerClass
   operational: WeightsPerClass
   mandatory: WeightsPerClass
+}
+
+export type V3Junctions = V3Junctions_Here | V3Junctions_X1 | V3Junctions_X2 | V3Junctions_X3 | V3Junctions_X4 | V3Junctions_X5 | V3Junctions_X6 | V3Junctions_X7 | V3Junctions_X8
+
+export interface V3Junctions_Here {
+  __kind: 'Here'
+}
+
+export interface V3Junctions_X1 {
+  __kind: 'X1'
+  value: V3Junction
+}
+
+export interface V3Junctions_X2 {
+  __kind: 'X2'
+  value: [V3Junction, V3Junction]
+}
+
+export interface V3Junctions_X3 {
+  __kind: 'X3'
+  value: [V3Junction, V3Junction, V3Junction]
+}
+
+export interface V3Junctions_X4 {
+  __kind: 'X4'
+  value: [V3Junction, V3Junction, V3Junction, V3Junction]
+}
+
+export interface V3Junctions_X5 {
+  __kind: 'X5'
+  value: [V3Junction, V3Junction, V3Junction, V3Junction, V3Junction]
+}
+
+export interface V3Junctions_X6 {
+  __kind: 'X6'
+  value: [V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction]
+}
+
+export interface V3Junctions_X7 {
+  __kind: 'X7'
+  value: [V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction]
+}
+
+export interface V3Junctions_X8 {
+  __kind: 'X8'
+  value: [V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction]
 }
 
 export interface WeightsPerClass {
@@ -838,4 +853,179 @@ export interface WeightsPerClass {
   maxExtrinsic: (Weight | undefined)
   maxTotal: (Weight | undefined)
   reserved: (Weight | undefined)
+}
+
+export type V3Junction = V3Junction_Parachain | V3Junction_AccountId32 | V3Junction_AccountIndex64 | V3Junction_AccountKey20 | V3Junction_PalletInstance | V3Junction_GeneralIndex | V3Junction_GeneralKey | V3Junction_OnlyChild | V3Junction_Plurality | V3Junction_GlobalConsensus
+
+export interface V3Junction_Parachain {
+  __kind: 'Parachain'
+  value: number
+}
+
+export interface V3Junction_AccountId32 {
+  __kind: 'AccountId32'
+  network: (V3NetworkId | undefined)
+  id: Uint8Array
+}
+
+export interface V3Junction_AccountIndex64 {
+  __kind: 'AccountIndex64'
+  network: (V3NetworkId | undefined)
+  index: bigint
+}
+
+export interface V3Junction_AccountKey20 {
+  __kind: 'AccountKey20'
+  network: (V3NetworkId | undefined)
+  key: Uint8Array
+}
+
+export interface V3Junction_PalletInstance {
+  __kind: 'PalletInstance'
+  value: number
+}
+
+export interface V3Junction_GeneralIndex {
+  __kind: 'GeneralIndex'
+  value: bigint
+}
+
+export interface V3Junction_GeneralKey {
+  __kind: 'GeneralKey'
+  length: number
+  data: Uint8Array
+}
+
+export interface V3Junction_OnlyChild {
+  __kind: 'OnlyChild'
+}
+
+export interface V3Junction_Plurality {
+  __kind: 'Plurality'
+  id: V3BodyId
+  part: V3BodyPart
+}
+
+export interface V3Junction_GlobalConsensus {
+  __kind: 'GlobalConsensus'
+  value: V3NetworkId
+}
+
+export type V3NetworkId = V3NetworkId_ByGenesis | V3NetworkId_ByFork | V3NetworkId_Polkadot | V3NetworkId_Kusama | V3NetworkId_Westend | V3NetworkId_Rococo | V3NetworkId_Wococo | V3NetworkId_Ethereum | V3NetworkId_BitcoinCore | V3NetworkId_BitcoinCash
+
+export interface V3NetworkId_ByGenesis {
+  __kind: 'ByGenesis'
+  value: Uint8Array
+}
+
+export interface V3NetworkId_ByFork {
+  __kind: 'ByFork'
+  blockNumber: bigint
+  blockHash: Uint8Array
+}
+
+export interface V3NetworkId_Polkadot {
+  __kind: 'Polkadot'
+}
+
+export interface V3NetworkId_Kusama {
+  __kind: 'Kusama'
+}
+
+export interface V3NetworkId_Westend {
+  __kind: 'Westend'
+}
+
+export interface V3NetworkId_Rococo {
+  __kind: 'Rococo'
+}
+
+export interface V3NetworkId_Wococo {
+  __kind: 'Wococo'
+}
+
+export interface V3NetworkId_Ethereum {
+  __kind: 'Ethereum'
+  chainId: bigint
+}
+
+export interface V3NetworkId_BitcoinCore {
+  __kind: 'BitcoinCore'
+}
+
+export interface V3NetworkId_BitcoinCash {
+  __kind: 'BitcoinCash'
+}
+
+export type V3BodyId = V3BodyId_Unit | V3BodyId_Moniker | V3BodyId_Index | V3BodyId_Executive | V3BodyId_Technical | V3BodyId_Legislative | V3BodyId_Judicial | V3BodyId_Defense | V3BodyId_Administration | V3BodyId_Treasury
+
+export interface V3BodyId_Unit {
+  __kind: 'Unit'
+}
+
+export interface V3BodyId_Moniker {
+  __kind: 'Moniker'
+  value: Uint8Array
+}
+
+export interface V3BodyId_Index {
+  __kind: 'Index'
+  value: number
+}
+
+export interface V3BodyId_Executive {
+  __kind: 'Executive'
+}
+
+export interface V3BodyId_Technical {
+  __kind: 'Technical'
+}
+
+export interface V3BodyId_Legislative {
+  __kind: 'Legislative'
+}
+
+export interface V3BodyId_Judicial {
+  __kind: 'Judicial'
+}
+
+export interface V3BodyId_Defense {
+  __kind: 'Defense'
+}
+
+export interface V3BodyId_Administration {
+  __kind: 'Administration'
+}
+
+export interface V3BodyId_Treasury {
+  __kind: 'Treasury'
+}
+
+export type V3BodyPart = V3BodyPart_Voice | V3BodyPart_Members | V3BodyPart_Fraction | V3BodyPart_AtLeastProportion | V3BodyPart_MoreThanProportion
+
+export interface V3BodyPart_Voice {
+  __kind: 'Voice'
+}
+
+export interface V3BodyPart_Members {
+  __kind: 'Members'
+  count: number
+}
+
+export interface V3BodyPart_Fraction {
+  __kind: 'Fraction'
+  nom: number
+  denom: number
+}
+
+export interface V3BodyPart_AtLeastProportion {
+  __kind: 'AtLeastProportion'
+  nom: number
+  denom: number
+}
+
+export interface V3BodyPart_MoreThanProportion {
+  __kind: 'MoreThanProportion'
+  nom: number
+  denom: number
 }

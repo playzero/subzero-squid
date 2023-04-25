@@ -26,6 +26,7 @@ interface OrganizationMetadata {
     url?: string;
     location?: string;
     tags?: [string];
+    slug?: string;
 }
 
 interface ProposalMetadata {
