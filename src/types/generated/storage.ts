@@ -473,6 +473,96 @@ export class FlowCampaignStatesStorage {
   }
 }
 
+export class NftsCollectionConfigOfStorage {
+  private readonly _chain: Chain
+  private readonly blockHash: string
+
+  constructor(ctx: BlockContext)
+  constructor(ctx: ChainContext, block: Block)
+  constructor(ctx: BlockContext, block?: Block) {
+    block = block || ctx.block
+    this.blockHash = block.hash
+    this._chain = ctx._chain
+  }
+
+  /**
+   *  Config of a collection.
+   */
+  get isV74() {
+    return this._chain.getStorageItemTypeHash('Nfts', 'CollectionConfigOf') === '7af03b8fee4556453f6c814d45bbf57c377d3716bf527c5b23dc8e9957be1e18'
+  }
+
+  /**
+   *  Config of a collection.
+   */
+  async getAsV74(key: number): Promise<v74.CollectionConfig | undefined> {
+    assert(this.isV74)
+    return this._chain.getStorage(this.blockHash, 'Nfts', 'CollectionConfigOf', key)
+  }
+
+  async getManyAsV74(keys: number[]): Promise<(v74.CollectionConfig | undefined)[]> {
+    assert(this.isV74)
+    return this._chain.queryStorage(this.blockHash, 'Nfts', 'CollectionConfigOf', keys.map(k => [k]))
+  }
+
+  async getAllAsV74(): Promise<(v74.CollectionConfig)[]> {
+    assert(this.isV74)
+    return this._chain.queryStorage(this.blockHash, 'Nfts', 'CollectionConfigOf')
+  }
+
+  /**
+   * Checks whether the storage item is defined for the current chain version.
+   */
+  get isExists(): boolean {
+    return this._chain.getStorageItemTypeHash('Nfts', 'CollectionConfigOf') != null
+  }
+}
+
+export class NftsItemConfigOfStorage {
+  private readonly _chain: Chain
+  private readonly blockHash: string
+
+  constructor(ctx: BlockContext)
+  constructor(ctx: ChainContext, block: Block)
+  constructor(ctx: BlockContext, block?: Block) {
+    block = block || ctx.block
+    this.blockHash = block.hash
+    this._chain = ctx._chain
+  }
+
+  /**
+   *  Config of an item.
+   */
+  get isV74() {
+    return this._chain.getStorageItemTypeHash('Nfts', 'ItemConfigOf') === '7091dc19588a4eec283a3787158bfda6ff9384b7b1ecdc5ac234c57fb9d38ddf'
+  }
+
+  /**
+   *  Config of an item.
+   */
+  async getAsV74(key1: number, key2: number): Promise<v74.ItemConfig | undefined> {
+    assert(this.isV74)
+    return this._chain.getStorage(this.blockHash, 'Nfts', 'ItemConfigOf', key1, key2)
+  }
+
+  async getManyAsV74(keys: [number, number][]): Promise<(v74.ItemConfig | undefined)[]> {
+    assert(this.isV74)
+    return this._chain.queryStorage(this.blockHash, 'Nfts', 'ItemConfigOf', keys)
+  }
+
+  async getAllAsV74(): Promise<(v74.ItemConfig)[]> {
+    assert(this.isV74)
+    return this._chain.queryStorage(this.blockHash, 'Nfts', 'ItemConfigOf')
+  }
+
+  /**
+   * Checks whether the storage item is defined for the current chain version.
+   */
+  get isExists(): boolean {
+    return this._chain.getStorageItemTypeHash('Nfts', 'ItemConfigOf') != null
+  }
+}
+
 export class SenseEntitiesStorage {
   private readonly _chain: Chain
   private readonly blockHash: string

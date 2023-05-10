@@ -1,10 +1,9 @@
 import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
-import {Battlepass} from "./battlepass.model"
 import {Nft} from "./nft.model"
 
 @Entity_()
-export class BattlepassNft {
-  constructor(props?: Partial<BattlepassNft>) {
+export class NftAttribute {
+  constructor(props?: Partial<NftAttribute>) {
     Object.assign(this, props)
   }
 
@@ -12,10 +11,15 @@ export class BattlepassNft {
   id!: string
 
   @Index_()
-  @ManyToOne_(() => Battlepass, {nullable: true})
-  battlepass!: Battlepass
-
-  @Index_()
   @ManyToOne_(() => Nft, {nullable: true})
   nft!: Nft
+
+  @Column_("text", {nullable: false})
+  namespace!: string
+
+  @Column_("text", {nullable: false})
+  key!: string
+
+  @Column_("text", {nullable: false})
+  value!: string
 }

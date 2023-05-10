@@ -6,12 +6,14 @@ import { getNft } from '../../../common/db/getters'
 
 import { ObjectNotExistsWarn } from '../../../common/errors'
 import { fetchMetadata } from '../../../common/ipfs/getters'
+import { constructNftId } from '../../../common/tools'
 
 
 async function handleNftMetadataSetEvent(ctx: Context, block: Block, event: Event, name: string) {
-    const [collectionId, nftId, metadata] = getNftMetadataSetData(ctx, event)
+    const [collectionId, itemId, metadata] = getNftMetadataSetData(ctx, event)
 
-    let nft = await getNft(ctx.store, nftId.toString())
+    let nftId = constructNftId(collectionId, itemId)
+    let nft = await getNft(ctx.store, nftId)
     if (!nft) {
         ctx.log.warn(ObjectNotExistsWarn(name, 'Nft', nftId))
         return
@@ -20,7 +22,7 @@ async function handleNftMetadataSetEvent(ctx: Context, block: Block, event: Even
     nft.metadata = metadata.toString()
 
     // Fetch metadata from ipfs
-    let meta = await fetchMetadata(nft.metadata, nftId.toString(), 'nft', null)
+    let meta = await fetchMetadata(nft.metadata, nftId, 'nft', null)
     nft.name = meta?.name ?? nft.name
     nft.description = meta?.description ?? nft.description
     nft.image = meta?.image ?? nft.image

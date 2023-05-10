@@ -1,7 +1,9 @@
-import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_} from "typeorm"
+import {Entity as Entity_, Column as Column_, PrimaryColumn as PrimaryColumn_, ManyToOne as ManyToOne_, Index as Index_, OneToMany as OneToMany_} from "typeorm"
 import * as marshal from "./marshal"
 import {Identity} from "./identity.model"
 import {Organization} from "./organization.model"
+import {NftCollection} from "./nftCollection.model"
+import {BattlepassNft} from "./battlepassNft.model"
 
 @Entity_()
 export class Battlepass {
@@ -18,7 +20,7 @@ export class Battlepass {
 
   @Index_()
   @ManyToOne_(() => Organization, {nullable: true})
-  org!: Organization
+  organization!: Organization
 
   @Column_("text", {nullable: false})
   name!: string
@@ -45,6 +47,13 @@ export class Battlepass {
   updatedAtBlock!: number
 
   @Column_("text", {nullable: false})
+  collectionId!: string
+
+  @Index_()
+  @ManyToOne_(() => NftCollection, {nullable: true})
+  collection!: NftCollection
+
+  @Column_("text", {nullable: false})
   cid!: string
 
   @Column_("text", {nullable: true})
@@ -52,4 +61,7 @@ export class Battlepass {
 
   @Column_("text", {nullable: true})
   image!: string | undefined | null
+
+  @OneToMany_(() => BattlepassNft, e => e.battlepass)
+  claimedNfts!: BattlepassNft[]
 }

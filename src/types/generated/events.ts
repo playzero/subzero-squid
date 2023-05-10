@@ -798,6 +798,151 @@ export class IdentityIdentityClearedEvent {
   }
 }
 
+export class NftsAttributeClearedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.AttributeCleared')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Attribute metadata has been cleared for a `collection` or `item`.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.AttributeCleared') === '4d246c14b51f1093b2b931b12ca433d89593c617b09ce2082dfc43ef8671765e'
+  }
+
+  /**
+   * Attribute metadata has been cleared for a `collection` or `item`.
+   */
+  get asV74(): {collection: number, maybeItem: (number | undefined), key: Uint8Array, namespace: v74.AttributeNamespace} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsAttributeSetEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.AttributeSet')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * New attribute metadata has been set for a `collection` or `item`.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.AttributeSet') === 'df375b4dee7b64ffeab47159334313f546d6fbe1d31d90f2253a667f6ac2799f'
+  }
+
+  /**
+   * New attribute metadata has been set for a `collection` or `item`.
+   */
+  get asV74(): {collection: number, maybeItem: (number | undefined), key: Uint8Array, value: Uint8Array, namespace: v74.AttributeNamespace} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsCollectionConfigChangedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.CollectionConfigChanged')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * A `collection` has had its config changed by the `Force` origin.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.CollectionConfigChanged') === 'a84ae2f0e555d689a7b5b0ee2914bd693902b07afc4f268377240f6ac92495cb'
+  }
+
+  /**
+   * A `collection` has had its config changed by the `Force` origin.
+   */
+  get asV74(): {collection: number} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsCollectionLockedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.CollectionLocked')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Some `collection` was locked.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.CollectionLocked') === 'a84ae2f0e555d689a7b5b0ee2914bd693902b07afc4f268377240f6ac92495cb'
+  }
+
+  /**
+   * Some `collection` was locked.
+   */
+  get asV74(): {collection: number} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsCollectionMetadataClearedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.CollectionMetadataCleared')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Metadata has been cleared for a `collection`.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.CollectionMetadataCleared') === 'a84ae2f0e555d689a7b5b0ee2914bd693902b07afc4f268377240f6ac92495cb'
+  }
+
+  /**
+   * Metadata has been cleared for a `collection`.
+   */
+  get asV74(): {collection: number} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
 export class NftsCollectionMetadataSetEvent {
   private readonly _chain: Chain
   private readonly event: Event
@@ -856,6 +1001,35 @@ export class NftsCreatedEvent {
   }
 }
 
+export class NftsForceCreatedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.ForceCreated')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * A `collection` was force-created.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.ForceCreated') === '6059bcf1dd7c48dc760f017d00a2c7c6719e745b3de9bde2046cbe26347c562f'
+  }
+
+  /**
+   * A `collection` was force-created.
+   */
+  get asV74(): {collection: number, owner: Uint8Array} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
 export class NftsIssuedEvent {
   private readonly _chain: Chain
   private readonly event: Event
@@ -885,6 +1059,35 @@ export class NftsIssuedEvent {
   }
 }
 
+export class NftsItemMetadataClearedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.ItemMetadataCleared')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * Metadata has been cleared for an item.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.ItemMetadataCleared') === 'ac39ace3905de6db862660444374575fb7ed5f403845b475c7f2addc21c71f91'
+  }
+
+  /**
+   * Metadata has been cleared for an item.
+   */
+  get asV74(): {collection: number, item: number} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
 export class NftsItemMetadataSetEvent {
   private readonly _chain: Chain
   private readonly event: Event
@@ -909,6 +1112,122 @@ export class NftsItemMetadataSetEvent {
    * New metadata has been set for an item.
    */
   get asV74(): {collection: number, item: number, data: Uint8Array} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsItemPropertiesLockedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.ItemPropertiesLocked')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * `item` metadata or attributes were locked.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.ItemPropertiesLocked') === 'b6965c94a3e24b173446abb1e12a56b541de3d666894c46f3753c4d9029db290'
+  }
+
+  /**
+   * `item` metadata or attributes were locked.
+   */
+  get asV74(): {collection: number, item: number, lockMetadata: boolean, lockAttributes: boolean} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsItemTransferLockedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.ItemTransferLocked')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * An `item` became non-transferable.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.ItemTransferLocked') === 'ac39ace3905de6db862660444374575fb7ed5f403845b475c7f2addc21c71f91'
+  }
+
+  /**
+   * An `item` became non-transferable.
+   */
+  get asV74(): {collection: number, item: number} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsItemTransferUnlockedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.ItemTransferUnlocked')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * An `item` became transferable.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.ItemTransferUnlocked') === 'ac39ace3905de6db862660444374575fb7ed5f403845b475c7f2addc21c71f91'
+  }
+
+  /**
+   * An `item` became transferable.
+   */
+  get asV74(): {collection: number, item: number} {
+    assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+}
+
+export class NftsOwnerChangedEvent {
+  private readonly _chain: Chain
+  private readonly event: Event
+
+  constructor(ctx: EventContext)
+  constructor(ctx: ChainContext, event: Event)
+  constructor(ctx: EventContext, event?: Event) {
+    event = event || ctx.event
+    assert(event.name === 'Nfts.OwnerChanged')
+    this._chain = ctx._chain
+    this.event = event
+  }
+
+  /**
+   * The owner changed.
+   */
+  get isV74(): boolean {
+    return this._chain.getEventHash('Nfts.OwnerChanged') === '0331b0b161c2f2db690f574540ade7765af19f5306dc65443561fbaa5825f323'
+  }
+
+  /**
+   * The owner changed.
+   */
+  get asV74(): {collection: number, newOwner: Uint8Array} {
     assert(this.isV74)
     return this._chain.decodeEvent(this.event)
   }

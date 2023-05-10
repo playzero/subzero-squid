@@ -70,6 +70,7 @@ type Organization @entity {
     members: [OrganizationMember!] @derivedFrom(field: "organization")
     campaigns: [Campaign!]! @derivedFrom(field: "organization")
     proposals: [Proposal]! @derivedFrom(field: "organization")
+    battlepasses: [Battlepass]! @derivedFrom(field: "organization")
     slug: String! @unique
 
     # Metadata:
@@ -194,7 +195,7 @@ type SenseEntity @entity {
 type Battlepass @entity {
     id: ID!
     creator: Identity!
-    org: Organization!
+    organization: Organization!
     name: String!
     state: String!
     season: String!
@@ -203,42 +204,82 @@ type Battlepass @entity {
     activeToBlock: Int
     createdAtBlock: Int!
     updatedAtBlock: Int!
+    collectionId: String!
+    collection: NftCollection!
 
     # Metadata:
     cid: String!
     description: String
     image: String
+
+    claimedNfts: [BattlepassNft!]! @derivedFrom(field: "battlepass")
 }
 
 type BattlepassNft @entity {
     id: ID!
-    owner: Identity!
     battlepass: Battlepass!
     nft: Nft!
 }
 
 type Nft @entity {
     id: ID!
-    owner: Identity!
-    metadata: String
-    metadataIsFrozen: Boolean
+    itemId: String!
     collection: NftCollection!
+    owner: Identity!
+
+    # Item settings
+    metadataLocked: Boolean!
+    transfersLocked: Boolean!
+    attributesLocked: Boolean!
 
     # Metadata:
+    metadata: String
     name: String
     description: String
     image: String
+
+    attributes: [NftAttribute!]! @derivedFrom(field: "nft")
 }
 
 type NftCollection @entity {
     id: ID!
     owner: Identity!
-    metadata: String
-    metadataIsFrozen: Boolean
     max: Int
+    
+    # Collection settings
+    metadataLocked: Boolean!
+    maxLocked: Boolean!
+    transfersLocked: Boolean!
+    attributesLocked: Boolean!
+
+    # Mint settings
+    mintType: String!
+    mintPrice: BigInt
+    mintStartBlock: Int
+    mintEndBlock: Int
 
     # Metadata:
+    metadata: String
     name: String
     description: String
     image: String
+
+    nfts: [Nft!]! @derivedFrom(field: "collection")
+    attributes: [NftCollectionAttribute!]! @derivedFrom(field: "collection")
+}
+
+type NftAttribute @entity {
+    id: ID!
+    nft: Nft!
+    namespace: String!
+    key: String!
+    value: String!
+}
+
+type NftCollectionAttribute @entity {
+    id: ID!
+    collection: NftCollection!
+    namespace: String!
+    key: String!
+    value: String!
 }

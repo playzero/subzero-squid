@@ -49,3 +49,11 @@ export const slugify = (text: string) => {
       .replace(/\-\-+/g, '-')       // Replace multiple - with single -
       .replace(/\-$/g, '');         // Remove trailing -
   }
+
+  export function constructNftId(collectionId: string | number, itemId: string | number): string {
+    return collectionId + '-' + itemId
+  }
+
+  export function constructNftAttributeId(id: number, namespace: string, key: string): string {
+    return id + '-' + namespace + '-' + key
+  }
