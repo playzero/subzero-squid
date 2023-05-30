@@ -38,9 +38,20 @@
     "Battlepass.BattlepassEnded",
 
     "Nfts.Created",
+    "Nfts.ForceCreated",
+    "Nfts.CollectionConfigChanged",
     "Nfts.CollectionMetadataSet",
+    "Nfts.CollectionMetadataCleared",
+    "Nfts.CollectionLocked",
+    "Nfts.OwnerChanged",
+    "Nfts.AttributeSet",
+    "Nfts.AttributeCleared",
     "Nfts.Issued",
     "Nfts.ItemMetadataSet",
+    "Nfts.ItemMetadataCleared",
+    "Nfts.ItemPropertiesLocked",
+    "Nfts.ItemTransferLocked",
+    "Nfts.ItemTransferUnlocked",
 
     "Balances.Transfer",
     "Balances.Endowed",
@@ -86,7 +97,10 @@
     "System.Account",
     "Balances.Account",
     "Balances.TotalIssuance",
-    "Tokens.Accounts"
+    "Tokens.Accounts",
+
+    "Nfts.CollectionConfigOf",
+    "Nfts.ItemConfigOf"
   ],
   "constants": true
 }

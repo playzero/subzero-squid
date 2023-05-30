@@ -453,13 +453,33 @@
               {
                 "name": "organization",
                 "using": {
-                  "foreign_key_constraint_on": "org_id"
+                  "foreign_key_constraint_on": "organization_id"
                 }
               },
               {
                 "name": "creator",
                 "using": {
                   "foreign_key_constraint_on": "creator_id"
+                }
+              },
+              {
+                "name": "nft_collection",
+                "using": {
+                  "foreign_key_constraint_on": "collection_id"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "claimed_nfts",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "battlepass_id",
+                    "table": {
+                      "name": "battlepass_nft",
+                      "schema": "public"
+                    }
+                  }
                 }
               }
             ],
@@ -495,12 +515,6 @@
                 "name": "battlepass",
                 "using": {
                   "foreign_key_constraint_on": "battlepass_id"
-                }
-              },
-              {
-                "name": "owner",
-                "using": {
-                  "foreign_key_constraint_on": "owner_id"
                 }
               },
               {
@@ -573,6 +587,20 @@
                   "foreign_key_constraint_on": "collection_id"
                 }
               }
+            ],
+            "array_relationships": [
+              {
+                "name": "attributes",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "nft_id",
+                    "table": {
+                      "name": "nft_attribute",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
             ]
           },
           {
@@ -585,6 +613,60 @@
                 "name": "owner",
                 "using": {
                   "foreign_key_constraint_on": "owner_id"
+                }
+              }
+            ],
+            "array_relationships": [
+              {
+                "name": "nfts",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "collection_id",
+                    "table": {
+                      "name": "nft",
+                      "schema": "public"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "attributes",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "collection_id",
+                    "table": {
+                      "name": "nft_collection_attribute",
+                      "schema": "public"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "nft_attribute",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "nft",
+                "using": {
+                  "foreign_key_constraint_on": "nft_id"
+                }
+              }
+            ]
+          },
+          {
+            "table": {
+              "name": "nft_collection_attribute",
+              "schema": "public"
+            },
+            "object_relationships": [
+              {
+                "name": "nft_collection",
+                "using": {
+                  "foreign_key_constraint_on": "collection_id"
                 }
               }
             ]
@@ -646,6 +728,18 @@
                     "column": "organization_id",
                     "table": {
                       "name": "proposal",
+                      "schema": "public"
+                    }
+                  }
+                }
+              },
+              {
+                "name": "battlepasses",
+                "using": {
+                  "foreign_key_constraint_on": {
+                    "column": "organization_id",
+                    "table": {
+                      "name": "battlepass",
                       "schema": "public"
                     }
                   }

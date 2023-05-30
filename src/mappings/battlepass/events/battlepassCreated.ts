@@ -2,7 +2,7 @@ import { Context, Block } from '../../../processor'
 import { Event } from '../../../types/generated/support'
 
 import { getBattlepassCreatedData } from './getters'
-import { getBattlepass, getOrg } from '../../../common/db/getters'
+import { getBattlepass, getNftCollection, getOrg } from '../../../common/db/getters'
 import { fetchMetadata } from '../../../common/ipfs/getters'
 import { upsertIdentity } from '../../../common/db/identity'
 import { Battlepass } from '../../../model'
@@ -37,19 +37,28 @@ async function handleBattlepassCreatedEvent(ctx: Context, block: Block, event: E
         return
     }
 
+    let collectionId = bpassData.collectionId.toString()
+    let collection = await getNftCollection(ctx.store, collectionId)
+    if (!collection) {
+        ctx.log.warn(ObjectNotExistsWarn(name, 'Collection', collectionId))
+        return
+    }
+
     let creator = addressCodec.encode(bpassData.creator)
     let creatorIdentity = await upsertIdentity(ctx.store, creator, null)
 
     let battlepass = new Battlepass()
     battlepass.id = bpassId
     battlepass.creator = creatorIdentity
-    battlepass.org = org
+    battlepass.organization = org
     battlepass.state = state.__kind
     battlepass.season = bpassData.season.toString()
     battlepass.price = BigInt(bpassData.price)
     battlepass.createdAtBlock = block.header.height
     battlepass.updatedAtBlock = block.header.height
     battlepass.cid = bpassData.cid.toString()
+    battlepass.collectionId = collectionId
+    battlepass.collection = collection
 
     // Fetch metadata from ipfs
     let metadata = await fetchMetadata(bpassData.cid.toString(), bpassId, 'battlepass', null)

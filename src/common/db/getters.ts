@@ -10,7 +10,9 @@ import {
     Battlepass,
     Nft,
     NftCollection,
-    BattlepassNft
+    BattlepassNft,
+    NftAttribute,
+    NftCollectionAttribute
 } from '../../model'
 import { Store } from '@subsquid/typeorm-store'
 
@@ -85,6 +87,14 @@ async function getBattlepassNfts(store: Store, collectionId: string): Promise<Ba
     return (await store.find(BattlepassNft, { where: { nft: { collection: {id: collectionId} } } }));
 }
 
+async function getNftAttribute(store: Store, id: string): Promise<NftAttribute | null> {
+    return get(store, NftAttribute, id);
+}
+
+async function getNftCollectionAttribute(store: Store, id: string): Promise<NftCollectionAttribute | null> {
+    return get(store, NftCollectionAttribute, id);
+}
+
 export {
     getOrg,
     getOrgMember,
@@ -98,5 +108,7 @@ export {
     getNft,
     getNftCollection,
     getCollectionNfts,
-    getBattlepassNfts
+    getBattlepassNfts,
+    getNftAttribute,
+    getNftCollectionAttribute
 };

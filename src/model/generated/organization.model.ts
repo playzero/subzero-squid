@@ -4,6 +4,7 @@ import {Identity} from "./identity.model"
 import {OrganizationMember} from "./organizationMember.model"
 import {Campaign} from "./campaign.model"
 import {Proposal} from "./proposal.model"
+import {Battlepass} from "./battlepass.model"
 
 @Entity_()
 export class Organization {
@@ -76,6 +77,9 @@ export class Organization {
 
   @OneToMany_(() => Proposal, e => e.organization)
   proposals!: Proposal[]
+
+  @OneToMany_(() => Battlepass, e => e.organization)
+  battlepasses!: Battlepass[]
 
   @Index_({unique: true})
   @Column_("text", {nullable: false})

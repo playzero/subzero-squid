@@ -94,6 +94,25 @@ export interface FeeModel_Transfer {
   __kind: 'Transfer'
 }
 
+export type AttributeNamespace = AttributeNamespace_Pallet | AttributeNamespace_CollectionOwner | AttributeNamespace_ItemOwner | AttributeNamespace_Account
+
+export interface AttributeNamespace_Pallet {
+  __kind: 'Pallet'
+}
+
+export interface AttributeNamespace_CollectionOwner {
+  __kind: 'CollectionOwner'
+}
+
+export interface AttributeNamespace_ItemOwner {
+  __kind: 'ItemOwner'
+}
+
+export interface AttributeNamespace_Account {
+  __kind: 'Account'
+  value: Uint8Array
+}
+
 export type PropertyType = PropertyType_Experience | PropertyType_Trust | PropertyType_Reputation
 
 export interface PropertyType_Experience {
@@ -224,6 +243,16 @@ export interface CampaignState_Failed {
 
 export interface CampaignState_Locked {
   __kind: 'Locked'
+}
+
+export interface CollectionConfig {
+  settings: bigint
+  maxSupply: (number | undefined)
+  mintSettings: MintSettings
+}
+
+export interface ItemConfig {
+  settings: bigint
 }
 
 export interface Entity {
@@ -601,6 +630,14 @@ export interface FlowGovernance_Yes {
   __kind: 'Yes'
 }
 
+export interface MintSettings {
+  mintType: MintType
+  price: (bigint | undefined)
+  startBlock: (number | undefined)
+  endBlock: (number | undefined)
+  defaultItemSettings: bigint
+}
+
 export type ProposalType = ProposalType_General | ProposalType_Withdrawal | ProposalType_Spending
 
 export interface ProposalType_General {
@@ -846,6 +883,21 @@ export interface V3Junctions_X7 {
 export interface V3Junctions_X8 {
   __kind: 'X8'
   value: [V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction, V3Junction]
+}
+
+export type MintType = MintType_Issuer | MintType_Public | MintType_HolderOf
+
+export interface MintType_Issuer {
+  __kind: 'Issuer'
+}
+
+export interface MintType_Public {
+  __kind: 'Public'
+}
+
+export interface MintType_HolderOf {
+  __kind: 'HolderOf'
+  value: number
 }
 
 export interface WeightsPerClass {
