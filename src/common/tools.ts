@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as ss58 from '@subsquid/ss58'
-import { CurrencyId } from '../types/generated/v74'
+import * as typesV74 from '../types/generated/v74'
+import * as typesV75 from '../types/generated/v75'
 import { decodeHex } from '@subsquid/util-internal-hex'
 import config from '../config'
+
+type CurrencyId = typesV75.CurrencyId | typesV74.CurrencyId
 
 export const addressCodec = ss58.codec(config.prefix)
 

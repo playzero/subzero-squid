@@ -1,6 +1,7 @@
 import assert from 'assert'
 import {Chain, ChainContext, EventContext, Event, Result, Option} from './support'
 import * as v74 from './v74'
+import * as v75 from './v75'
 
 export class BalancesBalanceSetEvent {
   private readonly _chain: Chain
@@ -429,6 +430,15 @@ export class ControlFundsSpendedEvent {
 
   get asV74(): {orgId: Uint8Array, beneficiary: Uint8Array, amount: bigint, currencyId: v74.CurrencyId, blockNumber: number} {
     assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+
+  get isV75(): boolean {
+    return this._chain.getEventHash('Control.FundsSpended') === 'b75c498ec937404f8ad0743d97d27426027fac3fffadaaf2dda1e5eb9ca4da66'
+  }
+
+  get asV75(): {orgId: Uint8Array, beneficiary: Uint8Array, amount: bigint, currencyId: v75.CurrencyId, blockNumber: number} {
+    assert(this.isV75)
     return this._chain.decodeEvent(this.event)
   }
 }
@@ -1502,6 +1512,21 @@ export class TokensBalanceSetEvent {
     assert(this.isV74)
     return this._chain.decodeEvent(this.event)
   }
+
+  /**
+   * A balance was set by root.
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.BalanceSet') === '2709e4d5e22cc0ffc9ea83acb14a91d34f51c23570b58c7871580cb0e1a23c88'
+  }
+
+  /**
+   * A balance was set by root.
+   */
+  get asV75(): {currencyId: v75.CurrencyId, who: Uint8Array, free: bigint, reserved: bigint} {
+    assert(this.isV75)
+    return this._chain.decodeEvent(this.event)
+  }
 }
 
 export class TokensDepositedEvent {
@@ -1531,6 +1556,21 @@ export class TokensDepositedEvent {
     assert(this.isV74)
     return this._chain.decodeEvent(this.event)
   }
+
+  /**
+   * Deposited some balance into an account
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.Deposited') === '3814216330cce90459a7dd87eec5ce6633dd558e4b6fec814e6564a0b7857f54'
+  }
+
+  /**
+   * Deposited some balance into an account
+   */
+  get asV75(): {currencyId: v75.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV75)
+    return this._chain.decodeEvent(this.event)
+  }
 }
 
 export class TokensEndowedEvent {
@@ -1558,6 +1598,21 @@ export class TokensEndowedEvent {
    */
   get asV74(): {currencyId: v74.CurrencyId, who: Uint8Array, amount: bigint} {
     assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+
+  /**
+   * An account was created with some free balance.
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.Endowed') === '3814216330cce90459a7dd87eec5ce6633dd558e4b6fec814e6564a0b7857f54'
+  }
+
+  /**
+   * An account was created with some free balance.
+   */
+  get asV75(): {currencyId: v75.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV75)
     return this._chain.decodeEvent(this.event)
   }
 }
@@ -1591,6 +1646,23 @@ export class TokensReserveRepatriatedEvent {
     assert(this.isV74)
     return this._chain.decodeEvent(this.event)
   }
+
+  /**
+   * Some reserved balance was repatriated (moved from reserved to
+   * another account).
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.ReserveRepatriated') === 'f813154b4308967544cd1e0d173fe297c626584572f7990b8fd3239258b7b552'
+  }
+
+  /**
+   * Some reserved balance was repatriated (moved from reserved to
+   * another account).
+   */
+  get asV75(): {currencyId: v75.CurrencyId, from: Uint8Array, to: Uint8Array, amount: bigint, status: v75.BalanceStatus} {
+    assert(this.isV75)
+    return this._chain.decodeEvent(this.event)
+  }
 }
 
 export class TokensReservedEvent {
@@ -1618,6 +1690,21 @@ export class TokensReservedEvent {
    */
   get asV74(): {currencyId: v74.CurrencyId, who: Uint8Array, amount: bigint} {
     assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+
+  /**
+   * Some balance was reserved (moved from free to reserved).
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.Reserved') === '3814216330cce90459a7dd87eec5ce6633dd558e4b6fec814e6564a0b7857f54'
+  }
+
+  /**
+   * Some balance was reserved (moved from free to reserved).
+   */
+  get asV75(): {currencyId: v75.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV75)
     return this._chain.decodeEvent(this.event)
   }
 }
@@ -1649,6 +1736,21 @@ export class TokensSlashedEvent {
     assert(this.isV74)
     return this._chain.decodeEvent(this.event)
   }
+
+  /**
+   * Some balances were slashed (e.g. due to mis-behavior)
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.Slashed') === '4ead49c39564a26b5ba44d2e818e364e8557710596888aea9c2b3db9562bbdb9'
+  }
+
+  /**
+   * Some balances were slashed (e.g. due to mis-behavior)
+   */
+  get asV75(): {currencyId: v75.CurrencyId, who: Uint8Array, freeAmount: bigint, reservedAmount: bigint} {
+    assert(this.isV75)
+    return this._chain.decodeEvent(this.event)
+  }
 }
 
 export class TokensTransferEvent {
@@ -1676,6 +1778,21 @@ export class TokensTransferEvent {
    */
   get asV74(): {currencyId: v74.CurrencyId, from: Uint8Array, to: Uint8Array, amount: bigint} {
     assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+
+  /**
+   * Transfer succeeded.
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.Transfer') === 'c1074a221eae2ba3d0c748125ab33d8ad8fb8d5d2e48a41b1f9ade2b726ab43d'
+  }
+
+  /**
+   * Transfer succeeded.
+   */
+  get asV75(): {currencyId: v75.CurrencyId, from: Uint8Array, to: Uint8Array, amount: bigint} {
+    assert(this.isV75)
     return this._chain.decodeEvent(this.event)
   }
 }
@@ -1707,6 +1824,21 @@ export class TokensUnreservedEvent {
     assert(this.isV74)
     return this._chain.decodeEvent(this.event)
   }
+
+  /**
+   * Some balance was unreserved (moved from reserved to free).
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.Unreserved') === '3814216330cce90459a7dd87eec5ce6633dd558e4b6fec814e6564a0b7857f54'
+  }
+
+  /**
+   * Some balance was unreserved (moved from reserved to free).
+   */
+  get asV75(): {currencyId: v75.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV75)
+    return this._chain.decodeEvent(this.event)
+  }
 }
 
 export class TokensWithdrawnEvent {
@@ -1734,6 +1866,21 @@ export class TokensWithdrawnEvent {
    */
   get asV74(): {currencyId: v74.CurrencyId, who: Uint8Array, amount: bigint} {
     assert(this.isV74)
+    return this._chain.decodeEvent(this.event)
+  }
+
+  /**
+   * Some balances were withdrawn (e.g. pay for transaction fee)
+   */
+  get isV75(): boolean {
+    return this._chain.getEventHash('Tokens.Withdrawn') === '3814216330cce90459a7dd87eec5ce6633dd558e4b6fec814e6564a0b7857f54'
+  }
+
+  /**
+   * Some balances were withdrawn (e.g. pay for transaction fee)
+   */
+  get asV75(): {currencyId: v75.CurrencyId, who: Uint8Array, amount: bigint} {
+    assert(this.isV75)
     return this._chain.decodeEvent(this.event)
   }
 }
