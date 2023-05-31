@@ -1,6 +1,7 @@
 import assert from 'assert'
 import {Block, Chain, ChainContext, BlockContext, Result, Option} from './support'
 import * as v74 from './v74'
+import * as v75 from './v75'
 
 export class BalancesAccountStorage {
   private readonly _chain: Chain
@@ -366,6 +367,35 @@ export class ControlOrgsStorage {
   }
 
   /**
+   *  Org by its id.
+   * 
+   *  Org: map Hash => Org
+   */
+  get isV75() {
+    return this._chain.getStorageItemTypeHash('Control', 'Orgs') === '1980474d9061abbc838d6474f1e4611d844df24c5a546ec43919ac74c53c87ea'
+  }
+
+  /**
+   *  Org by its id.
+   * 
+   *  Org: map Hash => Org
+   */
+  async getAsV75(key: Uint8Array): Promise<v75.Org | undefined> {
+    assert(this.isV75)
+    return this._chain.getStorage(this.blockHash, 'Control', 'Orgs', key)
+  }
+
+  async getManyAsV75(keys: Uint8Array[]): Promise<(v75.Org | undefined)[]> {
+    assert(this.isV75)
+    return this._chain.queryStorage(this.blockHash, 'Control', 'Orgs', keys.map(k => [k]))
+  }
+
+  async getAllAsV75(): Promise<(v75.Org)[]> {
+    assert(this.isV75)
+    return this._chain.queryStorage(this.blockHash, 'Control', 'Orgs')
+  }
+
+  /**
    * Checks whether the storage item is defined for the current chain version.
    */
   get isExists(): boolean {
@@ -703,6 +733,35 @@ export class SignalProposalOfStorage {
   }
 
   /**
+   *  Proposal by its hash (id).
+   * 
+   *  Proposals: map Hash => Proposal
+   */
+  get isV75() {
+    return this._chain.getStorageItemTypeHash('Signal', 'ProposalOf') === 'a608161ad297044981c905a04f98833b28229e938cada484ea4e423b7c24f22a'
+  }
+
+  /**
+   *  Proposal by its hash (id).
+   * 
+   *  Proposals: map Hash => Proposal
+   */
+  async getAsV75(key: Uint8Array): Promise<v75.Type_584 | undefined> {
+    assert(this.isV75)
+    return this._chain.getStorage(this.blockHash, 'Signal', 'ProposalOf', key)
+  }
+
+  async getManyAsV75(keys: Uint8Array[]): Promise<(v75.Type_584 | undefined)[]> {
+    assert(this.isV75)
+    return this._chain.queryStorage(this.blockHash, 'Signal', 'ProposalOf', keys.map(k => [k]))
+  }
+
+  async getAllAsV75(): Promise<(v75.Type_584)[]> {
+    assert(this.isV75)
+    return this._chain.queryStorage(this.blockHash, 'Signal', 'ProposalOf')
+  }
+
+  /**
    * Checks whether the storage item is defined for the current chain version.
    */
   get isExists(): boolean {
@@ -887,6 +946,41 @@ export class TokensAccountsStorage {
 
   async getAllAsV74(): Promise<(v74.Type_563)[]> {
     assert(this.isV74)
+    return this._chain.queryStorage(this.blockHash, 'Tokens', 'Accounts')
+  }
+
+  /**
+   *  The balance of a token type under an account.
+   * 
+   *  NOTE: If the total is ever zero, decrease account ref account.
+   * 
+   *  NOTE: This is only used in the case that this module is used to store
+   *  balances.
+   */
+  get isV75() {
+    return this._chain.getStorageItemTypeHash('Tokens', 'Accounts') === '47f1a37de59187255162a97883fac332507836be056fc0ae075a6fea6e152f28'
+  }
+
+  /**
+   *  The balance of a token type under an account.
+   * 
+   *  NOTE: If the total is ever zero, decrease account ref account.
+   * 
+   *  NOTE: This is only used in the case that this module is used to store
+   *  balances.
+   */
+  async getAsV75(key1: Uint8Array, key2: v75.CurrencyId): Promise<v75.Type_558> {
+    assert(this.isV75)
+    return this._chain.getStorage(this.blockHash, 'Tokens', 'Accounts', key1, key2)
+  }
+
+  async getManyAsV75(keys: [Uint8Array, v75.CurrencyId][]): Promise<(v75.Type_558)[]> {
+    assert(this.isV75)
+    return this._chain.queryStorage(this.blockHash, 'Tokens', 'Accounts', keys)
+  }
+
+  async getAllAsV75(): Promise<(v75.Type_558)[]> {
+    assert(this.isV75)
     return this._chain.queryStorage(this.blockHash, 'Tokens', 'Accounts')
   }
 

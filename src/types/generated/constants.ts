@@ -1,6 +1,7 @@
 import assert from 'assert'
 import {Block, Chain, ChainContext, BlockContext, Result, Option} from './support'
 import * as v74 from './v74'
+import * as v75 from './v75'
 
 export class BalancesExistentialDepositConstant {
   private readonly _chain: Chain
@@ -989,6 +990,21 @@ export class ControlPaymentTokenIdConstant {
   }
 
   /**
+   *  The CurrencyId which is used as a payment token.
+   */
+  get isV75() {
+    return this._chain.getConstantTypeHash('Control', 'PaymentTokenId') === 'f459645d8ec920cec0c79b70cb530d49ccb1f13a91be4b43a9ef9447420015be'
+  }
+
+  /**
+   *  The CurrencyId which is used as a payment token.
+   */
+  get asV75(): v75.CurrencyId {
+    assert(this.isV75)
+    return this._chain.getConstant('Control', 'PaymentTokenId')
+  }
+
+  /**
    * Checks whether the constant is defined for the current chain version.
    */
   get isExists(): boolean {
@@ -1015,6 +1031,21 @@ export class ControlProtocolTokenIdConstant {
    */
   get asV74(): v74.CurrencyId {
     assert(this.isV74)
+    return this._chain.getConstant('Control', 'ProtocolTokenId')
+  }
+
+  /**
+   *  The CurrencyId which is used as a protokol token.
+   */
+  get isV75() {
+    return this._chain.getConstantTypeHash('Control', 'ProtocolTokenId') === 'f459645d8ec920cec0c79b70cb530d49ccb1f13a91be4b43a9ef9447420015be'
+  }
+
+  /**
+   *  The CurrencyId which is used as a protokol token.
+   */
+  get asV75(): v75.CurrencyId {
+    assert(this.isV75)
     return this._chain.getConstant('Control', 'ProtocolTokenId')
   }
 
@@ -1069,6 +1100,15 @@ export class CurrenciesGetNativeCurrencyIdConstant {
 
   get asV74(): v74.CurrencyId {
     assert(this.isV74)
+    return this._chain.getConstant('Currencies', 'GetNativeCurrencyId')
+  }
+
+  get isV75() {
+    return this._chain.getConstantTypeHash('Currencies', 'GetNativeCurrencyId') === 'f459645d8ec920cec0c79b70cb530d49ccb1f13a91be4b43a9ef9447420015be'
+  }
+
+  get asV75(): v75.CurrencyId {
+    assert(this.isV75)
     return this._chain.getConstant('Currencies', 'GetNativeCurrencyId')
   }
 
@@ -2097,6 +2137,21 @@ export class FlowPaymentTokenIdConstant {
   }
 
   /**
+   *  The CurrencyId which is used as a payment token.
+   */
+  get isV75() {
+    return this._chain.getConstantTypeHash('Flow', 'PaymentTokenId') === 'f459645d8ec920cec0c79b70cb530d49ccb1f13a91be4b43a9ef9447420015be'
+  }
+
+  /**
+   *  The CurrencyId which is used as a payment token.
+   */
+  get asV75(): v75.CurrencyId {
+    assert(this.isV75)
+    return this._chain.getConstant('Flow', 'PaymentTokenId')
+  }
+
+  /**
    * Checks whether the constant is defined for the current chain version.
    */
   get isExists(): boolean {
@@ -2123,6 +2178,21 @@ export class FlowProtocolTokenIdConstant {
    */
   get asV74(): v74.CurrencyId {
     assert(this.isV74)
+    return this._chain.getConstant('Flow', 'ProtocolTokenId')
+  }
+
+  /**
+   *  The CurrencyId which is used as a protokol token.
+   */
+  get isV75() {
+    return this._chain.getConstantTypeHash('Flow', 'ProtocolTokenId') === 'f459645d8ec920cec0c79b70cb530d49ccb1f13a91be4b43a9ef9447420015be'
+  }
+
+  /**
+   *  The CurrencyId which is used as a protokol token.
+   */
+  get asV75(): v75.CurrencyId {
+    assert(this.isV75)
     return this._chain.getConstant('Flow', 'ProtocolTokenId')
   }
 
@@ -3347,6 +3417,21 @@ export class SignalPaymentTokenIdConstant {
   }
 
   /**
+   *  The CurrencyId which is used as a payment token.
+   */
+  get isV75() {
+    return this._chain.getConstantTypeHash('Signal', 'PaymentTokenId') === 'f459645d8ec920cec0c79b70cb530d49ccb1f13a91be4b43a9ef9447420015be'
+  }
+
+  /**
+   *  The CurrencyId which is used as a payment token.
+   */
+  get asV75(): v75.CurrencyId {
+    assert(this.isV75)
+    return this._chain.getConstant('Signal', 'PaymentTokenId')
+  }
+
+  /**
    * Checks whether the constant is defined for the current chain version.
    */
   get isExists(): boolean {
@@ -3403,6 +3488,21 @@ export class SignalProtocolTokenIdConstant {
    */
   get asV74(): v74.CurrencyId {
     assert(this.isV74)
+    return this._chain.getConstant('Signal', 'ProtocolTokenId')
+  }
+
+  /**
+   *  The CurrencyId which is used as a protokol token.
+   */
+  get isV75() {
+    return this._chain.getConstantTypeHash('Signal', 'ProtocolTokenId') === 'f459645d8ec920cec0c79b70cb530d49ccb1f13a91be4b43a9ef9447420015be'
+  }
+
+  /**
+   *  The CurrencyId which is used as a protokol token.
+   */
+  get asV75(): v75.CurrencyId {
+    assert(this.isV75)
     return this._chain.getConstant('Signal', 'ProtocolTokenId')
   }
 
